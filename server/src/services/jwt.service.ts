@@ -15,3 +15,15 @@ export function signAccessToken(userId: string): string {
     expiresIn: expiresIn as SignOptions["expiresIn"],
   });
 }
+
+export function verifyAccessToken(
+  token: string,
+): jwt.JwtPayload & { sub: string } {
+  const decoded = jwt.verify(token, getJwtSecret());
+
+  if (typeof decoded === "string" || typeof decoded.sub !== "string") {
+    throw new Error("Invalid access token payload");
+  }
+
+  return decoded as jwt.JwtPayload & { sub: string };
+}
