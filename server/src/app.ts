@@ -1,6 +1,8 @@
 import express from "express";
 import helmet from "helmet";
 import mongoose from "mongoose";
+import { errorHandler } from "./middlewares/error-handler.ts";
+import authRouter from "./routes/auth.routes.ts";
 
 const app = express();
 
@@ -30,5 +32,9 @@ app.get("/api/v1/ready", (_req, res) => {
     message: "Service is ready",
   });
 });
+
+app.use("/api/v1/auth", authRouter);
+
+app.use(errorHandler);
 
 export default app;

@@ -10,7 +10,9 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "noUncheckedIndexedAccess": true,
-    "noEmitOnError": true
+    "noEmitOnError": true,
+    "allowImportingTsExtensions": true,
+    "noEmit": true
   },
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules", "dist", "tests"]
