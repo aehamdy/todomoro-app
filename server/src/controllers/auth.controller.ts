@@ -69,3 +69,33 @@ export const login: RequestHandler = async (req, res, next) => {
     next(err);
   }
 };
+
+export const getMe: RequestHandler = async (req, res, next) => {
+  try {
+    const userId = req.userId;
+
+    const user = await User.findById(userId).select("_id name email createdAt");
+
+    if (!user) {
+      res.status(401).json({
+        status: "fail",
+        message: "User is no longer exists",
+      });
+      return;
+    }
+
+    res.status(200).json({
+      status: "success",
+      data: {
+        user: {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          createdAt: user.createdAt,
+        },
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+};
