@@ -106,3 +106,24 @@ export const getMe: RequestHandler = async (req, res, next) => {
     next(err);
   }
 };
+
+export const logout: RequestHandler = (_req, res) => {
+  res.clearCookie("accessToken", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/",
+  });
+
+  res.clearCookie("csrfToken", {
+    httpOnly: false,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/",
+  });
+
+  res.status(200).json({
+    status: "success",
+    message: "Logged out successfully",
+  });
+};
