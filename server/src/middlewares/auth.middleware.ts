@@ -4,24 +4,36 @@ import User from "../models/user.model.js";
 import { verifyAccessToken } from "../services/jwt.service.js";
 
 export const protect: RequestHandler = async (req, res, next) => {
-  const authorization = req.headers.authorization;
+  // the commented code below is for adding the token to the response
+  // const authorization = req.headers.authorization;
 
-  // Check the Authorization header. It expects Bearer followed by a token
-  if (!authorization?.startsWith("Bearer ")) {
+  // // Check the Authorization header. It expects Bearer followed by a token
+  // if (!authorization?.startsWith("Bearer ")) {
+  //   res.status(401).json({
+  //     status: "fail",
+  //     message: "You are not logged in. Please log in to get access.",
+  //   });
+  //   return;
+  // }
+
+  // // Verify the JWT. Invalid signatures and expired tokens are rejected
+  // const token = authorization.slice("Bearer ".length).trim();
+
+  // if (!token) {
+  //   res.status(401).json({
+  //     status: "fail",
+  //     message: "Invalid authentication token",
+  //   });
+  //   return;
+  // }
+
+  // the approach below is to set the JWT in an httpOnly-cookie
+  const token = req.cookies?.accessToken;
+
+  if (typeof token !== "string" || !token.trim()) {
     res.status(401).json({
       status: "fail",
       message: "You are not logged in. Please log in to get access.",
-    });
-    return;
-  }
-
-  // Verify the JWT. Invalid signatures and expired tokens are rejected
-  const token = authorization.slice("Bearer ".length).trim();
-
-  if (!token) {
-    res.status(401).json({
-      status: "fail",
-      message: "Invalid authentication token",
     });
     return;
   }

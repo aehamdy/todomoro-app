@@ -53,9 +53,16 @@ export const login: RequestHandler = async (req, res, next) => {
 
     const token = signAccessToken(user.id);
 
+    res.cookie("accessToken", token, {
+      httpOnly: true, // Prevents frontend JavaScript from reading the authentication cookie.
+      secure: process.env.NODE_ENV === "production", // Sends the cookie only over HTTPS in production.
+      sameSite: "lax", // Helps protect against cross-site request forgery (CSRF). It is not our only CSRF defense.
+      maxAge: 7 * 24 * 60 * 60 * 1000, // Keeps the cookie for seven days, matching your JWT lifetime.
+      path: "/", // Makes the cookie available across your API routes.
+    });
+
     res.status(200).json({
       status: "success",
-      token,
       data: {
         user: {
           id: user.id,
