@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
   createTask,
+  deleteTask,
   getTaskById,
   getTasks,
   updateTask,
@@ -33,5 +34,7 @@ taskRouter.patch(
   validateBody(updateTaskSchema),
   updateTask,
 );
+
+taskRouter.delete("/:id", protect, requireCsrfToken, deleteTask);
 
 export default taskRouter;

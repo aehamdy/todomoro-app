@@ -162,3 +162,44 @@ export const updateTask: RequestHandler = async (req, res, next) => {
     next(err);
   }
 };
+
+export const deleteTask: RequestHandler = async (req, res, next) => {
+  try {
+    const userId = req.userId;
+
+    if (!userId) {
+      res.status(401).json({
+        status: "fail",
+        message: "You must be logged in to delete a task",
+      });
+      return;
+    }
+
+    const taskId = req.params.id;
+
+    if (!mongoose.isValidObjectId(taskId)) {
+      res.status(400).json({
+        status: "fail",
+        message: "Invalid task ID",
+      });
+      return;
+    }
+
+    const task = await Task.findOneAndDelete({ _id: taskId, user: userId });
+
+    if (!task) {
+      res.status(404).json({
+        status: "fail",
+        message: "Task not found",
+      });
+      return;
+    }
+
+    res.status(200).json({
+      status: "success",
+      message: "Task deleted successfully",
+    });
+  } catch (err) {
+    next(err);
+  }
+};
