@@ -6,6 +6,7 @@ import { errorHandler } from "./middlewares/error-handler.ts";
 import authRouter from "./routes/auth.routes.ts";
 import cookieParser from "cookie-parser";
 import csrfRouter from "./routes/csrf.routes.js";
+import taskRouter from "./routes/task.routes.ts";
 
 const app = express();
 
@@ -47,6 +48,7 @@ app.get("/api/v1/ready", (_req, res) => {
 app.use("/api/v1/csrf", csrfRouter);
 
 app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/tasks", taskRouter);
 
 app.use(errorHandler);
 
