@@ -31,3 +31,29 @@ export const createTask: RequestHandler = async (req, res, next) => {
     next(err);
   }
 };
+
+export const getTasks: RequestHandler = async (req, res, next) => {
+  try {
+    const userId = req.userId;
+
+    if (!userId) {
+      res.status(401).json({
+        status: "fail",
+        message: "You must be logged in to view tasks",
+      });
+      return;
+    }
+
+    const tasks = await Task.find({ user: userId });
+
+    res.status(200).json({
+      status: "success",
+      results: tasks.length,
+      data: {
+        tasks,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+};
