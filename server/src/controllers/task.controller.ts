@@ -1,5 +1,8 @@
 import { RequestHandler } from "express";
-import { CreateTaskInput } from "../validators/task.validators.ts";
+import {
+  CreateTaskInput,
+  UpdateTaskInput,
+} from "../validators/task.validators.ts";
 import Task from "../models/task.model.ts";
 import mongoose from "mongoose";
 
@@ -85,6 +88,61 @@ export const getTaskById: RequestHandler = async (req, res, next) => {
       _id: taskId,
       user: userId,
     });
+
+    if (!task) {
+      res.status(404).json({
+        status: "fail",
+        message: "Task not found",
+      });
+      return;
+    }
+
+    res.status(200).json({
+      status: "success",
+      data: {
+        task,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const updateTask: RequestHandler = async (req, res, next) => {
+  try {
+    const userId = req.userId;
+
+    if (!userId) {
+      res.status(401).json({
+        status: "fail",
+        message: "You must be logged in to update a task",
+      });
+      return;
+    }
+
+    const taskId = req.params.id;
+
+    if (!mongoose.isValidObjectId(taskId)) {
+      res.status(400).json({
+        status: "fail",
+        message: "Invalid task ID",
+      });
+      return;
+    }
+
+    const input = req.body as UpdateTaskInput;
+
+    const task = await Task.findOneAndUpdate(
+      {
+        _id: taskId,
+        user: userId,
+      },
+      { $set: input },
+      {
+        new: true,
+        runValidators: true,
+      },
+    );
 
     if (!task) {
       res.status(404).json({
