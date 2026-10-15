@@ -1,4 +1,5 @@
 import { Link, Route, Routes } from "react-router-dom";
+import RegisterPage from "./pages/Register";
 
 function HomePage() {
   return (
@@ -40,7 +41,7 @@ function App() {
     <Routes>
       <Route path="/" element={<HomePage />} />
       <Route path="/login" element={<PlaceholderPage title="Login" />} />
-      <Route path="/register" element={<PlaceholderPage title="Register" />} />
+      <Route path="/register" element={<RegisterPage />} />
       <Route
         path="/dashboard"
         element={<PlaceholderPage title="Dashboard" />}
