@@ -1,24 +1,10 @@
-import api from "../../lib/api";
-
-export interface RegisterData {
-  name: string;
-  email: string;
-  password: string;
-}
-
-export interface AuthUser {
-  id: string;
-  name: string;
-  email: string;
-  createdAt: string;
-}
-
-interface RegisterResponse {
-  status: "success";
-  data: {
-    user: AuthUser;
-  };
-}
+import api, { clearCsrfToken } from "../../lib/api";
+import type {
+  LoginData,
+  LoginResponse,
+  RegisterData,
+  RegisterResponse,
+} from "./auth.types";
 
 export async function registerUser(
   data: RegisterData,
@@ -26,4 +12,18 @@ export async function registerUser(
   const response = await api.post<RegisterResponse>("/auth/register", data);
 
   return response.data;
+}
+
+export async function loginUser(data: LoginData): Promise<LoginResponse> {
+  const response = await api.post<LoginResponse>("/auth/login", data);
+
+  return response.data;
+}
+
+export async function logoutUser(): Promise<void> {
+  try {
+    await api.post("/auth/logout");
+  } finally {
+    clearCsrfToken();
+  }
 }
