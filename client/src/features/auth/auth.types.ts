@@ -34,3 +34,10 @@ export interface LoginData {
   email: string;
   password: string;
 }
+
+export interface CurrentUserResponse {
+  status: "success";
+  data: {
+    user: AuthUser;
+  };
+}

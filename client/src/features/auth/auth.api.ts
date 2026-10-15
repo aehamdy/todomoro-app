@@ -1,5 +1,6 @@
 import api, { clearCsrfToken } from "../../lib/api";
 import type {
+  CurrentUserResponse,
   LoginData,
   LoginResponse,
   RegisterData,
@@ -26,4 +27,9 @@ export async function logoutUser(): Promise<void> {
   } finally {
     clearCsrfToken();
   }
+}
+
+export async function getCurrentUser(): Promise<CurrentUserResponse> {
+  const response = await api.get<CurrentUserResponse>("/auth/me");
+  return response.data;
 }

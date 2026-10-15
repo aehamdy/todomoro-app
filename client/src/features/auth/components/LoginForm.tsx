@@ -11,8 +11,10 @@ import {
 } from "@mui/material";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { loginUser } from "./auth.api";
-import { loginSchema, type LoginFormValues } from "./auth.schema";
+import { loginUser } from "../auth.api";
+import { loginSchema, type LoginFormValues } from "../auth.schema";
+import { useQueryClient } from "@tanstack/react-query";
+import { AUTH_QUERY_KEY } from "../useAuth";
 
 interface LoginLocationState {
   message?: string;
@@ -24,6 +26,7 @@ function LoginForm() {
   const location = useLocation();
   const locationState = location.state as LoginLocationState | null;
   const successMessage = locationState?.message;
+  const queryClient = useQueryClient();
 
   const {
     register,
@@ -41,7 +44,10 @@ function LoginForm() {
     setServerError("");
 
     try {
-      await loginUser(values);
+      const response = await loginUser(values);
+
+      queryClient.setQueryData(AUTH_QUERY_KEY, response);
+
       navigate("/dashboard", { replace: true });
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {

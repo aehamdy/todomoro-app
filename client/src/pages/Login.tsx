@@ -1,5 +1,5 @@
 import { Container, Paper, Stack, Typography } from "@mui/material";
-import LoginForm from "../features/auth/LoginForm";
+import LoginForm from "../features/auth/components/LoginForm";
 
 function LoginPage() {
   return (
