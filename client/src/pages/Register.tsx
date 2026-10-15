@@ -1,5 +1,5 @@
 import { Container, Paper, Stack, Typography } from "@mui/material";
-import RegisterForm from "../features/auth/RegisterForm";
+import RegisterForm from "../features/auth/components/RegisterForm";
 
 function RegisterPage() {
   return (

@@ -12,8 +12,8 @@ import {
 } from "@mui/material";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { registerUser } from "./auth.api";
-import { registerSchema, type RegisterFormValues } from "./auth.schema";
+import { registerUser } from "../auth.api";
+import { registerSchema, type RegisterFormValues } from "../auth.schema";
 
 function RegisterForm() {
   const [serverError, setServerError] = useState("");
