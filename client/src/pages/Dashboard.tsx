@@ -16,6 +16,8 @@ import { Logout, TaskAlt } from "@mui/icons-material";
 import { logoutUser } from "../features/auth/auth.api";
 import { AUTH_QUERY_KEY, useAuth } from "../features/auth/useAuth";
 import { ROUTES } from "../routes/paths";
+import TaskList from "../features/tasks/components/TaskList";
+import PageHeading from "../components/ui/PageHeading";
 
 function Dashboard() {
   const { user } = useAuth();
@@ -51,8 +53,6 @@ function Dashboard() {
       setIsLoggingOut(false);
     }
   }
-
-  const firstName = user?.name.trim().split(/\s+/)[0] || "there";
 
   return (
     <Box sx={{ minHeight: "100vh", bgcolor: "grey.50" }}>
@@ -100,14 +100,10 @@ function Dashboard() {
             </Alert>
           )}
 
-          <Box>
-            <Typography variant="h4" sx={{ fontWeight: 700 }} gutterBottom>
-              Welcome back, {firstName}!
-            </Typography>
-            <Typography color="text.secondary">
-              A little progress every day. Let's make today count.
-            </Typography>
-          </Box>
+          <PageHeading
+            title={`Welcome, ${user?.name}!`}
+            description="Here's an overview of your tasks."
+          />
 
           <Paper
             elevation={0}
@@ -161,6 +157,8 @@ function Dashboard() {
               management features next.
             </Typography>
           </Paper>
+
+          <TaskList />
         </Stack>
       </Container>
     </Box>
