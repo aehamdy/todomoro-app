@@ -18,8 +18,8 @@ const taskSchema = new Schema(
     isCompleted: { type: Boolean, default: false },
     priority: {
       type: String,
-      enum: ["no-priority", "low", "medium", "high"],
-      default: "no-priority",
+      enum: ["low", "medium", "high", "urgent"],
+      default: "medium",
     },
     dueDate: { type: Date, default: null },
     user: {

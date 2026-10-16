@@ -11,7 +11,7 @@ const taskFields = {
 
   isCompleted: z.boolean(),
 
-  priority: z.enum(["no-priority", "low", "medium", "high"]),
+  priority: z.enum(["low", "medium", "high", "urgent"]),
 
   dueDate: z
     .string()
