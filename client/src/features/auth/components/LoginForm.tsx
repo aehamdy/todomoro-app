@@ -15,6 +15,7 @@ import { loginUser } from "../auth.api";
 import { loginSchema, type LoginFormValues } from "../auth.schema";
 import { useQueryClient } from "@tanstack/react-query";
 import { AUTH_QUERY_KEY } from "../useAuth";
+import { ROUTES } from "../../../routes/paths";
 
 interface LoginLocationState {
   message?: string;
@@ -48,7 +49,7 @@ function LoginForm() {
 
       queryClient.setQueryData(AUTH_QUERY_KEY, response);
 
-      navigate("/dashboard", { replace: true });
+      navigate(ROUTES.dashboard, { replace: true });
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
         setServerError(
@@ -119,7 +120,7 @@ function LoginForm() {
         Don't have an account?{" "}
         <Link
           component={RouterLink}
-          to="/register"
+          to={ROUTES.register}
           underline="hover"
           sx={{ fontWeight: 600 }}
         >
