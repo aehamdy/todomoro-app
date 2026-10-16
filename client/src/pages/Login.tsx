@@ -29,7 +29,7 @@ function LoginPage() {
           </Typography>
 
           <Typography variant="body1" color="text.secondary">
-            {/* Start organizing your tasks with Todomoro. */}
+            Start organizing your tasks with Todomoro.
           </Typography>
         </Stack>
 

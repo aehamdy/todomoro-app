@@ -2,6 +2,7 @@ import { Link, Route, Routes } from "react-router-dom";
 import RegisterPage from "./pages/Register";
 import LoginPage from "./pages/Login";
 import ProtectedRoute from "./features/auth/components/ProtectedRoute";
+import Dashboard from "./pages/Dashboard";
 
 function HomePage() {
   return (
@@ -45,10 +46,7 @@ function App() {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route element={<ProtectedRoute />}>
-        <Route
-          path="/dashboard"
-          element={<PlaceholderPage title="Dashboard" />}
-        />
+        <Route path="/dashboard" element={<Dashboard />} />
       </Route>
 
       <Route path="*" element={<PlaceholderPage title="Page not found" />} />

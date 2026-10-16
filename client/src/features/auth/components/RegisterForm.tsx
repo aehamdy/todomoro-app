@@ -14,6 +14,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { registerUser } from "../auth.api";
 import { registerSchema, type RegisterFormValues } from "../auth.schema";
+import { ROUTES } from "../../../routes/paths";
 
 function RegisterForm() {
   const [serverError, setServerError] = useState("");
@@ -47,7 +48,7 @@ function RegisterForm() {
       setSuccess(true);
 
       setTimeout(() => {
-        navigate("/login", {
+        navigate(ROUTES.login, {
           state: { message: "Account created successfully. Please log in." },
         });
       }, 2000);
@@ -134,7 +135,7 @@ function RegisterForm() {
         Already have an account?{" "}
         <Link
           component={RouterLink}
-          to="/login"
+          to={ROUTES.login}
           underline="hover"
           sx={{ fontWeight: 600 }}
         >
