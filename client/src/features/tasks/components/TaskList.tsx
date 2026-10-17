@@ -1,10 +1,12 @@
-import { Chip, List, Paper, Stack, Typography } from "@mui/material";
+import { Chip, List, Paper, Stack } from "@mui/material";
 import { useTasks } from "../useTasks";
 
 import TaskItem from "./TaskItem";
 import TasksEmptyList from "./TasksEmptyList";
 import AppLoader from "../../../components/ui/AppLoader";
 import ErrorAlert from "../../../components/ui/ErrorAlert";
+import { priorityColors } from "../task.constants";
+import { blue } from "@mui/material/colors";
 
 function TaskList() {
   const { tasks, isLoading, error, isError, refetch } = useTasks();
@@ -29,6 +31,7 @@ function TaskList() {
       elevation={0}
       sx={{
         p: { xs: 2, sm: 3 },
+        bgcolor: "transparent",
         border: 1,
         borderColor: "divider",
         borderRadius: 3,
@@ -37,29 +40,67 @@ function TaskList() {
       <Stack
         direction="row"
         sx={{
-          mb: 2,
-          alignItems: "center",
+          display: "dlex",
           justifyContent: "space-between",
+          alignItems: "center",
+          mb: 2,
         }}
       >
-        <Typography variant="h6" sx={{ fontWeight: 700 }}>
-          My Tasks
-        </Typography>
+        <Chip
+          label={`${tasks.length} Total`}
+          size="medium"
+          sx={{ fontSize: "14px", color: "white", bgcolor: blue[400] }}
+        />
 
-        <Chip label={`${tasks.length} total`} size="small" />
+        <Stack
+          direction="row"
+          sx={{
+            justifyContent: "space-between",
+            alignItems: "center",
+            gap: 1,
+          }}
+        >
+          <Chip
+            label="Low"
+            size="medium"
+            sx={{
+              color: `${priorityColors["low"].text}`,
+              bgcolor: `${priorityColors["low"].bg}`,
+            }}
+          />
+          <Chip
+            label="Medium"
+            size="medium"
+            sx={{
+              color: `${priorityColors["medium"].text}`,
+              bgcolor: `${priorityColors["medium"].bg}`,
+            }}
+          />
+          <Chip
+            label="High"
+            size="medium"
+            sx={{
+              color: `${priorityColors["high"].text}`,
+              bgcolor: `${priorityColors["high"].bg}`,
+            }}
+          />
+          <Chip
+            label="Urgent"
+            size="medium"
+            sx={{
+              color: `${priorityColors["urgent"].text}`,
+              bgcolor: `${priorityColors["urgent"].bg}`,
+            }}
+          />
+        </Stack>
       </Stack>
 
       {tasks.length === 0 ? (
         <TasksEmptyList />
       ) : (
         <List disablePadding>
-          {tasks.map((task, index) => (
-            <TaskItem
-              key={task._id}
-              task={task}
-              index={index}
-              tasksLength={tasks.length}
-            />
+          {tasks.map((task) => (
+            <TaskItem key={task._id} task={task} />
           ))}
         </List>
       )}

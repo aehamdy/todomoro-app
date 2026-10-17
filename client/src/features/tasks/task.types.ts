@@ -19,3 +19,8 @@ export interface GetTasksResponse {
     tasks: Task[];
   };
 }
+
+export type PriorityColorConfig = {
+  text: string;
+  bg: string;
+};

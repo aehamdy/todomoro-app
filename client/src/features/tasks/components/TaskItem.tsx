@@ -1,78 +1,82 @@
 import type { Task } from "../task.types";
-import { Chip, ListItem, ListItemText, Stack, Typography } from "@mui/material";
-import type { TaskPriority } from "../task.types";
+import {
+  Box,
+  Checkbox,
+  ListItem,
+  ListItemText,
+  Stack,
+  Typography,
+} from "@mui/material";
+import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import { priorityColors } from "../task.constants";
+import { formatDateTime } from "../../../utils/utils";
+import { grey } from "@mui/material/colors";
 
 type TaskItemProps = {
   task: Task;
-  index: number;
-  tasksLength: number;
 };
 
-const priorityColors: Record<
-  TaskPriority,
-  "error" | "warning" | "info" | "default"
-> = {
-  urgent: "error",
-  high: "warning",
-  medium: "info",
-  low: "default",
-};
+function TaskItem({ task }: TaskItemProps) {
+  const dueDate = task.dueDate ? formatDateTime(task.dueDate) : "No due date";
 
-function formatDueDate(dueDate: string | null): string {
-  if (!dueDate) return "No due date";
-
-  return new Intl.DateTimeFormat(undefined, {
-    dateStyle: "medium",
-  }).format(new Date(dueDate));
-}
-
-function TaskItem({ task, index, tasksLength }: TaskItemProps) {
   return (
     <ListItem
-      divider={index !== tasksLength - 1}
       disableGutters
-      sx={{ py: 2, alignItems: "flex-start" }}
+      sx={{
+        display: "flex",
+        alignItems: "stretch", // Ensures children stretch to full height
+        p: 0,
+        mb: "6px",
+        bgcolor: "#fff",
+        border: `1px solid ${priorityColors[task.priority].bg}`,
+        borderRadius: "8px",
+        overflow: "hidden",
+      }}
     >
+      {/* Circular Checkbox Container */}
+      <Box
+        sx={{
+          position: "relative",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          bgcolor: priorityColors[task.priority].bg,
+          borderInlineEnd: "1px solid #eeeeee",
+          px: "20px", // Adds a little horizontal padding around the checkbox
+        }}
+      >
+        <Checkbox
+          icon={<RadioButtonUncheckedIcon />}
+          checkedIcon={<CheckCircleIcon />}
+          checked={task.isCompleted}
+          // onChange={() => onToggle(task.id)}
+          sx={{
+            position: "absolute",
+            inset: 0,
+            width: "100%",
+            height: "100%",
+          }}
+        />
+      </Box>
+
+      {/* Task Text Content */}
       <ListItemText
+        sx={{ my: "auto", py: 1, px: 2 }} // Centers the text vertically inside the ListItem
         primary={
           <Stack>
             <Typography
               sx={{
                 fontWeight: 600,
                 textDecoration: task.isCompleted ? "line-through" : "none",
+                color: task.isCompleted ? "text.secondary" : "text.primary",
               }}
             >
               {task.title}
             </Typography>
-
-            <Typography>{task.note}</Typography>
-          </Stack>
-        }
-        secondary={
-          <Stack
-            direction="row"
-            spacing={1}
-            useFlexGap
-            sx={{
-              mt: 1,
-              flexWrap: "wrap",
-            }}
-          >
-            <Chip
-              label={task.priority}
-              size="small"
-              color={priorityColors[task.priority]}
-            />
-            <Chip
-              label={task.isCompleted ? "Completed" : "Pending"}
-              size="small"
-              variant="outlined"
-            />
-            <Chip
-              label={formatDueDate(task.dueDate)}
-              size="small"
-              variant="outlined"
-            />
+            <Typography variant="caption" sx={{ color: grey[500] }}>
+              {dueDate}
+            </Typography>
           </Stack>
         }
       />
