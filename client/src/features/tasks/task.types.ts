@@ -24,3 +24,16 @@ export type PriorityColorConfig = {
   text: string;
   bg: string;
 };
+
+export interface createTaskRequest {
+  title: string;
+  priority: string;
+  dueDate: string | null;
+}
+
+export interface createTaskResponse {
+  status: "success";
+  data: {
+    task: Task;
+  };
+}

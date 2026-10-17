@@ -1,5 +1,6 @@
 import { Box, Paper, Stack, Typography } from "@mui/material";
 import TaskList from "../features/tasks/components/TaskList";
+import CreateTaskForm from "../features/tasks/components/createTaskForm";
 
 function MyTasksPage() {
   return (
@@ -25,6 +26,8 @@ function MyTasksPage() {
           </Box>
         </Stack>
       </Paper>
+
+      <CreateTaskForm onSuccess={() => {}} />
 
       <TaskList />
     </Stack>
