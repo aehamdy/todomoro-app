@@ -1,39 +1,35 @@
 import { Navigate, Outlet, useLocation } from "react-router-dom";
-import { Box, CircularProgress } from "@mui/material";
-import { useAuth } from "../useAuth";
+import AppLoader from "../../../components/ui/AppLoader";
+import ErrorAlert from "../../../components/ui/ErrorAlert";
 import { ROUTES } from "../../../routes/paths";
+import { useAuth } from "../useAuth";
 
-export default function ProtectedRoute() {
-  const { user, isLoading, isUnauthenticated, error } = useAuth();
+function ProtectedRoute() {
+  const { user, isLoading, error, isUnauthenticated } = useAuth();
   const location = useLocation();
 
   if (isLoading) {
-    return (
-      <Box
-        sx={{
-          minHeight: "100vh",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <CircularProgress aria-label="Checking authentication" />
-      </Box>
-    );
+    return <AppLoader message="Checking your session..." minHeight="100dvh" />;
   }
 
   if (error) {
     return (
-      <Box sx={{ p: 4 }} role="alert">
-        We couldn't verify your session. Please check your connection and try
-        again.
-      </Box>
+      <ErrorAlert
+        message={
+          error instanceof Error
+            ? error.message
+            : "We couldn't verify your session."
+        }
+        onRetry={() => window.location.reload()}
+      />
     );
   }
 
-  if (isUnauthenticated || !user) {
-    return <Navigate to={ROUTES.login} replace state={{ from: location }} />;
+  if (!user || isUnauthenticated) {
+    return <Navigate to={ROUTES.login} state={{ from: location }} replace />;
   }
 
   return <Outlet />;
 }
+
+export default ProtectedRoute;
