@@ -37,3 +37,14 @@ export interface createTaskResponse {
     task: Task;
   };
 }
+
+export interface UpdateTaskRequest {
+  isCompleted: boolean;
+}
+
+export interface UpdateTaskResponse {
+  status: "success";
+  data: {
+    task: Task;
+  };
+}
