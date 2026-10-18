@@ -54,8 +54,6 @@ function DashboardLayout() {
             height: "100%",
             overflowY: "auto",
             bgcolor: "background.paper",
-            borderRight: 1,
-            borderColor: "divider",
           }}
         >
           <AppSidebar />

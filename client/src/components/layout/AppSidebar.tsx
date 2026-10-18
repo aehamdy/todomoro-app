@@ -44,8 +44,7 @@ function AppSidebar() {
           width: "100%",
           height: "100%",
           boxSizing: "border-box",
-          borderRight: 1,
-          borderColor: "#fafafa",
+          borderColor: "transparent",
           overflow: "hidden",
         },
       }}
@@ -84,7 +83,6 @@ function AppSidebar() {
           disablePadding
           sx={{ display: "flex", flexDirection: "column", gap: 0.5 }}
         >
-          {/* 2. Map over the array */}
           {navItems.map((item) => (
             <ListItemButton
               key={item.to}
