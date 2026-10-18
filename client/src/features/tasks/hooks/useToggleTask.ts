@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateTask } from "../task.api";
-import { TASKS_QUERY_KEY } from "../useTasks";
+import { TASKS_QUERY_KEY } from "./useTasks";
 
 interface ToggleTaskVariables {
   taskId: string;

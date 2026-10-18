@@ -20,6 +20,11 @@ export interface GetTasksResponse {
   };
 }
 
+export interface GetTaskResponse {
+  status: "success";
+  data: { task: Task };
+}
+
 export type PriorityColorConfig = {
   text: string;
   bg: string;

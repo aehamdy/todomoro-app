@@ -1,16 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { getTasks } from "./task.api";
+import { getTaskById } from "../task.api";
 
-export const TASKS_QUERY_KEY = ["tasks"] as const;
-
-export function useTasks() {
+export function useTaskDetails(taskId: string | null) {
   const query = useQuery({
-    queryKey: TASKS_QUERY_KEY,
-    queryFn: getTasks,
+    queryKey: ["tasks", taskId],
+    queryFn: () => getTaskById(taskId!),
+    enabled: Boolean(taskId),
     retry: (failureCount, error) => {
-      // A 401 means the user is not authenticated.
-      // Don't repeatedly retry an expected authentication failure.
       if (axios.isAxiosError(error) && error.response?.status === 401) {
         return false;
       }
@@ -20,10 +17,9 @@ export function useTasks() {
   });
 
   return {
-    tasks: query.data?.data.tasks ?? [],
+    task: query.data?.data.task ?? null,
     isLoading: query.isPending,
     error: query.error,
     isError: query.isError,
-    refetch: query.refetch,
   };
 }
