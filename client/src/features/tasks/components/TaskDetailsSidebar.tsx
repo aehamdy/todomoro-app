@@ -1,10 +1,22 @@
-import { Box, Divider, IconButton, Stack, Typography } from "@mui/material";
+import {
+  Alert,
+  Box,
+  CircularProgress,
+  Divider,
+  IconButton,
+  Stack,
+  Typography,
+} from "@mui/material";
 import FlagIcon from "@mui/icons-material/Flag";
 import CloseIcon from "@mui/icons-material/Close";
+import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import { priorityColors } from "../task.constants";
 import { formatDateTime } from "../../../utils/utils";
 import { CheckCircle } from "@mui/icons-material";
 import { useTaskDetails } from "../hooks/useTaskDetails";
+import { useDeleteTask } from "../hooks/useDeleteTask";
+import { useState } from "react";
+import DeleteTaskDialog from "./DeleteTaskDialog";
 
 type TaskDetailsSidebarProps = {
   taskId: string;
@@ -12,7 +24,10 @@ type TaskDetailsSidebarProps = {
 };
 
 function TaskDetailsSidebar({ taskId, onClose }: TaskDetailsSidebarProps) {
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+
   const { task, isLoading, isError } = useTaskDetails(taskId);
+  const { deleteTask, isDeleting, isError: isDeleteError } = useDeleteTask();
 
   if (isLoading) {
     return <div>Loading task details...</div>;
@@ -23,6 +38,15 @@ function TaskDetailsSidebar({ taskId, onClose }: TaskDetailsSidebarProps) {
   }
 
   const dueDate = task.dueDate ? formatDateTime(task.dueDate) : "Someday";
+
+  const handleDelete = () => {
+    deleteTask(taskId, {
+      onSuccess: () => {
+        setIsDeleteDialogOpen(false);
+        onClose();
+      },
+    });
+  };
 
   return (
     <Box
@@ -161,13 +185,35 @@ function TaskDetailsSidebar({ taskId, onClose }: TaskDetailsSidebarProps) {
             Created {formatDateTime(task.createdAt)}
           </Typography>
 
-          <IconButton
-            aria-label="Close task details"
-            size="small"
-            onClick={onClose}
-          >
-            {/* delete button */}
-          </IconButton>
+          <Stack spacing={1} sx={{ alignItems: "flex-end" }}>
+            {isDeleteError && (
+              <Alert severity="error" sx={{ width: "100%" }}>
+                Failed to delete task. Please try again.
+              </Alert>
+            )}
+
+            <IconButton
+              aria-label="Delete task"
+              color="error"
+              onClick={() => setIsDeleteDialogOpen(true)}
+              disabled={isDeleting}
+              size="small"
+            >
+              {isDeleting ? (
+                <CircularProgress size={20} color="inherit" />
+              ) : (
+                <DeleteRoundedIcon />
+              )}
+            </IconButton>
+          </Stack>
+
+          <DeleteTaskDialog
+            taskTitle={task.title}
+            isDeleteDialogOpen={isDeleteDialogOpen}
+            isDeleting={isDeleting}
+            setIsDeleteDialogOpen={setIsDeleteDialogOpen}
+            handleDelete={handleDelete}
+          />
         </Stack>
       </Box>
     </Box>
