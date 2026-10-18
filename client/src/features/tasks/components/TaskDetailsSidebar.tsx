@@ -1,22 +1,16 @@
-import {
-  Alert,
-  Box,
-  CircularProgress,
-  Divider,
-  IconButton,
-  Stack,
-  Typography,
-} from "@mui/material";
-import FlagIcon from "@mui/icons-material/Flag";
-import CloseIcon from "@mui/icons-material/Close";
-import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
-import { priorityColors } from "../task.constants";
-import { formatDateTime } from "../../../utils/utils";
-import { CheckCircle } from "@mui/icons-material";
+import { Alert, Box, Stack } from "@mui/material";
 import { useTaskDetails } from "../hooks/useTaskDetails";
 import { useDeleteTask } from "../hooks/useDeleteTask";
 import { useState } from "react";
-import DeleteTaskDialog from "./DeleteTaskDialog";
+import { useUpdateTask } from "../hooks/useUpdateTask";
+import TaskTitle from "./TaskTitle";
+import TaskDueDate from "./TaskDueDate";
+import TaskNote from "./TaskNote";
+import TaskDetailsHeader from "./TaskDetailsHeader";
+import TaskDetailsFooter from "./TaskDetailsFooter";
+import TaskDate from "./TaskDate";
+import TaskPrioritySelector from "./TaskPrioritySelector";
+import type { TaskPriority } from "../task.types";
 
 type TaskDetailsSidebarProps = {
   taskId: string;
@@ -27,6 +21,7 @@ function TaskDetailsSidebar({ taskId, onClose }: TaskDetailsSidebarProps) {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
   const { task, isLoading, isError } = useTaskDetails(taskId);
+  const { updateTask, isUpdating, isError: isUpdateError } = useUpdateTask();
   const { deleteTask, isDeleting, isError: isDeleteError } = useDeleteTask();
 
   if (isLoading) {
@@ -37,7 +32,40 @@ function TaskDetailsSidebar({ taskId, onClose }: TaskDetailsSidebarProps) {
     return <div>Failed to load task details.</div>;
   }
 
-  const dueDate = task.dueDate ? formatDateTime(task.dueDate) : "Someday";
+  const handleToggleComplete = (isCompleted: boolean) => {
+    updateTask({
+      taskId,
+      taskData: { isCompleted },
+    });
+  };
+
+  const handleSaveTitle = (newTitle: string) => {
+    updateTask({
+      taskId,
+      taskData: { title: newTitle },
+    });
+  };
+
+  const handleSaveDueDate = (newDueDate: string | null) => {
+    updateTask({
+      taskId,
+      taskData: { dueDate: newDueDate },
+    });
+  };
+
+  const handleSavePriority = (newPriority: TaskPriority) => {
+    updateTask({
+      taskId,
+      taskData: { priority: newPriority },
+    });
+  };
+
+  const handleSaveNote = (newNote: string) => {
+    updateTask({
+      taskId,
+      taskData: { note: newNote },
+    });
+  };
 
   const handleDelete = () => {
     deleteTask(taskId, {
@@ -66,156 +94,54 @@ function TaskDetailsSidebar({ taskId, onClose }: TaskDetailsSidebarProps) {
       }}
     >
       <Stack>
-        <Box>
-          <Stack
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-              mb: 2,
-            }}
-          >
-            <Typography
-              variant="subtitle1"
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                gap: "4px",
-                fontWeight: 600,
-              }}
-            >
-              {task.isCompleted ? (
-                <CheckCircle
-                  sx={{
-                    color: "#a9a9a9",
-                    flexShrink: 0,
-                  }}
-                />
-              ) : (
-                <FlagIcon
-                  sx={{
-                    color: priorityColors[task.priority].bg,
-                    fontSize: "30px",
-                    flexShrink: 0,
-                  }}
-                />
-              )}
-              Task details
-            </Typography>
+        <TaskDetailsHeader onClose={onClose} />
 
-            <IconButton
-              aria-label="Close task details"
-              size="small"
-              onClick={onClose}
-            >
-              <CloseIcon fontSize="small" />
-            </IconButton>
-          </Stack>
+        <Stack spacing={1}>
+          {isUpdateError && (
+            <Alert severity="error">
+              Failed to update the task. Please try again.
+            </Alert>
+          )}
 
-          <Divider sx={{ mb: 2 }} />
-        </Box>
+          <TaskTitle
+            title={task.title}
+            isCompleted={task.isCompleted}
+            onSave={handleSaveTitle}
+            onToggleComplete={handleToggleComplete}
+            isSaving={isUpdating}
+          />
 
-        <Stack spacing={2}>
-          <Typography
-            variant="h6"
-            sx={{
-              overflowWrap: "anywhere",
-            }}
-          >
-            {task.title}
-          </Typography>
+          <TaskDate taskDate={task.createdAt} />
 
-          <Stack
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <Typography variant="caption" color="text.secondary">
-              Due date
-            </Typography>
-            <Typography>{dueDate}</Typography>
-          </Stack>
+          <TaskDueDate
+            dueDate={task.dueDate}
+            onSave={handleSaveDueDate}
+            isSaving={isUpdating}
+          />
 
-          <Stack
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <Typography variant="caption" color="text.secondary">
-              Status
-            </Typography>
+          <TaskPrioritySelector
+            priority={task.priority}
+            onSave={handleSavePriority}
+            isSaving={isUpdating}
+          />
 
-            <Typography>
-              {task.isCompleted ? "Completed" : "In progress"}
-            </Typography>
-          </Stack>
-
-          <Box>
-            <Typography variant="caption" color="text.secondary">
-              Note
-            </Typography>
-            <Typography
-              sx={{ whiteSpace: "pre-wrap", overflowWrap: "anywhere" }}
-            >
-              {task.note || "No note added."}
-            </Typography>
-          </Box>
+          <TaskNote
+            note={task.note}
+            onSave={handleSaveNote}
+            isSaving={isUpdating}
+          />
         </Stack>
       </Stack>
 
-      <Box>
-        <Divider sx={{ mb: 2 }} />
-
-        <Stack
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <Typography variant="caption" color="text.secondary">
-            Created {formatDateTime(task.createdAt)}
-          </Typography>
-
-          <Stack spacing={1} sx={{ alignItems: "flex-end" }}>
-            {isDeleteError && (
-              <Alert severity="error" sx={{ width: "100%" }}>
-                Failed to delete task. Please try again.
-              </Alert>
-            )}
-
-            <IconButton
-              aria-label="Delete task"
-              color="error"
-              onClick={() => setIsDeleteDialogOpen(true)}
-              disabled={isDeleting}
-              size="small"
-            >
-              {isDeleting ? (
-                <CircularProgress size={20} color="inherit" />
-              ) : (
-                <DeleteRoundedIcon />
-              )}
-            </IconButton>
-          </Stack>
-
-          <DeleteTaskDialog
-            taskTitle={task.title}
-            isDeleteDialogOpen={isDeleteDialogOpen}
-            isDeleting={isDeleting}
-            setIsDeleteDialogOpen={setIsDeleteDialogOpen}
-            handleDelete={handleDelete}
-          />
-        </Stack>
-      </Box>
+      <TaskDetailsFooter
+        taskTitle={task.title}
+        creationDate={task.createdAt}
+        isDeleteError={isDeleteError}
+        isDeleting={isDeleting}
+        setIsDeleteDialogOpen={setIsDeleteDialogOpen}
+        isDeleteDialogOpen={isDeleteDialogOpen}
+        handleDelete={handleDelete}
+      />
     </Box>
   );
 }
