@@ -16,9 +16,10 @@ import TaskCheckbox from "./TaskCheckbox";
 
 type TaskItemProps = {
   task: Task;
+  onClick: () => void;
 };
 
-function TaskItem({ task }: TaskItemProps) {
+function TaskItem({ task, onClick }: TaskItemProps) {
   const { toggleTask, isToggling, error, isError } = useToggleTask();
   const [showError, setShowError] = useState(false);
 
@@ -46,8 +47,10 @@ function TaskItem({ task }: TaskItemProps) {
             ? ""
             : `1px solid ${priorityColors[task.priority].bg}`,
           borderRadius: "8px",
+          cursor: "pointer",
           overflow: "hidden",
         }}
+        onClick={onClick}
       >
         <TaskCheckbox
           isCompleted={task.isCompleted}

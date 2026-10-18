@@ -1,14 +1,16 @@
 import { Chip, List, Paper, Stack } from "@mui/material";
 import { useTasks } from "../useTasks";
-
 import TaskItem from "./TaskItem";
 import TasksEmptyList from "./TasksEmptyList";
 import AppLoader from "../../../components/ui/AppLoader";
 import ErrorAlert from "../../../components/ui/ErrorAlert";
 import { priorityColors } from "../task.constants";
 import { blue } from "@mui/material/colors";
+import { useOutletContext } from "react-router-dom";
+import type { DashboardOutletContext } from "../../../components/layout/DashboardLayout";
 
 function TaskList() {
+  const { setSelectedTask } = useOutletContext<DashboardOutletContext>();
   const { tasks, isLoading, error, isError, refetch } = useTasks();
 
   if (isLoading) return <AppLoader message="Loading tasks..." />;
@@ -100,7 +102,11 @@ function TaskList() {
       ) : (
         <List disablePadding>
           {tasks.map((task) => (
-            <TaskItem key={task._id} task={task} />
+            <TaskItem
+              key={task._id}
+              task={task}
+              onClick={() => setSelectedTask(task)}
+            />
           ))}
         </List>
       )}
