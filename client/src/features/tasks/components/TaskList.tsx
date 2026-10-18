@@ -1,5 +1,5 @@
 import { Chip, List, Paper, Stack } from "@mui/material";
-import { useTasks } from "../useTasks";
+import { useTasks } from "../hooks/useTasks";
 import TaskItem from "./TaskItem";
 import TasksEmptyList from "./TasksEmptyList";
 import AppLoader from "../../../components/ui/AppLoader";

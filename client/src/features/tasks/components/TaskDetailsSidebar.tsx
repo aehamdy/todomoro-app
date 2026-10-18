@@ -1,17 +1,27 @@
 import { Box, Divider, IconButton, Stack, Typography } from "@mui/material";
 import FlagIcon from "@mui/icons-material/Flag";
 import CloseIcon from "@mui/icons-material/Close";
-import type { Task } from "../task.types";
 import { priorityColors } from "../task.constants";
 import { formatDateTime } from "../../../utils/utils";
 import { CheckCircle } from "@mui/icons-material";
+import { useTaskDetails } from "../hooks/useTaskDetails";
 
 type TaskDetailsSidebarProps = {
-  task: Task;
+  taskId: string;
   onClose: () => void;
 };
 
-function TaskDetailsSidebar({ task, onClose }: TaskDetailsSidebarProps) {
+function TaskDetailsSidebar({ taskId, onClose }: TaskDetailsSidebarProps) {
+  const { task, isLoading, isError } = useTaskDetails(taskId);
+
+  if (isLoading) {
+    return <div>Loading task details...</div>;
+  }
+
+  if (isError || !task) {
+    return <div>Failed to load task details.</div>;
+  }
+
   const dueDate = task.dueDate ? formatDateTime(task.dueDate) : "Someday";
 
   return (

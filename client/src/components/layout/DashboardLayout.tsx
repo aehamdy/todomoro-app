@@ -107,7 +107,7 @@ function DashboardLayout() {
         >
           {selectedTask && (
             <TaskDetailsSidebar
-              task={selectedTask}
+              taskId={selectedTask._id}
               onClose={() => setSelectedTask(null)}
             />
           )}
