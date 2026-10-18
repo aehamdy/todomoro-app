@@ -36,3 +36,7 @@ export async function updateTask(
 
   return response.data;
 }
+
+export async function deleteTask(taskId: string): Promise<void> {
+  await api.delete(`/tasks/${taskId}`);
+}
