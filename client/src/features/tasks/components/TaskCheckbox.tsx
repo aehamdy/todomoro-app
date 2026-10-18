@@ -34,6 +34,7 @@ function TaskCheckbox({
         checkedIcon={<CheckCircleIcon />}
         checked={isCompleted}
         onChange={handleToggle}
+        onClick={(event) => event.stopPropagation()}
         disabled={isToggling}
         sx={{
           position: "absolute",
