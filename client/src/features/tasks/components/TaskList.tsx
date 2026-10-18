@@ -32,11 +32,8 @@ function TaskList() {
     <Paper
       elevation={0}
       sx={{
-        p: { xs: 2, sm: 3 },
+        p: 2,
         bgcolor: "transparent",
-        border: 1,
-        borderColor: "divider",
-        borderRadius: 3,
       }}
     >
       <Stack

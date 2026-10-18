@@ -5,7 +5,7 @@ import CreateTaskForm from "../features/tasks/components/createTaskForm";
 function MyTasksPage() {
   return (
     <Stack spacing={4}>
-      <Paper elevation={1} sx={{ p: 3, borderRadius: "8px" }}>
+      <Paper elevation={0} sx={{ p: 3, borderRadius: "8px" }}>
         <Stack
           direction={{ xs: "column", sm: "row" }}
           spacing={2}

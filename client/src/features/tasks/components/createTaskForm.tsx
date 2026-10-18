@@ -90,6 +90,7 @@ export default function CreateTaskForm({ onSuccess }: CreateTaskFormProps) {
           alignItems: "center",
           gap: { xs: 0.5, sm: 1 },
           p: { xs: 0.5, sm: 1 },
+          borderColor: "transparent",
           borderRadius: 2,
           minWidth: 0,
           transition: "border-color 150ms ease",

@@ -22,11 +22,12 @@ function TaskDetailsSidebar({ task, onClose }: TaskDetailsSidebarProps) {
         flexDirection: "column",
         justifyContent: "space-between",
         minWidth: 0,
-        height: "100%",
+        height: "calc(100% - 40px)",
+        my: "20px",
+        mx: 2,
         p: 2,
         bgcolor: "background.paper",
-        borderLeft: 1,
-        borderColor: "divider",
+        borderRadius: "8px",
         overflowY: "auto",
       }}
     >
