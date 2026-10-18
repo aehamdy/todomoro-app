@@ -32,7 +32,10 @@ export async function updateTask(
   taskId: string,
   taskData: UpdateTaskRequest,
 ): Promise<UpdateTaskResponse> {
-  const response = await api.patch(`/tasks/${taskId}`, taskData);
+  const response = await api.patch<UpdateTaskResponse>(
+    `/tasks/${taskId}`,
+    taskData,
+  );
 
   return response.data;
 }

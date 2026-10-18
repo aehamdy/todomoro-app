@@ -44,7 +44,11 @@ export interface createTaskResponse {
 }
 
 export interface UpdateTaskRequest {
-  isCompleted: boolean;
+  title?: string;
+  note?: string;
+  isCompleted?: boolean;
+  priority?: TaskPriority;
+  dueDate?: string | null;
 }
 
 export interface UpdateTaskResponse {
