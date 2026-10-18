@@ -1,86 +1,99 @@
 import type { Task } from "../task.types";
 import {
-  Box,
-  Checkbox,
+  Alert,
   ListItem,
   ListItemText,
+  Snackbar,
   Stack,
   Typography,
 } from "@mui/material";
-import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { priorityColors } from "../task.constants";
 import { formatDateTime } from "../../../utils/utils";
 import { grey } from "@mui/material/colors";
+import { useToggleTask } from "../hooks/useToggleTask";
+import { useState } from "react";
+import TaskCheckbox from "./TaskCheckbox";
 
 type TaskItemProps = {
   task: Task;
 };
 
 function TaskItem({ task }: TaskItemProps) {
+  const { toggleTask, isToggling, error, isError } = useToggleTask();
+  const [showError, setShowError] = useState(false);
+
+  const handleToggle = async () => {
+    try {
+      await toggleTask({ taskId: task._id, isCompleted: !task.isCompleted });
+    } catch {
+      setShowError(true);
+    }
+  };
+
   const dueDate = task.dueDate ? formatDateTime(task.dueDate) : "No due date";
 
   return (
-    <ListItem
-      disableGutters
-      sx={{
-        display: "flex",
-        alignItems: "stretch", // Ensures children stretch to full height
-        p: 0,
-        mb: "6px",
-        bgcolor: "#fff",
-        border: `1px solid ${priorityColors[task.priority].bg}`,
-        borderRadius: "8px",
-        overflow: "hidden",
-      }}
-    >
-      {/* Circular Checkbox Container */}
-      <Box
+    <>
+      <ListItem
+        disableGutters
         sx={{
-          position: "relative",
           display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          bgcolor: priorityColors[task.priority].bg,
-          borderInlineEnd: "1px solid #eeeeee",
-          px: "20px", // Adds a little horizontal padding around the checkbox
+          alignItems: "stretch",
+          p: 0,
+          mb: "6px",
+          bgcolor: task.isCompleted ? "grey.200" : "#fff",
+          border: task.isCompleted
+            ? ""
+            : `1px solid ${priorityColors[task.priority].bg}`,
+          borderRadius: "8px",
+          overflow: "hidden",
         }}
       >
-        <Checkbox
-          icon={<RadioButtonUncheckedIcon />}
-          checkedIcon={<CheckCircleIcon />}
-          checked={task.isCompleted}
-          // onChange={() => onToggle(task.id)}
-          sx={{
-            position: "absolute",
-            inset: 0,
-            width: "100%",
-            height: "100%",
-          }}
+        <TaskCheckbox
+          isCompleted={task.isCompleted}
+          priority={task.priority}
+          handleToggle={handleToggle}
+          isToggling={isToggling}
         />
-      </Box>
 
-      {/* Task Text Content */}
-      <ListItemText
-        sx={{ my: "auto", py: 1, px: 2 }} // Centers the text vertically inside the ListItem
-        primary={
-          <Stack>
-            <Typography
-              sx={{
-                fontWeight: 600,
-                textDecoration: task.isCompleted ? "line-through" : "none",
-                color: task.isCompleted ? "text.secondary" : "text.primary",
-              }}
-            >
-              {task.title}
-            </Typography>
-            <Typography variant="caption" sx={{ color: grey[500] }}>
-              {dueDate}
-            </Typography>
-          </Stack>
-        }
-      />
-    </ListItem>
+        <ListItemText
+          sx={{ my: "auto", py: 1, px: 2 }}
+          primary={
+            <Stack>
+              <Typography
+                sx={{
+                  fontWeight: 600,
+                  textDecoration: task.isCompleted ? "line-through" : "none",
+                  color: task.isCompleted ? "text.secondary" : "text.primary",
+                }}
+              >
+                {task.title}
+              </Typography>
+              <Typography variant="caption" sx={{ color: grey[500] }}>
+                {dueDate}
+              </Typography>
+            </Stack>
+          }
+        />
+      </ListItem>
+
+      <Snackbar
+        open={showError && isError}
+        autoHideDuration={5000}
+        onClose={() => setShowError(false)}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert
+          severity="error"
+          onClose={() => setShowError(false)}
+          variant="filled"
+        >
+          {error instanceof Error
+            ? error.message
+            : "Failed to update task. Please try again."}
+        </Alert>
+      </Snackbar>
+    </>
   );
 }
 
