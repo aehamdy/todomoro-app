@@ -218,7 +218,8 @@ function DashboardLayout() {
                 top: `${HEADER_HEIGHT + 12}px`,
                 left: isSidebarOpen ? "min(290px, 85vw)" : 0,
                 transform: isSidebarOpen ? "translateX(-50%)" : "translateX(0)",
-                zIndex: 1501,
+                // Lower than the Settings modal (1300) so it stays behind it
+                zIndex: 1250,
                 width: 36,
                 height: 40,
                 bgcolor: "background.paper",
