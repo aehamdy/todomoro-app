@@ -56,16 +56,10 @@ export const updateAccountSchema = z
     },
   );
 
-export const changePasswordSchema = z
-  .object({
-    currentPassword: z.string().min(8),
-    newPassword: z.string().min(8).max(20),
-    confirmPassword: z.string().min(8).max(20),
-  })
-  .refine((data) => data.newPassword === data.confirmPassword, {
-    message: "Password do not match",
-    path: ["confirmPassword"],
-  });
+export const changePasswordSchema = z.object({
+  currentPassword: z.string().min(1),
+  newPassword: z.string().min(8).max(20),
+});
 
 export type RegisterInput = z.infer<typeof registerSchema>;
 export type LoginInput = z.infer<typeof loginSchema>;
