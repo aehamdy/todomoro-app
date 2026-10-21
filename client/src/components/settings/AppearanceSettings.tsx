@@ -1,10 +1,8 @@
-/* eslint-disable react-hooks/set-state-in-effect */
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import type { ChangeEvent } from "react";
 import { Alert, Box, MenuItem, TextField, Typography } from "@mui/material";
-import { grey } from "@mui/material/colors";
 import type { ThemePreference } from "../../features/auth/auth.types";
-import { useAuth } from "../../features/auth/useAuth";
+import { useAppTheme } from "../../theme/AppThemeProvider";
 import { useUpdateUserPreferences } from "../../features/auth/useUpdateUserPreferences";
 
 const themeOptions: {
@@ -17,24 +15,29 @@ const themeOptions: {
 ];
 
 function AppearanceSettings() {
-  const { user } = useAuth();
+  const { themePreference, setThemePreference } = useAppTheme();
   const updatePreferences = useUpdateUserPreferences();
 
-  const savedTheme = user?.preferences?.theme ?? "system";
-  const [themeMode, setThemeMode] = useState<ThemePreference>(savedTheme);
-
-  useEffect(() => {
-    setThemeMode(savedTheme);
-  }, [savedTheme]);
+  const [saveError, setSaveError] = useState(false);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const nextTheme = event.target.value as ThemePreference;
+    const previousTheme = themePreference;
 
-    setThemeMode(nextTheme);
+    setSaveError(false);
 
+    // Apply the new theme immediately.
+    setThemePreference(nextTheme);
+
+    // Persist the preference in the backend.
     updatePreferences.mutate(nextTheme, {
+      onSuccess: () => {
+        setSaveError(false);
+      },
       onError: () => {
-        setThemeMode(savedTheme);
+        // Restore the previous theme if saving fails.
+        setThemePreference(previousTheme);
+        setSaveError(true);
       },
     });
   };
@@ -49,7 +52,7 @@ function AppearanceSettings() {
         <Box sx={{ flex: 1, minWidth: 0 }}>
           <TextField
             select
-            value={themeMode}
+            value={themePreference}
             onChange={handleChange}
             size="small"
             disabled={updatePreferences.isPending}
@@ -57,10 +60,10 @@ function AppearanceSettings() {
               width: 200,
               "& .MuiOutlinedInput-root": {
                 "& fieldset": {
-                  borderColor: grey[300],
+                  borderColor: "divider",
                 },
                 "&:hover fieldset": {
-                  borderColor: grey[400],
+                  borderColor: "text.secondary",
                 },
                 "&.Mui-focused fieldset": {
                   borderColor: "primary.main",
@@ -77,9 +80,10 @@ function AppearanceSettings() {
         </Box>
       </Box>
 
-      {updatePreferences.isError && (
+      {saveError && (
         <Alert severity="error" sx={{ mt: 2 }}>
-          Failed to save your theme preference. Please try again.
+          Failed to save your theme preference. Your previous theme has been
+          restored. Please try again.
         </Alert>
       )}
     </Box>

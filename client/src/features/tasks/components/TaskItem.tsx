@@ -7,7 +7,6 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { priorityColors } from "../task.constants";
 import { formatDateTime } from "../../../utils/utils";
 import { grey } from "@mui/material/colors";
 import { useToggleTask } from "../hooks/useToggleTask";
@@ -42,10 +41,11 @@ function TaskItem({ task, onClick }: TaskItemProps) {
           alignItems: "stretch",
           p: 0,
           mb: "6px",
-          bgcolor: task.isCompleted ? "grey.200" : "#fff",
-          border: task.isCompleted
-            ? ""
-            : `1px solid ${priorityColors[task.priority].bg}`,
+          // bgcolor: task.isCompleted ? "grey.200" : "#fff",
+          bgcolor: "background.default",
+          // border: task.isCompleted
+          //   ? ""
+          //   : `1px solid ${priorityColors[task.priority].bg}`,
           borderRadius: "8px",
           cursor: "pointer",
           overflow: "hidden",
