@@ -5,6 +5,7 @@ import type {
   LoginResponse,
   RegisterData,
   RegisterResponse,
+  UpdateAccountData,
 } from "./auth.types";
 
 export async function registerUser(
@@ -31,5 +32,11 @@ export async function logoutUser(): Promise<void> {
 
 export async function getCurrentUser(): Promise<CurrentUserResponse> {
   const response = await api.get<CurrentUserResponse>("/auth/me");
+  return response.data;
+}
+
+export async function updateAccount(data: UpdateAccountData) {
+  const response = await api.patch("/auth/me", data);
+
   return response.data;
 }

@@ -41,3 +41,9 @@ export interface CurrentUserResponse {
     user: AuthUser;
   };
 }
+
+export type UpdateAccountData = {
+  name?: string;
+  email?: string;
+  currentPassword?: string;
+};

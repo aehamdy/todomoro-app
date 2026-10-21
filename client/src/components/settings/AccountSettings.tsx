@@ -1,18 +1,28 @@
-import { useState } from "react";
+/* eslint-disable react-hooks/set-state-in-effect */
+import { useEffect, useState } from "react";
 import { Box, Button, Stack, TextField, Typography } from "@mui/material";
-import { useAuth } from "../../features/auth/useAuth";
 import { grey } from "@mui/material/colors";
 import EmailChangeModal from "./EmailChangeModal";
 import PasswordChangeModal from "./PasswordChangeModal";
+import { useUpdateAccount } from "../../features/auth/useUpdateAccount";
+import { useAuth } from "../../features/auth/useAuth";
 
 function AccountSettings() {
   const { user, isLoading } = useAuth();
+  const updateAccountMutation = useUpdateAccount();
+
+  const [name, setName] = useState("");
+  const [isSaving, setIsSaving] = useState(false);
+  const [error, setError] = useState("");
+
   const [isPasswordDialogOpen, setIsPasswordDialogOpen] = useState(false);
   const [isEmailDialogOpen, setIsEmailDialogOpen] = useState(false);
 
-  if (isLoading) {
-    return <Typography>Loading account information...</Typography>;
-  }
+  useEffect(() => {
+    if (user?.name !== undefined) {
+      setName(user.name);
+    }
+  }, [user?.name]);
 
   const handleCloseEmailDialog = () => {
     setIsEmailDialogOpen(false);
@@ -21,6 +31,45 @@ function AccountSettings() {
   const handleClosePasswordDialog = () => {
     setIsPasswordDialogOpen(false);
   };
+
+  const handleBlur = async () => {
+    if (!user || isSaving) return;
+
+    const trimmedName = name.trim();
+
+    if (!trimmedName) {
+      setName(user.name);
+      setError("Name cannot be empty.");
+      return;
+    }
+
+    if (trimmedName === user.name) {
+      setName(user.name);
+      setError("");
+      return;
+    }
+
+    setIsSaving(true);
+    setError("");
+
+    try {
+      const response = await updateAccountMutation.mutateAsync({
+        name: trimmedName,
+      });
+
+      setName(response.data.user.name);
+      setError("");
+    } catch {
+      setName(user.name);
+      setError("Failed to update your name. Please try again.");
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  if (isLoading) {
+    return <Typography>Loading account information...</Typography>;
+  }
 
   if (!user) {
     return (
@@ -32,7 +81,6 @@ function AccountSettings() {
 
   return (
     <>
-      {/* Account information rows */}
       <Stack spacing={2}>
         {/* Name */}
         <Box sx={{ display: "flex", alignItems: "center", gap: 5 }}>
@@ -42,26 +90,26 @@ function AccountSettings() {
 
           <Box sx={{ flex: 1, minWidth: 0 }}>
             <TextField
-              value={user.name}
-              size="small"
-              slotProps={{
-                input: { readOnly: true },
+              value={name}
+              onChange={(event) => {
+                setName(event.target.value);
+                setError("");
               }}
+              onBlur={handleBlur}
+              size="small"
+              disabled={isSaving}
+              error={Boolean(error)}
+              helperText={error || (isSaving ? "Saving..." : " ")}
               sx={{
-                bgcolor: grey[100],
-                // Target the outlined input wrapper to style borders
                 "& .MuiOutlinedInput-root": {
-                  // Normal state border
                   "& fieldset": {
                     borderColor: grey[300],
                   },
-                  // Hover state border
                   "&:hover fieldset": {
                     borderColor: grey[400],
                   },
-                  // Focused/Active state border
                   "&.Mui-focused fieldset": {
-                    borderColor: "primary.main", // or any color/hex you prefer
+                    borderColor: "primary.main",
                   },
                 },
               }}
@@ -93,19 +141,15 @@ function AccountSettings() {
               }}
               sx={{
                 bgcolor: grey[100],
-                // Target the outlined input wrapper to style borders
                 "& .MuiOutlinedInput-root": {
-                  // Normal state border
                   "& fieldset": {
                     borderColor: grey[300],
                   },
-                  // Hover state border
                   "&:hover fieldset": {
                     borderColor: grey[400],
                   },
-                  // Focused/Active state border
                   "&.Mui-focused fieldset": {
-                    borderColor: "primary.main", // or any color/hex you prefer
+                    borderColor: "primary.main",
                   },
                 },
               }}
