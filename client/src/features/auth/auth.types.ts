@@ -1,3 +1,5 @@
+export type ThemePreference = "system" | "light" | "dark";
+
 export interface RegisterData {
   name: string;
   email: string;
@@ -15,6 +17,9 @@ export interface AuthUser {
   id: string;
   name: string;
   email: string;
+  preferences: {
+    theme: ThemePreference;
+  };
   createdAt: string;
 }
 
@@ -51,4 +56,15 @@ export type UpdateAccountData = {
 export type ChangePasswordData = {
   currentPassword: string;
   newPassword: string;
+};
+
+export type UserPreferences = {
+  theme: ThemePreference;
+};
+
+export type UpdatePreferencesResponse = {
+  status: "success";
+  data: {
+    preferences: UserPreferences;
+  };
 };

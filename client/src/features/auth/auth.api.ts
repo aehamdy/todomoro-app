@@ -6,7 +6,9 @@ import type {
   LoginResponse,
   RegisterData,
   RegisterResponse,
+  ThemePreference,
   UpdateAccountData,
+  UpdatePreferencesResponse,
 } from "./auth.types";
 
 export async function registerUser(
@@ -44,4 +46,13 @@ export async function updateAccount(data: UpdateAccountData) {
 
 export function changePassword(data: ChangePasswordData) {
   return api.patch("/auth/me/password", data);
+}
+
+export async function updateUserPreferences(theme: ThemePreference) {
+  const response = await api.patch<UpdatePreferencesResponse>(
+    "/auth/me/preferences",
+    { theme },
+  );
+
+  return response.data;
 }
