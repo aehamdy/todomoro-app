@@ -61,7 +61,12 @@ export const changePasswordSchema = z.object({
   newPassword: z.string().min(8).max(20),
 });
 
+export const updatePreferencesSchema = z.object({
+  theme: z.enum(["system", "light", "dark"]),
+});
+
 export type RegisterInput = z.infer<typeof registerSchema>;
 export type LoginInput = z.infer<typeof loginSchema>;
 export type UpdateAccountInput = z.infer<typeof updateAccountSchema>;
 export type ChangePasswordInput = z.infer<typeof changePasswordSchema>;
+export type UpdatePreferencesInput = z.infer<typeof updatePreferencesSchema>;

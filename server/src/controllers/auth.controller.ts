@@ -5,6 +5,7 @@ import {
   LoginInput,
   RegisterInput,
   UpdateAccountInput,
+  UpdatePreferencesInput,
 } from "../validators/auth.validators.ts";
 import { comparePassword, hashPassword } from "../services/password.service.ts";
 import { signAccessToken } from "../services/jwt.service.ts";
@@ -253,6 +254,35 @@ export const changePassword: RequestHandler = async (req, res, next) => {
     res.status(200).json({
       status: "success",
       message: "Password updated successfully",
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const updatePreferences: RequestHandler = async (req, res, next) => {
+  try {
+    const userId = req.userId;
+    const { theme } = req.body as UpdatePreferencesInput;
+
+    const user = await User.findById(userId);
+
+    if (!user) {
+      res.status(401).json({
+        status: "fail",
+        message: "User no longer exists",
+      });
+      return;
+    }
+
+    user.set("preferences.theme", theme);
+    await user.save();
+
+    res.status(200).json({
+      status: "success",
+      data: {
+        preferences: { theme: user.get("preferences.theme") ?? "system" },
+      },
     });
   } catch (err) {
     next(err);

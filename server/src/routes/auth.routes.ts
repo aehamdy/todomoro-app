@@ -5,6 +5,7 @@ import {
   loginSchema,
   registerSchema,
   updateAccountSchema,
+  updatePreferencesSchema,
 } from "../validators/auth.validators.ts";
 import {
   changePassword,
@@ -13,6 +14,7 @@ import {
   logout,
   register,
   updateAccount,
+  updatePreferences,
 } from "../controllers/auth.controller.ts";
 import { protect } from "../middlewares/auth.middleware.ts";
 import { requireCsrfToken } from "../middlewares/csrf.middleware.ts";
@@ -40,3 +42,11 @@ authRouter.patch(
   changePassword,
 );
 export default authRouter;
+
+authRouter.patch(
+  "/me/preferences",
+  protect,
+  requireCsrfToken,
+  validateBody(updatePreferencesSchema),
+  updatePreferences,
+);
