@@ -93,7 +93,9 @@ export const getMe: RequestHandler = async (req, res, next) => {
   try {
     const userId = req.userId;
 
-    const user = await User.findById(userId).select("_id name email createdAt");
+    const user = await User.findById(userId).select(
+      "_id name email preferences createdAt",
+    );
 
     if (!user) {
       res.status(401).json({
@@ -110,6 +112,9 @@ export const getMe: RequestHandler = async (req, res, next) => {
           id: user.id,
           name: user.name,
           email: user.email,
+          preferences: {
+            theme: user.preferences?.theme ?? "system",
+          },
           createdAt: user.createdAt,
         },
       },
