@@ -41,11 +41,20 @@ function LogoutButton() {
   return (
     <>
       <Button
-        variant="outlined"
         startIcon={<Logout />}
         onClick={handleLogout}
         disabled={isLoggingOut}
-        sx={{ color: "red", borderColor: "red" }}
+        sx={{
+          display: "flex",
+          flex: 1,
+          width: "100%",
+          color: "error.main",
+          borderColor: "error.main",
+          "&:hover": {
+            backgroundColor: "rgba(211, 47, 47, 0.08)",
+            borderColor: "error.main",
+          },
+        }}
       >
         {isLoggingOut ? "Logging out..." : "Log out"}
       </Button>
