@@ -1,6 +1,11 @@
 import { RequestHandler } from "express";
 import User from "../models/user.model.ts";
-import { LoginInput, RegisterInput } from "../validators/auth.validators.ts";
+import {
+  ChangePasswordInput,
+  LoginInput,
+  RegisterInput,
+  UpdateAccountInput,
+} from "../validators/auth.validators.ts";
 import { comparePassword, hashPassword } from "../services/password.service.ts";
 import { signAccessToken } from "../services/jwt.service.ts";
 
@@ -126,4 +131,126 @@ export const logout: RequestHandler = (_req, res) => {
     status: "success",
     message: "Logged out successfully",
   });
+};
+
+export const updateAccount: RequestHandler = async (req, res, next) => {
+  try {
+    // Get the ID of the currently authenticated user.
+    // The `protect` middleware should set req.userId.
+    const userId = req.userId;
+
+    // Extract the name and email sent by the client.
+    // Either property might be undefined because both are optional.
+    const { name, email } = req.body as UpdateAccountInput;
+
+    // Search MongoDB for the user whose ID matches userId.
+    const user = await User.findById(userId);
+
+    // If no user exists with this ID, stop the function.
+    if (!user) {
+      // Send an error response because the account no longer exists.
+      res.status(401).json({
+        status: "fail",
+        message: "User no longer exists",
+      });
+
+      // Stop execution so the remaining code doesn't run.
+      return;
+    }
+
+    // Only check the email if the client provided one
+    // and it differs from the user's current email.
+    if (email !== undefined && email !== user.email) {
+      // Look for another user with this email.
+      // $ne means "not equal to", so exclude the current user.
+      const existingUser = await User.findOne({
+        email,
+        _id: { $ne: userId },
+      });
+
+      // If another account already uses this email, reject the update.
+      if (existingUser) {
+        // HTTP 409 means the request conflicts with existing data.
+        res.status(409).json({
+          status: "fail",
+          message: "Email is already in use",
+        });
+
+        // Stop execution to avoid updating the account.
+        return;
+      }
+
+      // No other account uses this email, so update the user's email.
+      user.email = email;
+    }
+
+    // Update the name only if the client provided one.
+    if (name !== undefined) {
+      user.name = name;
+    }
+
+    // Save the changes to MongoDB.
+    // Mongoose runs its configured validation during this save.
+    await user.save();
+
+    // Send HTTP 200 to indicate that the update succeeded.
+    res.status(200).json({
+      // Indicate that the operation was successful.
+      status: "success",
+
+      // Put the updated account information inside data.
+      data: {
+        // Return the user object to the client.
+        user: {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          createdAt: user.createdAt,
+        },
+      },
+    });
+  } catch (err) {
+    // Pass unexpected errors to Express's error-handling middleware.
+    next(err);
+  }
+};
+
+export const changePassword: RequestHandler = async (req, res, next) => {
+  try {
+    const userId = req.userId;
+    const { currentPassword, newPassword } = req.body as ChangePasswordInput;
+
+    const user = await User.findById(userId).select("+password");
+
+    if (!user) {
+      res.status(401).json({
+        status: "fail",
+        message: "User no longer exists",
+      });
+      return;
+    }
+
+    const isPasswordCorrect = await comparePassword(
+      currentPassword,
+      user.password,
+    );
+
+    if (!isPasswordCorrect) {
+      res.status(400).json({
+        status: "fail",
+        message: "Current password is incorrect",
+      });
+      return;
+    }
+
+    user.password = await hashPassword(newPassword);
+    await user.save();
+
+    res.status(200).json({
+      status: "success",
+      message: "Password updated successfully",
+    });
+  } catch (err) {
+    next(err);
+  }
 };
