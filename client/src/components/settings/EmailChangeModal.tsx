@@ -1,5 +1,7 @@
+import { useState } from "react";
+import axios from "axios";
 import {
-  Box,
+  Alert,
   Button,
   Dialog,
   DialogActions,
@@ -7,9 +9,8 @@ import {
   DialogTitle,
   Stack,
   TextField,
-  Typography,
 } from "@mui/material";
-import { grey } from "@mui/material/colors";
+import { useUpdateAccount } from "../../features/auth/useUpdateAccount";
 
 type EmailChangeModalProps = {
   isEmailDialogOpen: boolean;
@@ -20,95 +21,104 @@ function EmailChangeModal({
   isEmailDialogOpen,
   handleCloseEmailDialog,
 }: EmailChangeModalProps) {
+  const [email, setEmail] = useState("");
+  const [currentPassword, setCurrentPassword] = useState("");
+
+  const updateAccountMutation = useUpdateAccount();
+
+  const handleClose = () => {
+    setEmail("");
+    setCurrentPassword("");
+    updateAccountMutation.reset();
+    handleCloseEmailDialog();
+  };
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    updateAccountMutation.reset();
+
+    try {
+      await updateAccountMutation.mutateAsync({
+        email: email.trim(),
+        currentPassword,
+      });
+
+      handleClose();
+    } catch {
+      // The mutation error is displayed below.
+    }
+  };
+
+  const error = updateAccountMutation.error;
+
+  const errorMessage = error
+    ? axios.isAxiosError(error)
+      ? (error.response?.data?.message ?? "Failed to update email.")
+      : "Something went wrong. Please try again."
+    : null;
+
   return (
     <Dialog
       open={isEmailDialogOpen}
-      onClose={handleCloseEmailDialog}
+      onClose={handleClose}
       fullWidth
       maxWidth="xs"
     >
-      <DialogTitle>Change email</DialogTitle>
+      <DialogTitle>Change Email</DialogTitle>
 
-      <DialogContent>
-        <Stack spacing={2} sx={{ pt: 1 }}>
-          <Box sx={{ display: "flex", alignItems: "center", gap: 5 }}>
-            <Box sx={{ width: 110, flexShrink: 0 }}>
-              <Typography>New Email</Typography>
-            </Box>
+      <form onSubmit={handleSubmit}>
+        <DialogContent>
+          <Stack spacing={2} sx={{ pt: 1 }}>
+            {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
 
-            <Box sx={{ flex: 1, minWidth: 0 }}>
-              <TextField
-                value=""
-                size="small"
-                type="email"
-                autoComplete="current-email"
-                sx={{
-                  bgcolor: grey[100],
-                  // Target the outlined input wrapper to style borders
-                  "& .MuiOutlinedInput-root": {
-                    // Normal state border
-                    "& fieldset": {
-                      borderColor: grey[300],
-                    },
-                    // Hover state border
-                    "&:hover fieldset": {
-                      borderColor: grey[400],
-                    },
-                    // Focused/Active state border
-                    "&.Mui-focused fieldset": {
-                      borderColor: "primary.main",
-                    },
-                  },
-                }}
-              />
-            </Box>
-          </Box>
+            <TextField
+              label="New Email"
+              type="email"
+              autoComplete="email"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+              required
+              fullWidth
+              size="small"
+              disabled={updateAccountMutation.isPending}
+            />
 
-          <Box sx={{ display: "flex", alignItems: "center", gap: 5 }}>
-            <Box sx={{ width: 110, flexShrink: 0 }}>
-              <Typography>Current Password</Typography>
-            </Box>
+            <TextField
+              label="Current Password"
+              type="password"
+              autoComplete="current-password"
+              value={currentPassword}
+              onChange={(event) => setCurrentPassword(event.target.value)}
+              required
+              fullWidth
+              size="small"
+              disabled={updateAccountMutation.isPending}
+            />
+          </Stack>
+        </DialogContent>
 
-            <Box sx={{ flex: 1, minWidth: 0 }}>
-              <TextField
-                value=""
-                size="small"
-                type="password"
-                autoComplete="current-password"
-                slotProps={{
-                  input: { readOnly: true },
-                }}
-                sx={{
-                  bgcolor: grey[100],
-                  // Target the outlined input wrapper to style borders
-                  "& .MuiOutlinedInput-root": {
-                    // Normal state border
-                    "& fieldset": {
-                      borderColor: grey[300],
-                    },
-                    // Hover state border
-                    "&:hover fieldset": {
-                      borderColor: grey[400],
-                    },
-                    // Focused/Active state border
-                    "&.Mui-focused fieldset": {
-                      borderColor: "primary.main",
-                    },
-                  },
-                }}
-              />
-            </Box>
-          </Box>
-        </Stack>
-      </DialogContent>
+        <DialogActions sx={{ px: 3, pb: 2 }}>
+          <Button
+            onClick={handleClose}
+            disabled={updateAccountMutation.isPending}
+          >
+            Cancel
+          </Button>
 
-      <DialogActions sx={{ px: 3, pb: 2 }}>
-        <Button onClick={handleCloseEmailDialog}>Cancel</Button>
-
-        <Button variant="contained" disabled>
-          Update Email
-        </Button>
-      </DialogActions>
+          <Button
+            type="submit"
+            variant="contained"
+            disabled={
+              updateAccountMutation.isPending ||
+              !email.trim() ||
+              !currentPassword
+            }
+          >
+            {updateAccountMutation.isPending ? "Updating..." : "Update Email"}
+          </Button>
+        </DialogActions>
+      </form>
     </Dialog>
   );
 }

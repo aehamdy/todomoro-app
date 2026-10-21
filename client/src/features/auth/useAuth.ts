@@ -1,15 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { getCurrentUser } from "./auth.api";
+import type { CurrentUserResponse } from "./auth.types";
 
 export const AUTH_QUERY_KEY = ["auth", "user"] as const;
 
 export function useAuth() {
-  const query = useQuery({
+  const query = useQuery<CurrentUserResponse>({
     queryKey: AUTH_QUERY_KEY,
     queryFn: getCurrentUser,
     retry: (failureCount, error) => {
-      // An unauthenticated user is an expected state, not a transient failure.
       if (axios.isAxiosError(error) && error.response?.status === 401) {
         return false;
       }
