@@ -38,7 +38,7 @@ function DashboardLayout() {
       sx={{
         height: "100dvh",
         overflow: "hidden",
-        bgcolor: "grey.50",
+        bgcolor: "background.default",
       }}
     >
       {/* Application header */}

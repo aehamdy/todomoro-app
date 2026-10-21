@@ -87,14 +87,25 @@ function TaskPrioritySelector({
             flexDirection: "row",
             alignItems: "center",
             gap: 0.75,
+            py: 0.5,
+            px: 1.5,
+            bgcolor: currentPriority?.color ?? "text.secondary",
+            borderRadius: 2,
           }}
         >
           <FlagIcon
             fontSize="small"
-            sx={{ color: currentPriority?.color ?? "text.secondary" }}
+            // sx={{ color: currentPriority?.color ?? "text.secondary" }}
+            sx={{ color: "white" }}
           />
 
-          <Typography variant="body2">
+          <Typography
+            variant="body2"
+            sx={{
+              color: "white",
+              bgcolor: currentPriority?.color,
+            }}
+          >
             {currentPriority?.label ?? priority}
           </Typography>
         </Stack>
@@ -126,11 +137,9 @@ function TaskPrioritySelector({
             selected={option.value === priority}
             disabled={isSaving}
             onClick={() => handleSelect(option.value)}
+            sx={{ color: option.color ?? "text.secondary" }}
           >
-            <FlagIcon
-              fontSize="small"
-              sx={{ color: option.color ?? "text.secondary" }}
-            />
+            <FlagIcon fontSize="small" sx={{ color: "inherit" }} />
             {option.label}
           </MenuItem>
         ))}

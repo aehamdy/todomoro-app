@@ -122,7 +122,7 @@ function AppSidebar({
                   end
                   sx={{
                     borderRadius: 2,
-                    color: grey[600],
+                    color: "text.secondary",
                     "&:hover": {
                       bgcolor: "action.hover",
                       color: "primary.main",

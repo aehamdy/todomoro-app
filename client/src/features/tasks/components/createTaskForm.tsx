@@ -2,6 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import AddIcon from "@mui/icons-material/Add";
 import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
 import FlagOutlinedIcon from "@mui/icons-material/FlagOutlined";
+import FlagIcon from "@mui/icons-material/Flag";
 import {
   Alert,
   Box,
@@ -35,7 +36,7 @@ const priorities = [
   { value: "urgent", label: "Urgent" },
 ] as const;
 
-export default function CreateTaskForm({ onSuccess }: CreateTaskFormProps) {
+function CreateTaskForm({ onSuccess }: CreateTaskFormProps) {
   const { createTask, isCreating, error, isError } = useCreateTask();
 
   const [priorityAnchor, setPriorityAnchor] = useState<HTMLElement | null>(
@@ -183,15 +184,14 @@ export default function CreateTaskForm({ onSuccess }: CreateTaskFormProps) {
                       });
                       setPriorityAnchor(null);
                     }}
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 1,
+                      color: `${priorityColors[priority.value].text}`,
+                    }}
                   >
-                    <FlagOutlinedIcon
-                      fontSize="small"
-                      sx={{
-                        mr: 1.5,
-                        opacity: 0.7,
-                        color: `${priorityColors[priority.value].text}`,
-                      }}
-                    />
+                    <FlagIcon fontSize="small" sx={{ color: "inherit" }} />
                     {priority.label}
                   </MenuItem>
                 ))}
@@ -299,3 +299,5 @@ export default function CreateTaskForm({ onSuccess }: CreateTaskFormProps) {
     </Stack>
   );
 }
+
+export default CreateTaskForm;

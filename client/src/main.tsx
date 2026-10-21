@@ -7,13 +7,16 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import App from "./App";
 import queryClient from "./lib/queryClient";
 import "./index.css";
+import { AppThemeProvider } from "./theme/AppThemeProvider";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <BrowserRouter>
-          <App />
+          <AppThemeProvider>
+            <App />
+          </AppThemeProvider>
         </BrowserRouter>
       </LocalizationProvider>
     </QueryClientProvider>

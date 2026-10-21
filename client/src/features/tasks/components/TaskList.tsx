@@ -9,6 +9,16 @@ import { blue } from "@mui/material/colors";
 import { useOutletContext } from "react-router-dom";
 import type { DashboardOutletContext } from "../../../components/layout/DashboardLayout";
 
+const PRIORITY_OPTIONS: {
+  label: string;
+  value: "low" | "medium" | "high" | "urgent";
+}[] = [
+  { label: "Low", value: "low" },
+  { label: "Medium", value: "medium" },
+  { label: "High", value: "high" },
+  { label: "Urgent", value: "urgent" },
+];
+
 function TaskList() {
   const { setSelectedTask } = useOutletContext<DashboardOutletContext>();
   const { tasks, isLoading, error, isError, refetch } = useTasks();
@@ -28,12 +38,14 @@ function TaskList() {
     );
   }
 
+  const completedTasks = tasks.filter((task) => task.isCompleted);
+
   return (
     <Paper
       elevation={0}
       sx={{
         p: 2,
-        bgcolor: "transparent",
+        bgcolor: "background.paper",
       }}
     >
       <Stack
@@ -46,7 +58,7 @@ function TaskList() {
         }}
       >
         <Chip
-          label={`${tasks.length} Total`}
+          label={`${completedTasks.length}/${tasks.length}`}
           size="medium"
           sx={{ fontSize: "14px", color: "white", bgcolor: blue[400] }}
         />
@@ -59,45 +71,37 @@ function TaskList() {
             gap: 1,
           }}
         >
-          <Chip
-            label="Low"
-            size="medium"
-            sx={{
-              color: `${priorityColors["low"].text}`,
-              bgcolor: `${priorityColors["low"].bg}`,
-            }}
-          />
-          <Chip
-            label="Medium"
-            size="medium"
-            sx={{
-              color: `${priorityColors["medium"].text}`,
-              bgcolor: `${priorityColors["medium"].bg}`,
-            }}
-          />
-          <Chip
-            label="High"
-            size="medium"
-            sx={{
-              color: `${priorityColors["high"].text}`,
-              bgcolor: `${priorityColors["high"].bg}`,
-            }}
-          />
-          <Chip
-            label="Urgent"
-            size="medium"
-            sx={{
-              color: `${priorityColors["urgent"].text}`,
-              bgcolor: `${priorityColors["urgent"].bg}`,
-            }}
-          />
+          {PRIORITY_OPTIONS.map((option) => (
+            <Chip
+              key={option.value}
+              label={option.label}
+              size="medium"
+              sx={{
+                color: `${priorityColors[option.value].text}`,
+                bgcolor: `${priorityColors[option.value].bg}`,
+              }}
+            />
+          ))}
         </Stack>
       </Stack>
 
       {tasks.length === 0 ? (
         <TasksEmptyList />
       ) : (
-        <List disablePadding>
+        <List
+          sx={{
+            maxHeight: "450px",
+            overflowY: "auto",
+
+            "&::-webkit-scrollbar": {
+              width: "8px",
+            },
+            "&::-webkit-scrollbar-thumb": {
+              backgroundColor: "divider",
+              borderRadius: "4px",
+            },
+          }}
+        >
           {tasks.map((task) => (
             <TaskItem
               key={task._id}

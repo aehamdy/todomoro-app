@@ -29,7 +29,14 @@ function AppHeader() {
         >
           <Box sx={{ display: "flex", alignItems: "center", gap: 1.25 }}>
             <TaskAlt color="primary" fontSize="large" />
-            <Typography variant="h5" sx={{ fontWeight: 800 }}>
+            <Typography
+              variant="h5"
+              sx={{
+                fontWeight: 800,
+                color: "text.primary",
+                bgcolor: "background.paper",
+              }}
+            >
               Todomoro
             </Typography>
           </Box>
@@ -38,7 +45,7 @@ function AppHeader() {
             <IconButton
               aria-label="Open settings modal"
               onClick={() => setIsModalOpen(true)}
-              color="primary"
+              sx={{ color: "text.secondary" }}
             >
               <SettingsOutlined />
             </IconButton>

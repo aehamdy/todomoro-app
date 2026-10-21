@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 import { useEffect, useState } from "react";
 import { Box, Button, Stack, TextField, Typography } from "@mui/material";
-import { grey } from "@mui/material/colors";
 import EmailChangeModal from "./EmailChangeModal";
 import PasswordChangeModal from "./PasswordChangeModal";
 import { useUpdateAccount } from "../../features/auth/useUpdateAccount";
@@ -81,38 +80,34 @@ function AccountSettings() {
 
   return (
     <>
-      <Stack spacing={2}>
+      <Stack spacing={4}>
         {/* Name */}
         <Box sx={{ display: "flex", alignItems: "center", gap: 5 }}>
           <Box sx={{ width: 110, flexShrink: 0 }}>
             <Typography>Name</Typography>
           </Box>
 
-          <Box sx={{ flex: 1, minWidth: 0 }}>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: { xs: "column", lg: "row" },
+              alignItems: "center",
+              gap: 1,
+              flex: 1,
+              minWidth: 0,
+            }}
+          >
             <TextField
+              size="small"
               value={name}
               onChange={(event) => {
                 setName(event.target.value);
                 setError("");
               }}
               onBlur={handleBlur}
-              size="small"
               disabled={isSaving}
               error={Boolean(error)}
               helperText={error || (isSaving ? "Saving..." : " ")}
-              sx={{
-                "& .MuiOutlinedInput-root": {
-                  "& fieldset": {
-                    borderColor: grey[300],
-                  },
-                  "&:hover fieldset": {
-                    borderColor: grey[400],
-                  },
-                  "&.Mui-focused fieldset": {
-                    borderColor: "primary.main",
-                  },
-                },
-              }}
             />
           </Box>
         </Box>
@@ -134,25 +129,32 @@ function AccountSettings() {
             }}
           >
             <TextField
-              value={user.email}
               size="small"
+              value={user.email}
               slotProps={{
                 input: { readOnly: true },
               }}
-              sx={{
-                bgcolor: grey[100],
-                "& .MuiOutlinedInput-root": {
-                  "& fieldset": {
-                    borderColor: grey[300],
-                  },
-                  "&:hover fieldset": {
-                    borderColor: grey[400],
-                  },
-                  "&.Mui-focused fieldset": {
-                    borderColor: "primary.main",
-                  },
+              sx={(theme) => ({
+                "& .MuiInputBase-input": {
+                  color: "text.secondary",
+                  cursor: "not-allowed",
                 },
-              }}
+                /* Ensures the border color stays constant on hover */
+                "&:hover .MuiOutlinedInput-notchedOutline": {
+                  borderColor:
+                    theme.palette.mode === "dark"
+                      ? "rgba(255, 255, 255, 0.23)"
+                      : "rgba(0, 0, 0, 0.23)",
+                },
+                /* Prevents the border from changing color or thickening when focused */
+                "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                  borderColor:
+                    theme.palette.mode === "dark"
+                      ? "rgba(255, 255, 255, 0.23)"
+                      : "rgba(0, 0, 0, 0.23)",
+                  borderWidth: "1px",
+                },
+              })}
             />
 
             <Box sx={{ flex: 1, minWidth: 0 }}>

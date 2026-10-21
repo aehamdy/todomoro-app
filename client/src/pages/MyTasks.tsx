@@ -1,10 +1,10 @@
 import { Box, Paper, Stack, Typography } from "@mui/material";
 import TaskList from "../features/tasks/components/TaskList";
-import CreateTaskForm from "../features/tasks/components/createTaskForm";
+import CreateTaskForm from "../features/tasks/components/CreateTaskForm";
 
 function MyTasksPage() {
   return (
-    <Stack spacing={4}>
+    <Stack spacing={3}>
       <Paper elevation={0} sx={{ p: 3, borderRadius: "8px" }}>
         <Stack
           direction={{ xs: "column", sm: "row" }}
@@ -12,7 +12,6 @@ function MyTasksPage() {
           sx={{
             alignItems: { xs: "stretch", sm: "center" },
             justifyContent: "space-between",
-            mb: 3,
           }}
         >
           <Box>
