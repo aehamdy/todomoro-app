@@ -23,12 +23,13 @@ const userSchema = new Schema(
       minLength: [8, "password must be at least 8 characters"],
       select: false,
     },
+
     preferences: {
       theme: {
         type: String,
         enum: {
-          enum: ["light", "dark", "system"],
-          message: "Theme must be system, light or dark",
+          values: ["light", "dark", "system"],
+          message: "Theme must be light, dark, or system",
         },
         default: "system",
       },
