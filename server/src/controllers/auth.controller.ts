@@ -8,13 +8,19 @@ import {
 } from "../validators/auth.validators.ts";
 import { comparePassword, hashPassword } from "../services/password.service.ts";
 import { signAccessToken } from "../services/jwt.service.ts";
+import { formatName } from "../utils/formatName.ts";
 
 export const register: RequestHandler = async (req, res, next) => {
   try {
     const { name, email, password } = req.body as RegisterInput;
     const passwordHash = await hashPassword(password);
+    const formattedName = formatName(name);
 
-    const user = await User.create({ name, email, password: passwordHash });
+    const user = await User.create({
+      name: formattedName,
+      email,
+      password: passwordHash,
+    });
 
     res.status(201).json({
       status: "success",
@@ -135,72 +141,71 @@ export const logout: RequestHandler = (_req, res) => {
 
 export const updateAccount: RequestHandler = async (req, res, next) => {
   try {
-    // Get the ID of the currently authenticated user.
-    // The `protect` middleware should set req.userId.
     const userId = req.userId;
 
-    // Extract the name and email sent by the client.
-    // Either property might be undefined because both are optional.
-    const { name, email } = req.body as UpdateAccountInput;
+    const { name, email, currentPassword } = req.body as UpdateAccountInput;
 
-    // Search MongoDB for the user whose ID matches userId.
-    const user = await User.findById(userId);
+    // Load the user and explicitly include the hidden password hash.
+    const user = await User.findById(userId).select("+password");
 
-    // If no user exists with this ID, stop the function.
     if (!user) {
-      // Send an error response because the account no longer exists.
       res.status(401).json({
         status: "fail",
         message: "User no longer exists",
       });
-
-      // Stop execution so the remaining code doesn't run.
       return;
     }
 
-    // Only check the email if the client provided one
-    // and it differs from the user's current email.
+    // Verify the current password before changing the email.
     if (email !== undefined && email !== user.email) {
-      // Look for another user with this email.
-      // $ne means "not equal to", so exclude the current user.
+      if (!currentPassword) {
+        res.status(400).json({
+          status: "fail",
+          message: "Current password is required to change email",
+        });
+        return;
+      }
+
+      const isPasswordCorrect = await comparePassword(
+        currentPassword,
+        user.password,
+      );
+
+      if (!isPasswordCorrect) {
+        res.status(401).json({
+          status: "fail",
+          message: "Incorrect current password",
+        });
+        return;
+      }
+
+      // Check whether another account already uses this email.
       const existingUser = await User.findOne({
         email,
         _id: { $ne: userId },
       });
 
-      // If another account already uses this email, reject the update.
       if (existingUser) {
-        // HTTP 409 means the request conflicts with existing data.
         res.status(409).json({
           status: "fail",
           message: "Email is already in use",
         });
-
-        // Stop execution to avoid updating the account.
         return;
       }
 
-      // No other account uses this email, so update the user's email.
       user.email = email;
     }
 
-    // Update the name only if the client provided one.
+    // Update the name independently of the email.
     if (name !== undefined) {
-      user.name = name;
+      user.name = formatName(name);
     }
 
-    // Save the changes to MongoDB.
-    // Mongoose runs its configured validation during this save.
     await user.save();
 
-    // Send HTTP 200 to indicate that the update succeeded.
     res.status(200).json({
-      // Indicate that the operation was successful.
       status: "success",
-
-      // Put the updated account information inside data.
       data: {
-        // Return the user object to the client.
         user: {
           id: user.id,
           name: user.name,
@@ -210,7 +215,6 @@ export const updateAccount: RequestHandler = async (req, res, next) => {
       },
     });
   } catch (err) {
-    // Pass unexpected errors to Express's error-handling middleware.
     next(err);
   }
 };

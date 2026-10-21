@@ -42,11 +42,19 @@ export const loginSchema = z
 export const updateAccountSchema = z
   .object({
     name: z.string().trim().min(1).max(100).optional(),
-    email: z.string().trim().email().optional(),
+    email: z.email().trim().optional(),
+    currentPassword: z.string().min(1).optional(),
   })
   .refine((data) => data.name !== undefined || data.email !== undefined, {
     message: "Provide a name or email to update",
-  });
+  })
+  .refine(
+    (data) => data.email === undefined || data.currentPassword !== undefined,
+    {
+      message: "Current password is required to change email",
+      path: ["currentPassword"],
+    },
+  );
 
 export const changePasswordSchema = z
   .object({
