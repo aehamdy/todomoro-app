@@ -1,5 +1,6 @@
 import api, { clearCsrfToken } from "../../lib/api";
 import type {
+  ChangePasswordData,
   CurrentUserResponse,
   LoginData,
   LoginResponse,
@@ -39,4 +40,8 @@ export async function updateAccount(data: UpdateAccountData) {
   const response = await api.patch("/auth/me", data);
 
   return response.data;
+}
+
+export function changePassword(data: ChangePasswordData) {
+  return api.patch("/auth/me/password", data);
 }
