@@ -9,12 +9,6 @@ const taskSchema = new Schema(
       minlength: [1, "Title cannot be empty"],
       maxlength: [100, "Title cannot exceed 100 characters "],
     },
-    note: {
-      type: String,
-      trim: true,
-      maxlength: [1000, "Note cannot exceed 1000 characters"],
-      default: "",
-    },
     isCompleted: { type: Boolean, default: false },
     priority: {
       type: String,
@@ -22,6 +16,24 @@ const taskSchema = new Schema(
       default: "medium",
     },
     dueDate: { type: Date, default: null },
+    note: {
+      type: String,
+      trim: true,
+      maxlength: [1000, "Note cannot exceed 1000 characters"],
+      default: "",
+    },
+    subtasks: [
+      {
+        title: {
+          type: String,
+          required: true,
+          trim: true,
+          minLength: [1, "Title cannot be empty"],
+          maxLength: [100, "Title cannot exceed 100 characters"],
+        },
+        isCompleted: { type: Boolean, default: false },
+      },
+    ],
     user: {
       type: Schema.Types.ObjectId,
       ref: "User",

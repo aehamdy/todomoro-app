@@ -46,5 +46,30 @@ export const updateTaskSchema = z
     message: "Provide at least one field to update",
   });
 
+export const createSubtaskSchema = z.object({
+  title: z
+    .string()
+    .trim()
+    .min(1, "Subtask title is required")
+    .max(100, "Subtask title cannot exceed 100 characters"),
+});
+
+export const updateSubtaskSchema = z
+  .object({
+    title: z
+      .string()
+      .trim()
+      .min(1, "Subtask title is required")
+      .max(100, "Subtask title cannot exceed 100 characters")
+      .optional(),
+
+    isCompleted: z.boolean().optional(),
+  })
+  .refine((data) => Object.keys(data).length > 0, {
+    message: "Provide at least one field to update",
+  });
+
 export type CreateTaskInput = z.infer<typeof createTaskSchema>;
 export type UpdateTaskInput = z.infer<typeof updateTaskSchema>;
+export type CreateSubtaskInput = z.infer<typeof createSubtaskSchema>;
+export type UpdateSubtaskInput = z.infer<typeof updateSubtaskSchema>;
