@@ -1,4 +1,4 @@
-import api from "../../lib/api";
+import api from "../../../lib/api";
 import type {
   createTaskRequest,
   createTaskResponse,
@@ -6,7 +6,7 @@ import type {
   GetTasksResponse,
   UpdateTaskRequest,
   UpdateTaskResponse,
-} from "./task.types";
+} from "../task.types";
 
 export async function getTasks(): Promise<GetTasksResponse> {
   const response = await api.get<GetTasksResponse>("/tasks");
