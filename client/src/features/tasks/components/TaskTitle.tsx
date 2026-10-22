@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Box, Checkbox, Stack, TextField, Typography } from "@mui/material";
-import CheckIcon from "@mui/icons-material/Check";
+import { Stack, TextField, Typography } from "@mui/material";
+import TaskCheckbox from "./TaskCheckbox";
 
 type TaskTitleProps = {
   title: string;
@@ -52,43 +52,11 @@ function TaskTitle({
         gap: 1,
       }}
     >
-      <Checkbox
-        icon={
-          <Box
-            sx={{
-              width: 20,
-              height: 20,
-              borderRadius: "6px",
-              border: "2px solid",
-              borderColor: "text.secondary",
-            }}
-          />
-        }
-        checkedIcon={
-          <Box
-            sx={{
-              width: 20,
-              height: 20,
-              borderRadius: "6px",
-              bgcolor: "success.main",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <CheckIcon sx={{ fontSize: 14, color: "white" }} />
-          </Box>
-        }
-        checked={isCompleted}
-        disabled={isSaving}
-        onChange={(event) => onToggleComplete(event.target.checked)}
-        size="small"
-        sx={{ p: 0.5 }}
-        slotProps={{
-          input: {
-            "aria-label": "Mark task as completed",
-          },
-        }}
+      <TaskCheckbox
+        isCompleted={isCompleted}
+        handleToggle={() => onToggleComplete(!isCompleted)}
+        isToggling={isSaving}
+        loaderSize={26}
       />
 
       {isEditing ? (

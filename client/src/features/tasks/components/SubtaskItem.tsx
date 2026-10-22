@@ -47,8 +47,8 @@ function SubtaskItem({ taskId, subtask }: SubtaskItemProps) {
         subtaskId: subtask._id,
         subtaskData: { isCompleted: !subtask.isCompleted },
       });
-    } catch {
-      //
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -57,8 +57,8 @@ function SubtaskItem({ taskId, subtask }: SubtaskItemProps) {
       await deleteTask({ taskId, subtaskId: subtask._id });
 
       setIsDeleteModalOpen(false);
-    } catch {
-      //
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -90,8 +90,8 @@ function SubtaskItem({ taskId, subtask }: SubtaskItemProps) {
       });
 
       setIsEditingSubtask(false);
-    } catch {
-      // Keep the editor open so the user can retry.
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -115,43 +115,53 @@ function SubtaskItem({ taskId, subtask }: SubtaskItemProps) {
             minWidth: 0,
           }}
         >
-          <Checkbox
-            icon={
-              <Box
-                sx={{
-                  width: 20,
-                  height: 20,
-                  borderRadius: "6px",
-                  border: "2px solid",
-                  borderColor: "text.secondary",
-                }}
-              />
-            }
-            checkedIcon={
-              <Box
-                sx={{
-                  width: 20,
-                  height: 20,
-                  borderRadius: "6px",
-                  bgcolor: "success.main",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <CheckIcon sx={{ fontSize: 14, color: "white" }} />
-              </Box>
-            }
-            checked={subtask.isCompleted}
-            onChange={handleToggle}
-            disabled={isUpdating || isDeleting}
-            size="small"
-            slotProps={{
-              input: {
-                "aria-label": `Complete ${subtask.title}`,
-              },
-            }}
-          />
+          {isUpdating ? (
+            <CircularProgress
+              size={26}
+              thickness={5}
+              aria-label="Updating subtask"
+              sx={{ flexShrink: 0 }}
+            />
+          ) : (
+            <Checkbox
+              icon={
+                <Box
+                  sx={{
+                    width: 20,
+                    height: 20,
+                    borderRadius: "6px",
+                    border: "2px solid",
+                    borderColor: "text.secondary",
+                  }}
+                />
+              }
+              checkedIcon={
+                <Box
+                  sx={{
+                    width: 20,
+                    height: 20,
+                    borderRadius: "6px",
+                    bgcolor: "success.main",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <CheckIcon sx={{ fontSize: 14, color: "white" }} />
+                </Box>
+              }
+              checked={subtask.isCompleted}
+              onChange={handleToggle}
+              disabled={isUpdating || isDeleting}
+              size="small"
+              slotProps={{
+                input: {
+                  "aria-label": `Complete ${subtask.title}`,
+                },
+              }}
+            />
+          )}
+
           {isEditingSubtask ? (
             <TextField
               autoFocus
@@ -185,36 +195,24 @@ function SubtaskItem({ taskId, subtask }: SubtaskItemProps) {
               sx={{ flex: 1, minWidth: 0 }}
             />
           ) : (
-            <>
-              {isUpdating && (
-                <CircularProgress
-                  size={16}
-                  thickness={5}
-                  aria-label="Updating subtask"
-                  sx={{ flexShrink: 0 }}
-                />
-              )}
-
-              <Typography
-                onClick={handleStartEditing}
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  textDecoration: subtask.isCompleted ? "line-through" : "none",
-                  //   change the color to dark grey while updating
-                  color:
-                    subtask.isCompleted || isUpdating
-                      ? "text.secondary"
-                      : "text.primary",
-                  wordBreak: "break-word",
-                  flex: 1,
-                  cursor: "text",
-                  minWidth: 0,
-                }}
-              >
-                {subtask.title}
-              </Typography>
-            </>
+            <Typography
+              onClick={handleStartEditing}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                textDecoration: subtask.isCompleted ? "line-through" : "none",
+                color:
+                  subtask.isCompleted || isUpdating
+                    ? "text.secondary"
+                    : "text.primary",
+                wordBreak: "break-word",
+                flex: 1,
+                cursor: "text",
+                minWidth: 0,
+              }}
+            >
+              {subtask.title}
+            </Typography>
           )}
         </Stack>
 
