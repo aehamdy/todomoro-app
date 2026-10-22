@@ -41,11 +41,7 @@ function TaskItem({ task, onClick }: TaskItemProps) {
           alignItems: "stretch",
           p: 0,
           mb: "6px",
-          // bgcolor: task.isCompleted ? "grey.200" : "#fff",
           bgcolor: "background.default",
-          // border: task.isCompleted
-          //   ? ""
-          //   : `1px solid ${priorityColors[task.priority].bg}`,
           borderRadius: "8px",
           cursor: "pointer",
           overflow: "hidden",
@@ -60,7 +56,13 @@ function TaskItem({ task, onClick }: TaskItemProps) {
         />
 
         <ListItemText
-          sx={{ my: "auto", py: 1, px: 2 }}
+          sx={{
+            my: "auto",
+            py: 1,
+            px: 2,
+            borderInlineStart: "3px solid",
+            borderColor: "background.paper",
+          }}
           primary={
             <Stack>
               <Typography

@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { getTasks } from "../task.api";
+import { getTasks } from "../api/task.api";
 
 export const TASKS_QUERY_KEY = ["tasks"] as const;
 
