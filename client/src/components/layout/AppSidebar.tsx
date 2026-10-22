@@ -24,8 +24,8 @@ const navItems = [
     icon: <DashboardIcon />,
   },
   {
-    label: "My Tasks",
-    to: ROUTES.myTasks,
+    label: "Tasks",
+    to: ROUTES.tasks,
     icon: <AssignmentRoundedIcon />,
   },
 ];
