@@ -1,4 +1,4 @@
-import { Alert, Box, Stack } from "@mui/material";
+import { Alert, Box, Divider, Stack } from "@mui/material";
 import { useTaskDetails } from "../hooks/useTaskDetails";
 import { useDeleteTask } from "../hooks/useDeleteTask";
 import { useState } from "react";
@@ -11,6 +11,7 @@ import TaskDetailsFooter from "./TaskDetailsFooter";
 import TaskDate from "./TaskDate";
 import TaskPrioritySelector from "./TaskPrioritySelector";
 import type { TaskPriority } from "../task.types";
+import SubtasksList from "./SubtasksList";
 
 type TaskDetailsSidebarProps = {
   taskId: string;
@@ -131,6 +132,10 @@ function TaskDetailsSidebar({ taskId, onClose }: TaskDetailsSidebarProps) {
             isSaving={isUpdating}
           />
         </Stack>
+
+        <Divider sx={{ my: 2 }} />
+
+        <SubtasksList taskId={taskId} subtasks={task.subtasks} />
       </Stack>
 
       <TaskDetailsFooter
