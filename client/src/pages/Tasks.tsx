@@ -2,7 +2,7 @@ import { Box, Paper, Stack, Typography } from "@mui/material";
 import TaskList from "../features/tasks/components/TaskList";
 import CreateTaskForm from "../features/tasks/components/CreateTaskForm";
 
-function MyTasksPage() {
+function TasksPage() {
   return (
     <Stack spacing={3}>
       <Paper elevation={0} sx={{ p: 3, borderRadius: "8px" }}>
@@ -33,4 +33,4 @@ function MyTasksPage() {
   );
 }
 
-export default MyTasksPage;
+export default TasksPage;

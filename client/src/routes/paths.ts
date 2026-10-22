@@ -5,5 +5,5 @@ export const ROUTES = {
   forgotPassword: "/forgot-password",
   resetPassword: "reset-password",
   dashboard: "/dashboard",
-  myTasks: "/my-tasks",
+  tasks: "/tasks",
 } as const;

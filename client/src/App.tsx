@@ -5,7 +5,7 @@ import ProtectedRoute from "./features/auth/components/ProtectedRoute";
 import { ROUTES } from "./routes/paths";
 import DashboardLayout from "./components/layout/DashboardLayout";
 import DashboardPage from "./pages/Dashboard";
-import MyTasksPage from "./pages/MyTasks";
+import TasksPage from "./pages/Tasks";
 
 function App() {
   return (
@@ -18,7 +18,7 @@ function App() {
       <Route element={<ProtectedRoute />}>
         <Route element={<DashboardLayout />}>
           <Route path={ROUTES.dashboard} element={<DashboardPage />} />
-          <Route path={ROUTES.myTasks} element={<MyTasksPage />} />
+          <Route path={ROUTES.tasks} element={<TasksPage />} />
         </Route>
       </Route>
 

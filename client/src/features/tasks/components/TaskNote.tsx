@@ -87,15 +87,16 @@ function TaskNote({ note, onSave, isSaving }: TaskNoteProps) {
       >
         <Typography
           color="text.secondary"
-          sx={{ display: "flex", alignItems: "center", gap: "6px" }}
+          sx={{ display: "flex", alignItems: "center", gap: "6px", mb: 1 }}
         >
           Note
         </Typography>
 
         <Typography
           sx={{
-            fontSize: "18px",
-            color: note ? "text.primary" : "text.secondary",
+            fontSize: "14px",
+            mb: 2,
+            color: note ? "text.secondary" : "text.secondary",
             whiteSpace: "pre-wrap",
             overflowWrap: "anywhere",
           }}

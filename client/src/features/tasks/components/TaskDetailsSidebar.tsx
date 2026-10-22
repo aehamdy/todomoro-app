@@ -133,7 +133,7 @@ function TaskDetailsSidebar({ taskId, onClose }: TaskDetailsSidebarProps) {
           />
         </Stack>
 
-        <Divider sx={{ my: 2 }} />
+        <Divider sx={{ my: 1 }} />
 
         <SubtasksList taskId={taskId} subtasks={task.subtasks} />
       </Stack>
