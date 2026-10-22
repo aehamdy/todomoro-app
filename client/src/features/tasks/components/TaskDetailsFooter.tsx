@@ -22,7 +22,7 @@ function TaskDetailsFooter({
   handleDelete,
 }: TaskDetailsFooterProps) {
   return (
-    <Box>
+    <Box sx={{ mt: 2 }}>
       <Stack
         sx={{
           display: "flex",

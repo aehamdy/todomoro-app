@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { Checkbox, Stack, TextField, Typography } from "@mui/material";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import CheckBoxOutlineBlankRoundedIcon from "@mui/icons-material/CheckBoxOutlineBlankRounded";
+import { Box, Checkbox, Stack, TextField, Typography } from "@mui/material";
+import CheckIcon from "@mui/icons-material/Check";
 
 type TaskTitleProps = {
   title: string;
@@ -54,8 +53,32 @@ function TaskTitle({
       }}
     >
       <Checkbox
-        icon={<CheckBoxOutlineBlankRoundedIcon />}
-        checkedIcon={<CheckCircleIcon />}
+        icon={
+          <Box
+            sx={{
+              width: 20,
+              height: 20,
+              borderRadius: "6px",
+              border: "2px solid",
+              borderColor: "text.secondary",
+            }}
+          />
+        }
+        checkedIcon={
+          <Box
+            sx={{
+              width: 20,
+              height: 20,
+              borderRadius: "6px",
+              bgcolor: "success.main",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <CheckIcon sx={{ fontSize: 14, color: "white" }} />
+          </Box>
+        }
         checked={isCompleted}
         disabled={isSaving}
         onChange={(event) => onToggleComplete(event.target.checked)}

@@ -1,13 +1,16 @@
 export type TaskPriority = "low" | "medium" | "high" | "urgent";
 
+export type Subtask = { _id: string; title: string; isCompleted: boolean };
+
 export interface Task {
   _id: string;
   title: string;
-  note: string;
   isCompleted: boolean;
   priority: TaskPriority;
   dueDate: string | null;
+  note: string;
   user: string;
+  subtasks: Subtask[];
   createdAt: string;
   updatedAt: string;
 }
