@@ -34,10 +34,17 @@ const taskSchema = new Schema(
         isCompleted: { type: Boolean, default: false },
       },
     ],
+
     user: {
       type: Schema.Types.ObjectId,
       ref: "User",
       required: [true, "Task owner is required"],
+      index: true,
+    },
+    project: {
+      type: Schema.Types.ObjectId,
+      ref: "Project",
+      default: null,
       index: true,
     },
   },
