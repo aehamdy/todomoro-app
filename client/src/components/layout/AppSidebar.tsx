@@ -1,5 +1,6 @@
 import {
   Box,
+  Divider,
   Drawer,
   List,
   ListItemButton,
@@ -10,6 +11,7 @@ import { Dashboard as DashboardIcon } from "@mui/icons-material";
 import AssignmentRoundedIcon from "@mui/icons-material/AssignmentRounded";
 import { NavLink } from "react-router-dom";
 import { ROUTES } from "../../routes/paths";
+import ProjectsSection from "../../features/projects/components/ProjectsSection";
 
 type AppSidebarProps = {
   mobileOpen: boolean;
@@ -99,6 +101,10 @@ function AppSidebar({
               ))}
             </List>
           </Box>
+
+          <Divider />
+
+          <ProjectsSection />
         </>
       )}
     </Drawer>
