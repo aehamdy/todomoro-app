@@ -58,7 +58,7 @@ function AppSidebar({
     >
       {!collapsed && (
         <>
-          <Box sx={{ p: 2 }}>
+          <Box sx={{ p: 1.5 }}>
             <List
               disablePadding
               sx={{

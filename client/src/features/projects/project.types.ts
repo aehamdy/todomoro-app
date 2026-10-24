@@ -1,3 +1,13 @@
+export type TProject = {
+  _id: string;
+  title: string;
+  description?: string;
+  color?: string;
+  user: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
 export type GetProjectsResponse = {
   status: "success";
   data: {
@@ -5,9 +15,15 @@ export type GetProjectsResponse = {
   };
 };
 
-export type TProject = {
-  _id: string;
+export type CreateProjectRequest = {
   title: string;
   description?: string;
   color?: string;
+};
+
+export type CreateProjectResponse = {
+  status: "success";
+  data: {
+    project: TProject[] | [];
+  };
 };
