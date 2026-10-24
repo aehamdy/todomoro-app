@@ -26,9 +26,9 @@ function TasksPage() {
         </Stack>
       </Paper>
 
-      <CreateTaskForm onSuccess={() => {}} />
+      <CreateTaskForm projectId={null} />
 
-      <TaskList />
+      <TaskList projectId={null} />
     </Stack>
   );
 }

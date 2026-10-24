@@ -1,4 +1,5 @@
 import {
+  Chip,
   Divider,
   Drawer,
   List,
@@ -11,6 +12,7 @@ import AssignmentRoundedIcon from "@mui/icons-material/AssignmentRounded";
 import { NavLink } from "react-router-dom";
 import { ROUTES } from "../../routes/paths";
 import ProjectsSection from "../../features/projects/components/ProjectsSection";
+import { useFetchTasks } from "../../features/tasks/hooks/useFetchTasks";
 
 type AppSidebarProps = {
   mobileOpen: boolean;
@@ -36,6 +38,8 @@ function AppSidebar({
   onMobileClose,
   collapsed = false,
 }: AppSidebarProps) {
+  const { tasks: generalTasks } = useFetchTasks(null);
+
   return (
     <Drawer
       variant="permanent"
@@ -98,6 +102,21 @@ function AppSidebar({
                   </ListItemIcon>
 
                   <ListItemText primary={item.label} />
+
+                  {item.to === ROUTES.tasks && (
+                    <Chip
+                      label={generalTasks.length}
+                      size="small"
+                      color="primary"
+                      sx={{
+                        height: 24,
+                        minWidth: 24,
+                        fontWeight: 600,
+                        fontSize: "0.75rem",
+                        borderRadius: 1.5,
+                      }}
+                    />
+                  )}
                 </ListItemButton>
               ))}
             </List>

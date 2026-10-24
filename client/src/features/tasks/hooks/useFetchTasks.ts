@@ -1,13 +1,13 @@
-import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { getTasks } from "../api/task.api";
+import { useQuery } from "@tanstack/react-query";
 
 export const TASKS_QUERY_KEY = ["tasks"] as const;
 
-export function useTasks() {
+export function useFetchTasks(projectId: string | null) {
   const query = useQuery({
-    queryKey: TASKS_QUERY_KEY,
-    queryFn: getTasks,
+    queryKey: [...TASKS_QUERY_KEY, projectId],
+    queryFn: () => getTasks(projectId),
     retry: (failureCount, error) => {
       if (axios.isAxiosError(error) && error.response?.status === 401) {
         return false;

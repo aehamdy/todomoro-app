@@ -8,8 +8,14 @@ import type {
   UpdateTaskResponse,
 } from "../task.types";
 
-export async function getTasks(): Promise<GetTasksResponse> {
-  const response = await api.get<GetTasksResponse>("/tasks");
+export async function getTasks(
+  projectId: string | null,
+): Promise<GetTasksResponse> {
+  const response = await api.get<GetTasksResponse>("/tasks", {
+    params: {
+      projectId: projectId ?? "general",
+    },
+  });
 
   return response.data;
 }

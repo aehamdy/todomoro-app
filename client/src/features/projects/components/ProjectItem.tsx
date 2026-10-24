@@ -16,6 +16,8 @@ import { useDeleteProject } from "../hooks/useDeleteProject";
 import ProjectActionsMenu from "./ProjectActionsMenu";
 import ProjectFormDialog from "./ProjectFormDialog";
 import DeleteModal from "../../../components/common/DeleteModal";
+import { ROUTES } from "../../../routes/paths";
+import { useNavigate } from "react-router-dom";
 
 type ProjectItemProps = {
   project: TProject;
@@ -32,13 +34,15 @@ function getApiErrorMessage(error: unknown, fallbackMessage: string): string {
   return fallbackMessage;
 }
 
-function ProjectItem({ project, onSelect }: ProjectItemProps) {
+function ProjectItem({ project }: ProjectItemProps) {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
+
+  const navigate = useNavigate();
 
   const {
     updateProject,
@@ -53,6 +57,10 @@ function ProjectItem({ project, onSelect }: ProjectItemProps) {
     isError: isDeleteError,
     error: deleteError,
   } = useDeleteProject();
+
+  const handleProjectSelect = () => {
+    navigate(ROUTES.projectById(project._id));
+  };
 
   const updateErrorMessage = getApiErrorMessage(
     updateError,
@@ -118,7 +126,7 @@ function ProjectItem({ project, onSelect }: ProjectItemProps) {
   return (
     <>
       <ListItemButton
-        onClick={() => onSelect?.(project)}
+        onClick={handleProjectSelect}
         sx={{
           display: "flex",
           alignItems: "center",

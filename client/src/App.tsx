@@ -6,6 +6,7 @@ import { ROUTES } from "./routes/paths";
 import DashboardLayout from "./components/layout/DashboardLayout";
 import DashboardPage from "./pages/Dashboard";
 import TasksPage from "./pages/Tasks";
+import ProjectPage from "./pages/ProjectPage";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route element={<DashboardLayout />}>
           <Route path={ROUTES.dashboard} element={<DashboardPage />} />
           <Route path={ROUTES.tasks} element={<TasksPage />} />
+          <Route path={ROUTES.project} element={<ProjectPage />} />
         </Route>
       </Route>
 
