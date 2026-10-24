@@ -17,7 +17,7 @@ import ProjectActionsMenu from "./ProjectActionsMenu";
 import ProjectFormDialog from "./ProjectFormDialog";
 import DeleteModal from "../../../components/common/DeleteModal";
 import { ROUTES } from "../../../routes/paths";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 type ProjectItemProps = {
   project: TProject;
@@ -43,6 +43,9 @@ function ProjectItem({ project }: ProjectItemProps) {
   const [selectedColor, setSelectedColor] = useState("");
 
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const isActive = location.pathname === ROUTES.projectById(project._id);
 
   const {
     updateProject,
@@ -134,6 +137,10 @@ function ProjectItem({ project }: ProjectItemProps) {
           color: "text.secondary",
           borderRadius: 2,
           position: "relative",
+          bgcolor: isActive ? "action.selected" : "transparent",
+          ...(isActive && {
+            color: "primary.main",
+          }),
           "&:hover": {
             color: "primary.main",
             bgcolor: "action.hover",
