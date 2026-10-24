@@ -1,5 +1,4 @@
 import {
-  Box,
   Divider,
   Drawer,
   List,
@@ -58,7 +57,9 @@ function AppSidebar({
     >
       {!collapsed && (
         <>
-          <Box sx={{ p: 1.5 }}>
+          <List
+            sx={{ display: "flex", flexDirection: "column", gap: 2, p: 1.5 }}
+          >
             <List
               disablePadding
               sx={{
@@ -100,11 +101,11 @@ function AppSidebar({
                 </ListItemButton>
               ))}
             </List>
-          </Box>
 
-          <Divider />
+            <Divider />
 
-          <ProjectsSection />
+            <ProjectsSection />
+          </List>
         </>
       )}
     </Drawer>
