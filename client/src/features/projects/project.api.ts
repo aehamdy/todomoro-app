@@ -3,6 +3,8 @@ import type {
   CreateProjectRequest,
   CreateProjectResponse,
   GetProjectsResponse,
+  UpdateProjectData,
+  UpdateProjectResponse,
 } from "./project.types";
 
 export async function fetchProjects(): Promise<GetProjectsResponse> {
@@ -16,6 +18,21 @@ export async function createProject(
 ): Promise<CreateProjectResponse> {
   const response = await api.post<CreateProjectResponse>(
     "/projects",
+    projectData,
+  );
+
+  return response.data;
+}
+
+export async function updateProject({
+  projectId,
+  projectData,
+}: {
+  projectId: string;
+  projectData: UpdateProjectData;
+}): Promise<UpdateProjectResponse> {
+  const response = await api.patch<UpdateProjectResponse>(
+    `/projects/${projectId}`,
     projectData,
   );
 
