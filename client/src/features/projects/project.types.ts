@@ -27,3 +27,16 @@ export type CreateProjectResponse = {
     project: TProject[] | [];
   };
 };
+
+export type UpdateProjectData = {
+  title?: string;
+  description?: string;
+  color?: string;
+};
+
+export type UpdateProjectResponse = {
+  status: "success";
+  data: {
+    project: TProject;
+  };
+};
