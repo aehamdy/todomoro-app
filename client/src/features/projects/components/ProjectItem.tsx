@@ -1,7 +1,13 @@
 import { useState } from "react";
 import type { FormEvent } from "react";
 import axios from "axios";
-import { ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
+import {
+  Box,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Typography,
+} from "@mui/material";
 import FolderRoundedIcon from "@mui/icons-material/FolderRounded";
 
 import type { TProject } from "../project.types";
@@ -19,12 +25,10 @@ type ProjectItemProps = {
 function getApiErrorMessage(error: unknown, fallbackMessage: string): string {
   if (axios.isAxiosError<{ message?: string }>(error)) {
     const message = error.response?.data?.message;
-
     if (typeof message === "string" && message.length > 0) {
       return message;
     }
   }
-
   return fallbackMessage;
 }
 
@@ -75,7 +79,6 @@ function ProjectItem({ project, onSelect }: ProjectItemProps) {
 
   const handleEditSubmit = async (event: FormEvent) => {
     event.preventDefault();
-
     const projectData = {
       title: title.trim(),
       description: description.trim(),
@@ -87,7 +90,6 @@ function ProjectItem({ project, onSelect }: ProjectItemProps) {
         projectId: project._id,
         projectData,
       });
-
       setIsEditDialogOpen(false);
     } catch (err) {
       console.log(err);
@@ -123,6 +125,7 @@ function ProjectItem({ project, onSelect }: ProjectItemProps) {
           px: 1,
           color: "text.secondary",
           borderRadius: 2,
+          position: "relative",
           "&:hover": {
             color: "primary.main",
             bgcolor: "action.hover",
@@ -140,10 +143,65 @@ function ProjectItem({ project, onSelect }: ProjectItemProps) {
 
         <ListItemText primary={project.title} />
 
-        <ProjectActionsMenu
-          onEdit={handleEditOpen}
-          onDelete={handleDeleteOpen}
-        />
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-betwee",
+            alignItems: "center",
+            position: "relative",
+          }}
+        >
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            sx={{
+              fontVariantNumeric: "tabular-nums",
+              opacity: 1,
+              visibility: "visible",
+              transition: "opacity 0.2s ease, visibility 0.2s ease",
+              ".MuiListItemButton-root:hover &": {
+                opacity: { xs: 1, md: 0 },
+                visibility: { xs: "visible", md: "hidden" },
+              },
+            }}
+          >
+            <Box
+              component="span"
+              sx={{ display: { xs: "inline", md: "none" } }}
+            >
+              ({project.tasksCount})
+            </Box>
+            <Box
+              component="span"
+              sx={{ display: { xs: "none", md: "inline" } }}
+            >
+              {project.tasksCount}
+            </Box>
+          </Typography>
+
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              position: { xs: "static", md: "absolute" },
+              right: 0,
+              top: "50%",
+              transition: "opacity 0.2s ease, visibility 0.2s ease",
+              transform: { xs: "none", md: "translateY(-50%)" },
+              ".MuiListItemButton-root:hover &": {
+                opacity: 1,
+                visibility: "visible",
+              },
+              opacity: { xs: 1, md: 0 },
+              visibility: { xs: "visible", md: "hidden" },
+            }}
+          >
+            <ProjectActionsMenu
+              onEdit={handleEditOpen}
+              onDelete={handleDeleteOpen}
+            />
+          </Box>
+        </Box>
       </ListItemButton>
 
       <ProjectFormDialog

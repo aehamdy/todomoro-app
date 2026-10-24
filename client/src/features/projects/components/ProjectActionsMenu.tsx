@@ -1,7 +1,8 @@
 import { useState } from "react";
 import type { MouseEvent } from "react";
 import { Divider, IconButton, Menu, MenuItem } from "@mui/material";
-import MoreHorizRoundedIcon from "@mui/icons-material/MoreHorizRounded";
+// import MoreHorizRoundedIcon from "@mui/icons-material/MoreHorizRounded";
+import MoreVertRoundedIcon from "@mui/icons-material/MoreVertRounded";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteIcon from "@mui/icons-material/Delete";
 
@@ -50,7 +51,7 @@ function ProjectActionsMenu({ onEdit, onDelete }: ProjectActionsMenuProps) {
           },
         }}
       >
-        <MoreHorizRoundedIcon fontSize="small" />
+        <MoreVertRoundedIcon fontSize="small" />
       </IconButton>
 
       <Menu
