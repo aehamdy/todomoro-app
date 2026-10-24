@@ -19,15 +19,42 @@ export const getProjects: RequestHandler = async (req, res, next) => {
       return;
     }
 
-    const projects = await Project.find({ user: userId }).sort({
-      createdAt: -1,
-    });
+    const [projects, taskCounts] = await Promise.all([
+      Project.find({ user: userId }).sort({ createdAt: -1 }),
+
+      Task.aggregate([
+        {
+          $match: {
+            user: new mongoose.Types.ObjectId(userId),
+            project: { $ne: null },
+          },
+        },
+        {
+          $group: {
+            _id: "$project",
+            tasksCount: { $sum: 1 },
+          },
+        },
+      ]),
+    ]);
+
+    const taskCountsByProject = new Map<string, number>(
+      taskCounts.map(
+        ({ _id, tasksCount }) =>
+          [_id.toString(), tasksCount] as [string, number],
+      ),
+    );
+
+    const projectsWithTaskCounts = projects.map((project) => ({
+      ...project.toObject(),
+      tasksCount: taskCountsByProject.get(project._id.toString()) ?? 0,
+    }));
 
     res.status(200).json({
       status: "success",
-      results: projects.length,
+      results: projectsWithTaskCounts.length,
       data: {
-        projects,
+        projects: projectsWithTaskCounts,
       },
     });
   } catch (err) {
