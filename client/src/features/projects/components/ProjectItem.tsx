@@ -146,8 +146,10 @@ function ProjectItem({ project, onSelect }: ProjectItemProps) {
         <Box
           sx={{
             display: "flex",
-            justifyContent: "space-between",
             alignItems: "center",
+            justifyContent: "flex-end",
+            gap: 1,
+            minWidth: 36,
             position: "relative",
           }}
         >
@@ -156,13 +158,16 @@ function ProjectItem({ project, onSelect }: ProjectItemProps) {
             color="text.secondary"
             sx={{
               fontVariantNumeric: "tabular-nums",
-              opacity: 1,
-              visibility: "visible",
               transition: "opacity 0.2s ease, visibility 0.2s ease",
-              ".MuiListItemButton-root:hover &": {
-                opacity: { xs: 1, md: 0 },
-                visibility: { xs: "visible", md: "hidden" },
-              },
+
+              "@media (min-width: 900px) and (hover: hover) and (pointer: fine)":
+                {
+                  ".MuiListItemButton-root:hover &, .MuiListItemButton-root:focus-within &":
+                    {
+                      opacity: 0,
+                      visibility: "hidden",
+                    },
+                },
             }}
           >
             <Box
@@ -171,6 +176,7 @@ function ProjectItem({ project, onSelect }: ProjectItemProps) {
             >
               ({project.tasksCount})
             </Box>
+
             <Box
               component="span"
               sx={{ display: { xs: "none", md: "inline" } }}
@@ -184,16 +190,26 @@ function ProjectItem({ project, onSelect }: ProjectItemProps) {
               display: "flex",
               alignItems: "center",
               transition: "opacity 0.2s ease, visibility 0.2s ease",
-              position: { xs: "static", md: "absolute" },
-              right: 0,
-              top: "50%",
-              transform: { xs: "none", md: "translateY(-50%)" },
-              ".MuiListItemButton-root:hover &": {
+
+              "@media (min-width: 900px) and (hover: hover) and (pointer: fine)":
+                {
+                  position: "absolute",
+                  right: 0,
+                  opacity: 0,
+                  visibility: "hidden",
+
+                  ".MuiListItemButton-root:hover &, .MuiListItemButton-root:focus-within &":
+                    {
+                      opacity: 1,
+                      visibility: "visible",
+                    },
+                },
+
+              "@media (max-width: 899.95px)": {
+                position: "static",
                 opacity: 1,
                 visibility: "visible",
               },
-              opacity: { xs: 1, md: 0 },
-              visibility: { xs: "visible", md: "hidden" },
             }}
           >
             <ProjectActionsMenu
