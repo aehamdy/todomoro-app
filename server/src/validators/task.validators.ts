@@ -30,6 +30,10 @@ export const createTaskSchema = z
     isCompleted: taskFields.isCompleted.optional(),
     priority: taskFields.priority.optional(),
     dueDate: taskFields.dueDate.optional(),
+    project: z
+      .string()
+      .regex(/^[0-9a-fA-F]{24}$/)
+      .nullable(),
   })
   .strict();
 
