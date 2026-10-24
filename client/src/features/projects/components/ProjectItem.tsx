@@ -1,42 +1,52 @@
+import { useState } from "react";
+import type { FormEvent } from "react";
+import axios from "axios";
 import {
-  Divider,
-  IconButton,
+  Box,
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  Menu,
-  MenuItem,
+  Typography,
 } from "@mui/material";
-import MoreHorizRoundedIcon from "@mui/icons-material/MoreHorizRounded";
-import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import FolderRoundedIcon from "@mui/icons-material/FolderRounded";
-import DeleteIcon from "@mui/icons-material/Delete";
+
 import type { TProject } from "../project.types";
-import { useState } from "react";
-import ProjectFormDialog from "./ProjectFormDialog";
 import { useUpdateProject } from "../hooks/useUpdateProject";
-import axios from "axios";
 import { useDeleteProject } from "../hooks/useDeleteProject";
+import ProjectActionsMenu from "./ProjectActionsMenu";
+import ProjectFormDialog from "./ProjectFormDialog";
 import DeleteModal from "../../../components/common/DeleteModal";
 
 type ProjectItemProps = {
   project: TProject;
   onSelect?: (project: TProject) => void;
-  onDelete?: (project: TProject) => void;
 };
-function ProjectItem({ project, onSelect }: ProjectItemProps) {
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const isMenuOpen = Boolean(anchorEl);
+function getApiErrorMessage(error: unknown, fallbackMessage: string): string {
+  if (axios.isAxiosError<{ message?: string }>(error)) {
+    const message = error.response?.data?.message;
+    if (typeof message === "string" && message.length > 0) {
+      return message;
+    }
+  }
+  return fallbackMessage;
+}
+
+function ProjectItem({ project, onSelect }: ProjectItemProps) {
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [selectedColor, setSelectedColor] = useState<string>("");
+  const [selectedColor, setSelectedColor] = useState("");
 
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const {
+    updateProject,
+    isUpdating,
+    isError: isUpdateError,
+    error: updateError,
+  } = useUpdateProject();
 
-  const { updateProject, isUpdating, isError, error } = useUpdateProject();
   const {
     deleteProject,
     isDeleting,
@@ -44,58 +54,56 @@ function ProjectItem({ project, onSelect }: ProjectItemProps) {
     error: deleteError,
   } = useDeleteProject();
 
-  const errorMessage = axios.isAxiosError(error)
-    ? error.response?.data?.message ||
-      "Unable to update the project. Please try again."
-    : "An unexpected error occurred. Please try again.";
+  const updateErrorMessage = getApiErrorMessage(
+    updateError,
+    "Unable to update the project. Please try again.",
+  );
 
-  const deleteErrorMessage = axios.isAxiosError(deleteError)
-    ? deleteError.response?.data?.message ||
-      "Unable to delete the project. Please try again."
-    : "An unexpected error occurred. Please try again.";
+  const deleteErrorMessage = getApiErrorMessage(
+    deleteError,
+    "Unable to delete the project. Please try again.",
+  );
 
-  const handleDotsClick = (event: React.MouseEvent<HTMLElement>) => {
-    event.stopPropagation();
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const handleEditClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    handleClose();
-
+  const handleEditOpen = () => {
     setTitle(project.title);
     setDescription(project.description ?? "");
     setSelectedColor(project.color ?? "");
-
-    setIsDialogOpen(true);
+    setIsEditDialogOpen(true);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleEditClose = () => {
+    if (!isUpdating) {
+      setIsEditDialogOpen(false);
+    }
+  };
+
+  const handleEditSubmit = async (event: FormEvent) => {
+    event.preventDefault();
+    const projectData = {
+      title: title.trim(),
+      description: description.trim(),
+      color: selectedColor,
+    };
 
     try {
-      const projectData = {
-        title: title.trim(),
-        description: description.trim(),
-        color: selectedColor,
-      };
-
-      await updateProject({ projectId: project._id, projectData });
-
-      setIsDialogOpen(false);
+      await updateProject({
+        projectId: project._id,
+        projectData,
+      });
+      setIsEditDialogOpen(false);
     } catch (err) {
       console.log(err);
     }
   };
 
-  const handleDeleteClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    handleClose();
+  const handleDeleteOpen = () => {
     setIsDeleteModalOpen(true);
+  };
+
+  const handleDeleteClose = () => {
+    if (!isDeleting) {
+      setIsDeleteModalOpen(false);
+    }
   };
 
   const handleDeleteConfirm = async () => {
@@ -103,7 +111,7 @@ function ProjectItem({ project, onSelect }: ProjectItemProps) {
       await deleteProject(project._id);
       setIsDeleteModalOpen(false);
     } catch (err) {
-      console.error("Failed to delete project:", err);
+      console.log(err);
     }
   };
 
@@ -117,94 +125,91 @@ function ProjectItem({ project, onSelect }: ProjectItemProps) {
           px: 1,
           color: "text.secondary",
           borderRadius: 2,
+          position: "relative",
           "&:hover": {
             color: "primary.main",
             bgcolor: "action.hover",
-            "& .MuiListItemIcon-root": {
-              color: "primary.main",
-            },
           },
         }}
       >
-        <ListItemIcon sx={{ color: project.color || "inherit", minWidth: 40 }}>
+        <ListItemIcon
+          sx={{
+            color: project.color || "inherit",
+            minWidth: 40,
+          }}
+        >
           <FolderRoundedIcon />
         </ListItemIcon>
 
         <ListItemText primary={project.title} />
 
-        <IconButton
-          size="small"
-          aria-label="project options"
-          onClick={handleDotsClick}
+        <Box
           sx={{
-            color: "text.secondary",
-            "&:hover": { color: "primary.main", bgcolor: "action.hover" },
+            display: "flex",
+            alignItems: "center",
+            position: "relative",
           }}
         >
-          <MoreHorizRoundedIcon fontSize="small" />
-        </IconButton>
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            sx={{
+              fontVariantNumeric: "tabular-nums",
+              opacity: 1,
+              visibility: "visible",
+              transition: "opacity 0.2s ease, visibility 0.2s ease",
+              ".MuiListItemButton-root:hover &": {
+                opacity: { xs: 1, md: 0 },
+                visibility: { xs: "visible", md: "hidden" },
+              },
+            }}
+          >
+            <Box
+              component="span"
+              sx={{ display: { xs: "inline", md: "none" } }}
+            >
+              ({project.tasksCount})
+            </Box>
+            <Box
+              component="span"
+              sx={{ display: { xs: "none", md: "inline" } }}
+            >
+              {project.tasksCount}
+            </Box>
+          </Typography>
+
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              opacity: { xs: 1, md: 0 },
+              visibility: { xs: "visible", md: "hidden" },
+              transition: "opacity 0.2s ease, visibility 0.2s ease",
+              position: { xs: "static", md: "absolute" },
+              right: 0,
+              top: "50%",
+              transform: { xs: "none", md: "translateY(-50%)" },
+              ".MuiListItemButton-root:hover &": {
+                opacity: 1,
+                visibility: "visible",
+              },
+            }}
+          >
+            <ProjectActionsMenu
+              onEdit={handleEditOpen}
+              onDelete={handleDeleteOpen}
+            />
+          </Box>
+        </Box>
       </ListItemButton>
-
-      <Menu
-        anchorEl={anchorEl}
-        open={isMenuOpen}
-        onClose={handleClose}
-        onClick={(e) => e.stopPropagation()}
-        transformOrigin={{ horizontal: "right", vertical: "top" }}
-        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
-        slotProps={{
-          paper: {
-            elevation: 6,
-            sx: {
-              minWidth: 120,
-              border: "1px solid",
-              borderColor: "divider",
-              borderRadius: 2,
-            },
-          },
-        }}
-      >
-        <MenuItem
-          onClick={handleEditClick}
-          sx={{
-            gap: 1.5,
-            fontSize: "0.875rem",
-            color: "primary.main",
-            "&:hover": {
-              color: "text.primary",
-            },
-          }}
-        >
-          <EditOutlinedIcon fontSize="small" sx={{ color: "inherit" }} />
-          Edit
-        </MenuItem>
-
-        <Divider />
-
-        <MenuItem
-          onClick={handleDeleteClick}
-          sx={{
-            gap: 1.5,
-            fontSize: "0.875rem",
-            color: "error.main",
-            "&:hover": {
-              backgroundColor: "rgba(211, 47, 47, 0.08)",
-              borderColor: "error.main",
-            },
-          }}
-        >
-          <DeleteIcon fontSize="small" sx={{ color: "error.main" }} />
-          Delete
-        </MenuItem>
-      </Menu>
 
       <ProjectFormDialog
         formType="edit"
-        handleOpen={isDialogOpen}
-        handleClose={() => setIsDialogOpen(false)}
-        handleSubmit={handleSubmit}
-        isError={isError}
-        errorMessage={errorMessage}
+        handleOpen={isEditDialogOpen}
+        handleClose={handleEditClose}
+        handleSubmit={handleEditSubmit}
+        isError={isUpdateError}
+        errorMessage={updateErrorMessage}
         isLoading={isUpdating}
         title={title}
         setTitle={setTitle}
@@ -219,7 +224,7 @@ function ProjectItem({ project, onSelect }: ProjectItemProps) {
         itemName={project.title}
         itemType="project"
         isDeleting={isDeleting}
-        onClose={() => setIsDeleteModalOpen(false)}
+        onClose={handleDeleteClose}
         onConfirm={handleDeleteConfirm}
         isError={isDeleteError}
         errorMessage={deleteErrorMessage}

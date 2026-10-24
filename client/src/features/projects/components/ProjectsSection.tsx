@@ -4,7 +4,7 @@ import ProjectCreateButton from "./ProjectCreateButton";
 
 function ProjectsSection() {
   return (
-    <Box sx={{ p: 1.5 }}>
+    <Box sx={{ bgcolor: "background.default", borderRadius: 2 }}>
       <Box
         sx={{
           display: "flex",

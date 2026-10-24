@@ -4,6 +4,7 @@ export type TProject = {
   description?: string;
   color?: string;
   user: string;
+  tasksCount: number;
   createdAt: string;
   updatedAt: string;
 };
