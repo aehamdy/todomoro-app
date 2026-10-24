@@ -1,3 +1,4 @@
+import type { ReactElement } from "react";
 import type { AuthUser } from "../features/auth/auth.types";
 
 export type SettingsTab = "account" | "appearance" | "about";
@@ -25,3 +26,10 @@ export interface UpdateAccountInput {
   email?: string;
   currentPassword?: string;
 }
+
+export type TNavItem = {
+  id: number;
+  label: string;
+  to: string;
+  icon: ReactElement;
+};
