@@ -1,4 +1,5 @@
 import {
+  Alert,
   Button,
   Dialog,
   DialogActions,
@@ -10,10 +11,12 @@ import {
 type DeleteModalProps = {
   open: boolean;
   itemName: string;
-  itemType: "task" | "subtask";
+  itemType: "task" | "subtask" | "project";
   isDeleting: boolean;
   onClose: () => void;
   onConfirm: () => void;
+  isError?: boolean;
+  errorMessage?: string;
 };
 
 function DeleteModal({
@@ -23,6 +26,8 @@ function DeleteModal({
   isDeleting,
   onClose,
   onConfirm,
+  isError,
+  errorMessage,
 }: DeleteModalProps) {
   const title = `Delete ${itemType}`;
 
@@ -43,6 +48,12 @@ function DeleteModal({
           Are you sure you want to delete "{itemName}"? This action cannot be
           undone.
         </DialogContentText>
+
+        {isError && (
+          <Alert severity="error" sx={{ mb: 2 }}>
+            {errorMessage}
+          </Alert>
+        )}
       </DialogContent>
 
       <DialogActions sx={{ px: 3, pb: 2 }}>

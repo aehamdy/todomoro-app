@@ -38,3 +38,7 @@ export async function updateProject({
 
   return response.data;
 }
+
+export async function deleteProject(projectId: string): Promise<void> {
+  await api.delete(`/projects/${projectId}`);
+}
