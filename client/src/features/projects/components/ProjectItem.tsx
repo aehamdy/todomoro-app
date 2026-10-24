@@ -146,6 +146,7 @@ function ProjectItem({ project, onSelect }: ProjectItemProps) {
         <Box
           sx={{
             display: "flex",
+            justifyContent: "space-between",
             alignItems: "center",
             position: "relative",
           }}
@@ -182,8 +183,6 @@ function ProjectItem({ project, onSelect }: ProjectItemProps) {
             sx={{
               display: "flex",
               alignItems: "center",
-              opacity: { xs: 1, md: 0 },
-              visibility: { xs: "visible", md: "hidden" },
               transition: "opacity 0.2s ease, visibility 0.2s ease",
               position: { xs: "static", md: "absolute" },
               right: 0,
@@ -193,6 +192,8 @@ function ProjectItem({ project, onSelect }: ProjectItemProps) {
                 opacity: 1,
                 visibility: "visible",
               },
+              opacity: { xs: 1, md: 0 },
+              visibility: { xs: "visible", md: "hidden" },
             }}
           >
             <ProjectActionsMenu

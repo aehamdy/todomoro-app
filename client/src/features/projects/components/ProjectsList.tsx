@@ -28,7 +28,14 @@ function ProjectsList() {
       sx={{
         display: "flex",
         flexDirection: "column",
-        gap: 0.5,
+        gap: { xs: 1, md: 0.5 },
+        minHeight: 0,
+        height: "235px",
+        pb: 0.5,
+        px: 1,
+        bgcolor: "background.default",
+        borderRadius: 1,
+        overflowY: "auto",
       }}
     >
       {projects.map((project: TProject) => (

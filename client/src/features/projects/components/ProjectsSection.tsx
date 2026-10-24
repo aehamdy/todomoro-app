@@ -10,6 +10,7 @@ function ProjectsSection() {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
+          p: 1,
         }}
       >
         <Typography sx={{ fontWeight: "600", color: "text.secondary" }}>
