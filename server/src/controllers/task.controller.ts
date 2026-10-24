@@ -50,7 +50,33 @@ export const getTasks: RequestHandler = async (req, res, next) => {
       return;
     }
 
-    const tasks = await Task.find({ user: userId });
+    const { projectId } = req.query;
+
+    let projectFilter = {};
+
+    if (projectId === "general") {
+      // Tasks that don't belong to any project
+      projectFilter = {
+        $or: [{ project: null }, { project: { $exists: false } }],
+      };
+    } else if (
+      typeof projectId === "string" &&
+      mongoose.isValidObjectId(projectId)
+    ) {
+      // Tasks belonging to the selected project
+      projectFilter = { project: projectId };
+    } else {
+      res.status(400).json({
+        status: "fail",
+        message: "A valid projectId or 'general' is required",
+      });
+      return;
+    }
+
+    const tasks = await Task.find({
+      user: userId,
+      ...projectFilter,
+    });
 
     res.status(200).json({
       status: "success",
