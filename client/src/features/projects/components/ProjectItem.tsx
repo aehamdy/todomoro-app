@@ -146,7 +146,7 @@ function ProjectItem({ project, onSelect }: ProjectItemProps) {
         <Box
           sx={{
             display: "flex",
-            justifyContent: "space-betwee",
+            justifyContent: "space-between",
             alignItems: "center",
             position: "relative",
           }}
@@ -183,10 +183,10 @@ function ProjectItem({ project, onSelect }: ProjectItemProps) {
             sx={{
               display: "flex",
               alignItems: "center",
+              transition: "opacity 0.2s ease, visibility 0.2s ease",
               position: { xs: "static", md: "absolute" },
               right: 0,
               top: "50%",
-              transition: "opacity 0.2s ease, visibility 0.2s ease",
               transform: { xs: "none", md: "translateY(-50%)" },
               ".MuiListItemButton-root:hover &": {
                 opacity: 1,
