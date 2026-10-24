@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { TASKS_QUERY_KEY } from "./useTasks";
+import { TASKS_QUERY_KEY } from "./useFetchTasks";
 import { createTask } from "../api/task.api";
+import { PROJECTS_QUERY_KEY } from "../../projects/hooks/useFetchProjects";
 
 export function useCreateTask() {
   const queryClient = useQueryClient();
@@ -11,6 +12,10 @@ export function useCreateTask() {
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: TASKS_QUERY_KEY,
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: PROJECTS_QUERY_KEY,
       });
     },
   });

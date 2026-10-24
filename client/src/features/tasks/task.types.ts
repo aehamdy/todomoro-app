@@ -10,6 +10,7 @@ export interface Task {
   dueDate: string | null;
   note: string;
   user: string;
+  project: string | null;
   subtasks: Subtask[];
   createdAt: string;
   updatedAt: string;
@@ -37,6 +38,7 @@ export interface createTaskRequest {
   title: string;
   priority: string;
   dueDate: string | null;
+  project: string | null;
 }
 
 export interface createTaskResponse {

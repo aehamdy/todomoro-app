@@ -1,5 +1,5 @@
 import { Chip, List, Paper, Stack } from "@mui/material";
-import { useTasks } from "../hooks/useTasks";
+import { useFetchTasks } from "../hooks/useFetchTasks";
 import TaskItem from "./TaskItem";
 import TasksEmptyList from "./TasksEmptyList";
 import AppLoader from "../../../components/ui/AppLoader";
@@ -8,6 +8,10 @@ import { priorityColors } from "../task.constants";
 import { blue } from "@mui/material/colors";
 import { useOutletContext } from "react-router-dom";
 import type { DashboardOutletContext } from "../../../components/layout/DashboardLayout";
+
+type TaskListProps = {
+  projectId: string | null;
+};
 
 const PRIORITY_OPTIONS: {
   label: string;
@@ -19,9 +23,11 @@ const PRIORITY_OPTIONS: {
   { label: "Urgent", value: "urgent" },
 ];
 
-function TaskList() {
+function TaskList({ projectId }: TaskListProps) {
   const { setSelectedTask } = useOutletContext<DashboardOutletContext>();
-  const { tasks, isLoading, error, isError, refetch } = useTasks();
+
+  const { tasks, isLoading, error, isError, refetch } =
+    useFetchTasks(projectId);
 
   if (isLoading) return <AppLoader message="Loading tasks..." />;
 

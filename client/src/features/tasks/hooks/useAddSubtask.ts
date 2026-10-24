@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { addSubtask } from "../api/subtask.api";
-import { TASKS_QUERY_KEY } from "./useTasks";
+import { TASKS_QUERY_KEY } from "./useFetchTasks";
 
 type AddSubtaskVariables = {
   taskId: string;

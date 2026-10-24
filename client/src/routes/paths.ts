@@ -6,4 +6,6 @@ export const ROUTES = {
   resetPassword: "reset-password",
   dashboard: "/dashboard",
   tasks: "/tasks",
+  project: "/projects/:projectId",
+  projectById: (projectId: string) => `/projects/${projectId}`,
 } as const;

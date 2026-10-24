@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/incompatible-library */
 import { zodResolver } from "@hookform/resolvers/zod";
 import AddIcon from "@mui/icons-material/Add";
 import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
@@ -24,8 +25,10 @@ import {
   type createTaskOutput,
 } from "../task.schema";
 import { priorityColors } from "../task.constants";
+import axios from "axios";
 
 interface CreateTaskFormProps {
+  projectId: string | null;
   onSuccess?: () => void;
 }
 
@@ -36,7 +39,7 @@ const priorities = [
   { value: "urgent", label: "Urgent" },
 ] as const;
 
-function CreateTaskForm({ onSuccess }: CreateTaskFormProps) {
+function CreateTaskForm({ projectId, onSuccess }: CreateTaskFormProps) {
   const { createTask, isCreating, error, isError } = useCreateTask();
 
   const [priorityAnchor, setPriorityAnchor] = useState<HTMLElement | null>(
@@ -70,12 +73,20 @@ function CreateTaskForm({ onSuccess }: CreateTaskFormProps) {
         title: values.title,
         priority: values.priority,
         dueDate: values.dueDate || null,
+        project: projectId,
       });
 
       reset();
       onSuccess?.();
-    } catch {
-      // The mutation error is displayed below.
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.error(
+          "Validation errors:",
+          JSON.stringify(error.response?.data?.errors, null, 2),
+        );
+      } else {
+        console.error(error);
+      }
     }
   };
 
