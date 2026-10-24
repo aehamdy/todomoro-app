@@ -1,18 +1,6 @@
-import {
-  Chip,
-  Divider,
-  Drawer,
-  List,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-} from "@mui/material";
-import { Dashboard as DashboardIcon } from "@mui/icons-material";
-import AssignmentRoundedIcon from "@mui/icons-material/AssignmentRounded";
-import { NavLink } from "react-router-dom";
-import { ROUTES } from "../../routes/paths";
+import { Divider, Drawer, List } from "@mui/material";
+import NavList from "./NavList";
 import ProjectsSection from "../../features/projects/components/ProjectsSection";
-import { useFetchTasks } from "../../features/tasks/hooks/useFetchTasks";
 
 type AppSidebarProps = {
   mobileOpen: boolean;
@@ -20,26 +8,11 @@ type AppSidebarProps = {
   collapsed?: boolean;
 };
 
-const navItems = [
-  {
-    label: "Dashboard",
-    to: ROUTES.dashboard,
-    icon: <DashboardIcon />,
-  },
-  {
-    label: "Tasks",
-    to: ROUTES.tasks,
-    icon: <AssignmentRoundedIcon />,
-  },
-];
-
 function AppSidebar({
   mobileOpen,
   onMobileClose,
   collapsed = false,
 }: AppSidebarProps) {
-  const { tasks: generalTasks } = useFetchTasks(null);
-
   return (
     <Drawer
       variant="permanent"
@@ -64,62 +37,7 @@ function AppSidebar({
           <List
             sx={{ display: "flex", flexDirection: "column", gap: 2, p: 1.5 }}
           >
-            <List
-              disablePadding
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                gap: 0.5,
-              }}
-            >
-              {navItems.map((item) => (
-                <ListItemButton
-                  key={item.to}
-                  component={NavLink}
-                  to={item.to}
-                  end
-                  sx={{
-                    borderRadius: 2,
-                    color: "text.secondary",
-                    "&:hover": {
-                      bgcolor: "action.hover",
-                      color: "primary.main",
-                      "& .MuiListItemIcon-root": {
-                        color: "primary.main",
-                      },
-                    },
-                    "&.active": {
-                      bgcolor: "action.selected",
-                      color: "primary.main",
-                      "& .MuiListItemIcon-root": {
-                        color: "primary.main",
-                      },
-                    },
-                  }}
-                >
-                  <ListItemIcon sx={{ color: "inherit", minWidth: 40 }}>
-                    {item.icon}
-                  </ListItemIcon>
-
-                  <ListItemText primary={item.label} />
-
-                  {item.to === ROUTES.tasks && (
-                    <Chip
-                      label={generalTasks.length}
-                      size="small"
-                      color="primary"
-                      sx={{
-                        height: 24,
-                        minWidth: 24,
-                        fontWeight: 600,
-                        fontSize: "0.75rem",
-                        borderRadius: 1.5,
-                      }}
-                    />
-                  )}
-                </ListItemButton>
-              ))}
-            </List>
+            <NavList />
 
             <Divider />
 
