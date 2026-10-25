@@ -8,9 +8,11 @@ import { priorityColors } from "../task.constants";
 import { blue } from "@mui/material/colors";
 import { useOutletContext } from "react-router-dom";
 import type { DashboardOutletContext } from "../../../components/layout/DashboardLayout";
+import { useEffect } from "react";
 
 type TaskListProps = {
   projectId: string | null;
+  onTaskCountChange?: (completed: number, incomplete: number) => void;
 };
 
 const PRIORITY_OPTIONS: {
@@ -23,11 +25,21 @@ const PRIORITY_OPTIONS: {
   { label: "Urgent", value: "urgent" },
 ];
 
-function TaskList({ projectId }: TaskListProps) {
+function TaskList({ projectId, onTaskCountChange }: TaskListProps) {
   const { setSelectedTask } = useOutletContext<DashboardOutletContext>();
 
   const { tasks, isLoading, error, isError, refetch } =
     useFetchTasks(projectId);
+
+  const completedCount = tasks.filter((task) => task.isCompleted).length;
+
+  const incompleteCount = tasks.length - completedCount;
+
+  useEffect(() => {
+    if (!isLoading && !isError) {
+      onTaskCountChange?.(completedCount, incompleteCount);
+    }
+  }, [completedCount, incompleteCount, isLoading, isError, onTaskCountChange]);
 
   if (isLoading) return <AppLoader message="Loading tasks..." />;
 
@@ -43,8 +55,6 @@ function TaskList({ projectId }: TaskListProps) {
       />
     );
   }
-
-  const completedTasks = tasks.filter((task) => task.isCompleted);
 
   return (
     <Paper
@@ -64,7 +74,7 @@ function TaskList({ projectId }: TaskListProps) {
         }}
       >
         <Chip
-          label={`${completedTasks.length}/${tasks.length}`}
+          label={`${completedCount}/${tasks.length}`}
           size="medium"
           sx={{ fontSize: "14px", color: "white", bgcolor: blue[400] }}
         />

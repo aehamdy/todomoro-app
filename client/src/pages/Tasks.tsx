@@ -1,34 +1,37 @@
-import { Box, Paper, Stack, Typography } from "@mui/material";
+import { Paper, Stack } from "@mui/material";
 import TaskList from "../features/tasks/components/TaskList";
 import CreateTaskForm from "../features/tasks/components/CreateTaskForm";
+import TaskCompletionSummary from "../features/tasks/components/TaskCompletionSummary";
+import { useState } from "react";
 
 function TasksPage() {
+  const [completedCount, setCompletedCount] = useState(0);
+  const [incompleteCount, setIncompleteCount] = useState(0);
+
+  const handleTaskCountChange = (completed: number, incomplete: number) => {
+    setCompletedCount(completed);
+    setIncompleteCount(incomplete);
+  };
+
   return (
     <Stack spacing={3}>
       <Paper elevation={0} sx={{ p: 3, borderRadius: "8px" }}>
         <Stack
           direction={{ xs: "column", sm: "row" }}
-          spacing={2}
+          spacing={6}
           sx={{
             alignItems: { xs: "stretch", sm: "center" },
-            justifyContent: "space-between",
+            justifyContent: "space-evenly",
           }}
         >
-          <Box>
-            <Typography variant="h4" component="h1" sx={{ fontWeight: 700 }}>
-              My Tasks
-            </Typography>
-
-            <Typography variant="body1" color="text.secondary" sx={{ mt: 1 }}>
-              Organize your work. Focus on what matters.
-            </Typography>
-          </Box>
+          <TaskCompletionSummary count={incompleteCount} status="incomplete" />
+          <TaskCompletionSummary count={completedCount} status="completed" />
         </Stack>
       </Paper>
 
       <CreateTaskForm projectId={null} />
 
-      <TaskList projectId={null} />
+      <TaskList projectId={null} onTaskCountChange={handleTaskCountChange} />
     </Stack>
   );
 }
