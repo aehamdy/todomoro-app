@@ -12,6 +12,7 @@ import TaskDate from "./TaskDate";
 import TaskPrioritySelector from "./TaskPrioritySelector";
 import type { TaskPriority } from "../task.types";
 import SubtasksList from "./SubtasksList";
+import TaskProject from "./TaskProject";
 
 type TaskDetailsSidebarProps = {
   taskId: string;
@@ -87,17 +88,18 @@ function TaskDetailsSidebar({ taskId, onClose }: TaskDetailsSidebarProps) {
         minWidth: 0,
         height: "calc(100% - 40px)",
         my: "20px",
-        mx: 2,
+        mx: 1,
         p: 2,
         bgcolor: "background.paper",
         borderRadius: "8px",
+        boxShadow: 5,
         overflowY: "auto",
       }}
     >
       <Stack>
         <TaskDetailsHeader onClose={onClose} />
 
-        <Stack spacing={1}>
+        <Stack spacing={1} sx={{ color: "text.secondary" }}>
           {isUpdateError && (
             <Alert severity="error">
               Failed to update the task. Please try again.
@@ -119,6 +121,8 @@ function TaskDetailsSidebar({ taskId, onClose }: TaskDetailsSidebarProps) {
             onSave={handleSaveDueDate}
             isSaving={isUpdating}
           />
+
+          <TaskProject taskId={taskId} projectId={task.project} />
 
           <TaskPrioritySelector
             priority={task.priority}
