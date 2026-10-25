@@ -52,7 +52,13 @@ function ProjectFormDialog({
   const loadingLabel = isCreate ? "Creating..." : "Updating...";
 
   return (
-    <Dialog open={handleOpen} onClose={handleClose} maxWidth="xs" fullWidth>
+    <Dialog
+      open={handleOpen}
+      onClose={handleClose}
+      maxWidth="xs"
+      fullWidth
+      sx={{ zIndex: (theme) => theme.zIndex.modal + 100 }}
+    >
       <form onSubmit={handleSubmit}>
         <DialogTitle sx={{ fontWeight: "600" }}>{formTitle}</DialogTitle>
 

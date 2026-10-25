@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Box, Stack, Typography } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import TrackChangesIcon from "@mui/icons-material/TrackChanges";
@@ -14,6 +14,7 @@ type TaskDueDateProps = {
 function TaskDueDate({ dueDate, onSave, isSaving }: TaskDueDateProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [editedDate, setEditedDate] = useState<Dayjs | null>(null);
+  const anchorRef = useRef<HTMLDivElement>(null);
 
   const handleStartEditing = () => {
     if (isSaving) return;
@@ -36,7 +37,7 @@ function TaskDueDate({ dueDate, onSave, isSaving }: TaskDueDateProps) {
   };
 
   return (
-    <Box sx={{ position: "relative" }}>
+    <Box ref={anchorRef} sx={{ position: "relative" }}>
       <Stack
         onClick={handleStartEditing}
         sx={{
@@ -138,6 +139,11 @@ function TaskDueDate({ dueDate, onSave, isSaving }: TaskDueDateProps) {
                   height: 30,
                   fontSize: "0.7rem",
                 },
+              },
+            },
+            dialog: {
+              sx: {
+                zIndex: 1501,
               },
             },
           }}

@@ -61,6 +61,9 @@ function ProjectActionsMenu({ onEdit, onDelete }: ProjectActionsMenuProps) {
         disableRestoreFocus
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+        sx={{
+          zIndex: (theme) => theme.zIndex.modal + 100,
+        }}
         slotProps={{
           paper: {
             elevation: 6,
