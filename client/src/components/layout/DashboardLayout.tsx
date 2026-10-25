@@ -185,6 +185,7 @@ function DashboardLayout() {
             anchor="left"
             open={isSidebarOpen}
             onClose={() => setIsSidebarOpen(false)}
+            disableRestoreFocus
             sx={{
               zIndex: 1400,
               "& .MuiDrawer-paper": {
