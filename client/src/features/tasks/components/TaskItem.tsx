@@ -1,6 +1,7 @@
 import type { Task } from "../task.types";
 import {
   Alert,
+  Box,
   ListItem,
   ListItemText,
   Snackbar,
@@ -12,6 +13,8 @@ import { grey } from "@mui/material/colors";
 import { useToggleTask } from "../hooks/useToggleTask";
 import { useState } from "react";
 import TaskCheckbox from "./TaskCheckbox";
+import DescriptionOutlined from "@mui/icons-material/DescriptionOutlined";
+import FormatListBulletedRounded from "@mui/icons-material/FormatListBulletedRounded";
 
 type TaskItemProps = {
   task: Task;
@@ -21,6 +24,9 @@ type TaskItemProps = {
 function TaskItem({ task, onClick }: TaskItemProps) {
   const { toggleTask, isToggling, error, isError } = useToggleTask();
   const [showError, setShowError] = useState(false);
+
+  const includesNote = task.note.length > 0;
+  const includesSubtasks = task.subtasks.some((item) => !item.isCompleted);
 
   const handleToggle = async () => {
     try {
@@ -65,15 +71,41 @@ function TaskItem({ task, onClick }: TaskItemProps) {
           }}
           primary={
             <Stack>
-              <Typography
+              <Stack
                 sx={{
-                  fontWeight: 600,
-                  textDecoration: task.isCompleted ? "line-through" : "none",
-                  color: task.isCompleted ? "text.secondary" : "text.primary",
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
                 }}
               >
-                {task.title}
-              </Typography>
+                <Typography
+                  sx={{
+                    fontWeight: 600,
+                    textDecoration: task.isCompleted ? "line-through" : "none",
+                    color: task.isCompleted ? "text.secondary" : "text.primary",
+                  }}
+                >
+                  {task.title}
+                </Typography>
+
+                {(includesNote || includesSubtasks) && (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                      gap: 1,
+                      color: "text.secondary",
+                    }}
+                  >
+                    {includesNote && <DescriptionOutlined fontSize="small" />}
+                    {includesSubtasks && (
+                      <FormatListBulletedRounded fontSize="small" />
+                    )}
+                  </Box>
+                )}
+              </Stack>
+
               <Typography variant="caption" sx={{ color: grey[500] }}>
                 {dueDate}
               </Typography>
