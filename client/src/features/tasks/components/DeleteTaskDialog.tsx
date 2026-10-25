@@ -35,6 +35,7 @@ function DeleteTaskDialog({
       }}
       aria-labelledby="delete-task-dialog-title"
       aria-describedby="delete-task-dialog-description"
+      closeAfterTransition={false}
     >
       <DialogTitle id="delete-task-dialog-title">Delete task?</DialogTitle>
 

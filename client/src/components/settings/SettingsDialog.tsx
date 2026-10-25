@@ -25,7 +25,13 @@ function SettingsDialog({ isModalOpen, setIsModalOpen }: SettingsDialogProps) {
   const handleClose = () => setIsModalOpen(false);
 
   return (
-    <Dialog open={isModalOpen} onClose={handleClose} fullWidth maxWidth="md">
+    <Dialog
+      open={isModalOpen}
+      onClose={handleClose}
+      fullWidth
+      maxWidth="md"
+      closeAfterTransition={false}
+    >
       <DialogTitle>Settings</DialogTitle>
 
       <DialogContent dividers sx={{ p: { xs: 1.5, md: 2 } }}>
