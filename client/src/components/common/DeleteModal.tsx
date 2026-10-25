@@ -35,7 +35,6 @@ function DeleteModal({
     <Dialog
       open={open}
       onClose={isDeleting ? undefined : onClose}
-      closeAfterTransition={false}
       aria-labelledby="delete-dialog-title"
       aria-describedby="delete-dialog-description"
       fullWidth

@@ -52,13 +52,7 @@ function ProjectFormDialog({
   const loadingLabel = isCreate ? "Creating..." : "Updating...";
 
   return (
-    <Dialog
-      open={handleOpen}
-      onClose={handleClose}
-      maxWidth="xs"
-      fullWidth
-      closeAfterTransition={false}
-    >
+    <Dialog open={handleOpen} onClose={handleClose} maxWidth="xs" fullWidth>
       <form onSubmit={handleSubmit}>
         <DialogTitle sx={{ fontWeight: "600" }}>{formTitle}</DialogTitle>
 

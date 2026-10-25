@@ -58,6 +58,7 @@ function ProjectActionsMenu({ onEdit, onDelete }: ProjectActionsMenuProps) {
         open={isMenuOpen}
         onClose={handleClose}
         onClick={(event) => event.stopPropagation()}
+        disableRestoreFocus
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
         slotProps={{
