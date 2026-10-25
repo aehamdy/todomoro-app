@@ -45,7 +45,6 @@ function TaskDueDate({ dueDate, onSave, isSaving }: TaskDueDateProps) {
           justifyContent: "space-between",
           alignItems: "center",
           p: 1,
-          mx: -0.5,
           borderRadius: 1,
           cursor: isSaving ? "default" : "pointer",
           "&:hover": {
@@ -62,7 +61,9 @@ function TaskDueDate({ dueDate, onSave, isSaving }: TaskDueDateProps) {
           Due Date
         </Typography>
 
-        <Typography>{dueDate ? formatDateTime(dueDate) : "Someday"}</Typography>
+        <Typography sx={{ color: "text.primary" }}>
+          {dueDate ? formatDateTime(dueDate) : "Someday"}
+        </Typography>
       </Stack>
 
       {isOpen && (
@@ -107,10 +108,13 @@ function TaskDueDate({ dueDate, onSave, isSaving }: TaskDueDateProps) {
               sx: {
                 "& .MuiPaper-root": {
                   transformOrigin: "top center",
+                  border: "1px solid",
+                  borderColor: "divider",
+                  borderRadius: 2,
                 },
                 "& .MuiDateCalendar-root": {
-                  width: "300px", // date picker width
-                  height: "290px", // date picker height
+                  width: "300px",
+                  height: "290px",
                 },
                 "& .MuiPickersCalendarHeader-root": {
                   paddingLeft: 1,

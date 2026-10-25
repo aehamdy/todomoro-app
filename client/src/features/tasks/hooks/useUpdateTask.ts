@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { UpdateTaskRequest } from "../task.types";
 import { TASKS_QUERY_KEY } from "./useFetchTasks";
 import { updateTask } from "../api/task.api";
+import { PROJECTS_QUERY_KEY } from "../../projects/hooks/useFetchProjects";
 
 export function useUpdateTask() {
   const queryClient = useQueryClient();
@@ -15,9 +16,13 @@ export function useUpdateTask() {
       taskData: UpdateTaskRequest;
     }) => updateTask(taskId, taskData),
 
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({
+    onSuccess: () => {
+      queryClient.invalidateQueries({
         queryKey: TASKS_QUERY_KEY,
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: PROJECTS_QUERY_KEY,
       });
     },
   });

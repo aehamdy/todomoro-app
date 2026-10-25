@@ -122,6 +122,9 @@ function TaskPrioritySelector({
             sx: {
               minWidth: 160,
               mt: 0.5,
+              border: "1px solid",
+              borderColor: "divider",
+              borderRadius: 1,
               "& .MuiMenuItem-root": {
                 minHeight: 36,
                 gap: 1,

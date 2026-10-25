@@ -54,6 +54,7 @@ export interface UpdateTaskRequest {
   isCompleted?: boolean;
   priority?: TaskPriority;
   dueDate?: string | null;
+  project?: string | null;
 }
 
 export interface UpdateTaskResponse {

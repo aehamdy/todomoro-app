@@ -1,6 +1,6 @@
 import { List } from "@mui/material";
-import { Dashboard as DashboardIcon } from "@mui/icons-material";
-import AssignmentRoundedIcon from "@mui/icons-material/AssignmentRounded";
+import SpaceDashboardRoundedIcon from "@mui/icons-material/SpaceDashboardRounded";
+import ChecklistIcon from "@mui/icons-material/Checklist";
 import { ROUTES } from "../../routes/paths";
 import { useFetchTasks } from "../../features/tasks/hooks/useFetchTasks";
 import NavItem from "./NavItem";
@@ -11,13 +11,13 @@ const navItems: TNavItem[] = [
     id: 1,
     label: "Dashboard",
     to: ROUTES.dashboard,
-    icon: <DashboardIcon />,
+    icon: <SpaceDashboardRoundedIcon />,
   },
   {
     id: 2,
     label: "Tasks",
     to: ROUTES.tasks,
-    icon: <AssignmentRoundedIcon />,
+    icon: <ChecklistIcon />,
   },
 ];
 

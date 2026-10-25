@@ -156,8 +156,6 @@ function DashboardLayout() {
               minWidth: 0,
               height: "100%",
               overflow: "hidden",
-              borderLeft: 1,
-              borderColor: "divider",
               animation: "slideInFromRight 250ms ease-out",
               "@keyframes slideInFromRight": {
                 from: {
