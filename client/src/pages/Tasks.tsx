@@ -17,7 +17,7 @@ function TasksPage() {
     <Stack spacing={3}>
       <Paper elevation={0} sx={{ p: 3, borderRadius: "8px" }}>
         <Stack
-          direction={{ xs: "column", sm: "row" }}
+          direction="row"
           spacing={6}
           sx={{
             alignItems: { xs: "stretch", sm: "center" },
