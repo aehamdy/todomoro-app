@@ -35,6 +35,8 @@ function TaskProject({ taskId, projectId }: TaskProjectProps) {
   const isMenuOpen = Boolean(anchorEl);
 
   const handleOpen = (event: MouseEvent<HTMLElement>) => {
+    if (isLoading || isUpdating) return;
+
     setAnchorEl(event.currentTarget);
   };
 
@@ -122,6 +124,11 @@ function TaskProject({ taskId, projectId }: TaskProjectProps) {
           horizontal: "right",
         }}
         slotProps={{
+          root: {
+            sx: {
+              zIndex: 1501,
+            },
+          },
           paper: {
             sx: {
               mt: 0.75,

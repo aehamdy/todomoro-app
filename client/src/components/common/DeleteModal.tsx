@@ -39,6 +39,7 @@ function DeleteModal({
       aria-describedby="delete-dialog-description"
       fullWidth
       maxWidth="xs"
+      sx={{ zIndex: (theme) => theme.zIndex.modal + 100 }}
     >
       <DialogTitle id="delete-dialog-title">{title}</DialogTitle>
 

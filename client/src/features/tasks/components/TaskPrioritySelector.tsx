@@ -1,7 +1,7 @@
 import { Menu, MenuItem, Stack, Typography } from "@mui/material";
 import FlagOutlinedIcon from "@mui/icons-material/FlagOutlined";
 import type { TaskPriority } from "../task.types";
-import { useState } from "react";
+import { useState, type MouseEvent } from "react";
 import FlagIcon from "@mui/icons-material/Flag";
 
 type TaskPriorityProps = {
@@ -30,7 +30,7 @@ function TaskPrioritySelector({
 
   const isMenuOpen = Boolean(anchorEl);
 
-  const handleOpen = (event: React.MouseEvent<HTMLElement>) => {
+  const handleOpen = (event: MouseEvent<HTMLElement>) => {
     if (isSaving) return;
 
     setAnchorEl(event.currentTarget);
@@ -118,6 +118,11 @@ function TaskPrioritySelector({
         anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
         transformOrigin={{ vertical: "top", horizontal: "right" }}
         slotProps={{
+          root: {
+            sx: {
+              zIndex: 1501,
+            },
+          },
           paper: {
             sx: {
               minWidth: 160,
