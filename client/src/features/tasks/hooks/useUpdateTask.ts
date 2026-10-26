@@ -28,7 +28,7 @@ export function useUpdateTask() {
   });
 
   return {
-    updateTask: mutation.mutate,
+    updateTask: mutation.mutateAsync,
     isUpdating: mutation.isPending,
     error: mutation.error,
     isError: mutation.isError,

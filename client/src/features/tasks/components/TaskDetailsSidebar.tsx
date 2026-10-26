@@ -13,6 +13,7 @@ import TaskPrioritySelector from "./TaskPrioritySelector";
 import type { TaskPriority } from "../task.types";
 import SubtasksList from "./SubtasksList";
 import TaskProject from "./TaskProject";
+import { playTaskCompletionSound } from "../utils/playTaskCompletionSound";
 
 type TaskDetailsSidebarProps = {
   taskId: string;
@@ -34,11 +35,21 @@ function TaskDetailsSidebar({ taskId, onClose }: TaskDetailsSidebarProps) {
     return <div>Failed to load task details.</div>;
   }
 
-  const handleToggleComplete = (isCompleted: boolean) => {
-    updateTask({
-      taskId,
-      taskData: { isCompleted },
-    });
+  const handleToggleComplete = async (isCompleted: boolean) => {
+    const isCompleting = isCompleted;
+
+    try {
+      await updateTask({
+        taskId,
+        taskData: { isCompleted },
+      });
+
+      if (isCompleting) {
+        playTaskCompletionSound();
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const handleSaveTitle = (newTitle: string) => {

@@ -16,6 +16,7 @@ import { useUpdateSubtask } from "../hooks/useUpdateSubtask";
 import { useDeleteSubtask } from "../hooks/useDeleteSubtask";
 import { useState } from "react";
 import DeleteModal from "../../../components/common/DeleteModal";
+import { playTaskCompletionSound } from "../utils/playTaskCompletionSound";
 
 type SubtaskItemProps = {
   taskId: string;
@@ -41,12 +42,18 @@ function SubtaskItem({ taskId, subtask }: SubtaskItemProps) {
   } = useDeleteSubtask();
 
   const handleToggle = async () => {
+    const isCompleting = !subtask.isCompleted;
+
     try {
       await updateTask({
         taskId,
         subtaskId: subtask._id,
         subtaskData: { isCompleted: !subtask.isCompleted },
       });
+
+      if (isCompleting) {
+        playTaskCompletionSound();
+      }
     } catch (err) {
       console.log(err);
     }

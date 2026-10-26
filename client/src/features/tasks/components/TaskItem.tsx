@@ -15,6 +15,7 @@ import { useState } from "react";
 import TaskCheckbox from "./TaskCheckbox";
 import DescriptionOutlined from "@mui/icons-material/DescriptionOutlined";
 import FormatListBulletedRounded from "@mui/icons-material/FormatListBulletedRounded";
+import { playTaskCompletionSound } from "../utils/playTaskCompletionSound";
 
 type TaskItemProps = {
   task: Task;
@@ -29,8 +30,14 @@ function TaskItem({ task, onClick }: TaskItemProps) {
   const includesSubtasks = task.subtasks.some((item) => !item.isCompleted);
 
   const handleToggle = async () => {
+    const isCompleting = !task.isCompleted;
+
     try {
-      await toggleTask({ taskId: task._id, isCompleted: !task.isCompleted });
+      await toggleTask({ taskId: task._id, isCompleted: isCompleting });
+
+      if (isCompleting) {
+        playTaskCompletionSound();
+      }
     } catch {
       setShowError(true);
     }
