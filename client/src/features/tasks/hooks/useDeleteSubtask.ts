@@ -22,7 +22,7 @@ export function useDeleteSubtask() {
   });
 
   return {
-    deleteTask: mutation.mutate,
+    deleteTask: mutation.mutateAsync,
     isDeleting: mutation.isPending,
     error: mutation.error,
     isError: mutation.isError,
