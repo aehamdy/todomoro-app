@@ -114,6 +114,8 @@ export const getMe: RequestHandler = async (req, res, next) => {
           email: user.email,
           preferences: {
             theme: user.preferences?.theme ?? "system",
+            taskCompletionSoundEnabled:
+              user.preferences?.taskCompletionSoundEnabled ?? true,
           },
           createdAt: user.createdAt,
         },
@@ -268,7 +270,8 @@ export const changePassword: RequestHandler = async (req, res, next) => {
 export const updatePreferences: RequestHandler = async (req, res, next) => {
   try {
     const userId = req.userId;
-    const { theme } = req.body as UpdatePreferencesInput;
+    const { theme, taskCompletionSoundEnabled } =
+      req.body as UpdatePreferencesInput;
 
     const user = await User.findById(userId);
 
@@ -280,13 +283,27 @@ export const updatePreferences: RequestHandler = async (req, res, next) => {
       return;
     }
 
-    user.set("preferences.theme", theme);
+    if (theme !== undefined) {
+      user.set("preferences.theme", theme);
+    }
+
+    if (taskCompletionSoundEnabled !== undefined) {
+      user.set(
+        "preferences.taskCompletionSoundEnabled",
+        taskCompletionSoundEnabled,
+      );
+    }
+
     await user.save();
 
     res.status(200).json({
       status: "success",
       data: {
-        preferences: { theme: user.get("preferences.theme") ?? "system" },
+        preferences: {
+          theme: user.get("preferences.theme") ?? "system",
+          taskCompletionSoundEnabled:
+            user.get("preferences.taskCompletionSoundEnabled") ?? true,
+        },
       },
     });
   } catch (err) {

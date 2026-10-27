@@ -33,6 +33,8 @@ const userSchema = new Schema(
         },
         default: "system",
       },
+
+      taskCompletionSoundEnabled: { type: Boolean, default: true },
     },
   },
 
