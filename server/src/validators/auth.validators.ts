@@ -61,9 +61,14 @@ export const changePasswordSchema = z.object({
   newPassword: z.string().min(8).max(20),
 });
 
-export const updatePreferencesSchema = z.object({
-  theme: z.enum(["system", "light", "dark"]),
-});
+export const updatePreferencesSchema = z
+  .object({
+    theme: z.enum(["light", "dark", "system"]).optional(),
+    taskCompletionSoundEnabled: z.boolean().optional(),
+  })
+  .refine((preferences) => Object.keys(preferences).length > 0, {
+    message: "At least one preference must be provided",
+  });
 
 export type RegisterInput = z.infer<typeof registerSchema>;
 export type LoginInput = z.infer<typeof loginSchema>;
