@@ -16,6 +16,7 @@ import TaskCheckbox from "./TaskCheckbox";
 import DescriptionOutlined from "@mui/icons-material/DescriptionOutlined";
 import FormatListBulletedRounded from "@mui/icons-material/FormatListBulletedRounded";
 import { playTaskCompletionSound } from "../utils/playTaskCompletionSound";
+import { useAuth } from "../../auth/useAuth";
 
 type TaskItemProps = {
   task: Task;
@@ -23,6 +24,7 @@ type TaskItemProps = {
 };
 
 function TaskItem({ task, onClick }: TaskItemProps) {
+  const { user } = useAuth();
   const { toggleTask, isToggling, error, isError } = useToggleTask();
   const [showError, setShowError] = useState(false);
 
@@ -36,7 +38,9 @@ function TaskItem({ task, onClick }: TaskItemProps) {
       await toggleTask({ taskId: task._id, isCompleted: isCompleting });
 
       if (isCompleting) {
-        playTaskCompletionSound();
+        await playTaskCompletionSound(
+          user?.preferences.taskCompletionSoundEnabled ?? true,
+        );
       }
     } catch {
       setShowError(true);

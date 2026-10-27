@@ -17,6 +17,7 @@ import { useDeleteSubtask } from "../hooks/useDeleteSubtask";
 import { useState } from "react";
 import DeleteModal from "../../../components/common/DeleteModal";
 import { playTaskCompletionSound } from "../utils/playTaskCompletionSound";
+import { useAuth } from "../../auth/useAuth";
 
 type SubtaskItemProps = {
   taskId: string;
@@ -24,6 +25,7 @@ type SubtaskItemProps = {
 };
 
 function SubtaskItem({ taskId, subtask }: SubtaskItemProps) {
+  const { user } = useAuth();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isEditingSubtask, setIsEditingSubtask] = useState(false);
   const [draftTitle, setDraftTitle] = useState(subtask.title);
@@ -52,7 +54,9 @@ function SubtaskItem({ taskId, subtask }: SubtaskItemProps) {
       });
 
       if (isCompleting) {
-        playTaskCompletionSound();
+        await playTaskCompletionSound(
+          user?.preferences.taskCompletionSoundEnabled ?? true,
+        );
       }
     } catch (err) {
       console.log(err);

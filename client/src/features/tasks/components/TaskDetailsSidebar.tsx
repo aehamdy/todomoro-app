@@ -14,6 +14,7 @@ import type { TaskPriority } from "../task.types";
 import SubtasksList from "./SubtasksList";
 import TaskProject from "./TaskProject";
 import { playTaskCompletionSound } from "../utils/playTaskCompletionSound";
+import { useAuth } from "../../auth/useAuth";
 
 type TaskDetailsSidebarProps = {
   taskId: string;
@@ -21,6 +22,7 @@ type TaskDetailsSidebarProps = {
 };
 
 function TaskDetailsSidebar({ taskId, onClose }: TaskDetailsSidebarProps) {
+  const { user } = useAuth();
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
   const { task, isLoading, isError } = useTaskDetails(taskId);
@@ -45,7 +47,9 @@ function TaskDetailsSidebar({ taskId, onClose }: TaskDetailsSidebarProps) {
       });
 
       if (isCompleting) {
-        playTaskCompletionSound();
+        await playTaskCompletionSound(
+          user?.preferences.taskCompletionSoundEnabled ?? true,
+        );
       }
     } catch (err) {
       console.log(err);
