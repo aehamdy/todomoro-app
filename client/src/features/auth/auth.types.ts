@@ -17,9 +17,7 @@ export interface AuthUser {
   id: string;
   name: string;
   email: string;
-  preferences: {
-    theme: ThemePreference;
-  };
+  preferences: UserPreferences;
   createdAt: string;
 }
 
@@ -60,6 +58,7 @@ export type ChangePasswordData = {
 
 export type UserPreferences = {
   theme: ThemePreference;
+  taskCompletionSoundEnabled: boolean;
 };
 
 export type UpdatePreferencesResponse = {

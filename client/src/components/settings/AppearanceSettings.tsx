@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { ChangeEvent } from "react";
-import { Alert, Box, MenuItem, TextField, Typography } from "@mui/material";
+import { Alert, Box, TextField, Typography } from "@mui/material";
 import type { ThemePreference } from "../../features/auth/auth.types";
 import { useAppTheme } from "../../theme/AppThemeProvider";
 import { useUpdateUserPreferences } from "../../features/auth/useUpdateUserPreferences";
@@ -25,21 +25,20 @@ function AppearanceSettings() {
     const previousTheme = themePreference;
 
     setSaveError(false);
-
-    // Apply the new theme immediately.
     setThemePreference(nextTheme);
 
-    // Persist the preference in the backend.
-    updatePreferences.mutate(nextTheme, {
-      onSuccess: () => {
-        setSaveError(false);
+    updatePreferences.mutate(
+      { theme: nextTheme },
+      {
+        onSuccess: () => {
+          setSaveError(false);
+        },
+        onError: () => {
+          setThemePreference(previousTheme);
+          setSaveError(true);
+        },
       },
-      onError: () => {
-        // Restore the previous theme if saving fails.
-        setThemePreference(previousTheme);
-        setSaveError(true);
-      },
-    });
+    );
   };
 
   return (
@@ -56,6 +55,11 @@ function AppearanceSettings() {
             onChange={handleChange}
             size="small"
             disabled={updatePreferences.isPending}
+            slotProps={{
+              select: {
+                native: true,
+              },
+            }}
             sx={{
               width: 200,
               "& .MuiOutlinedInput-root": {
@@ -72,9 +76,9 @@ function AppearanceSettings() {
             }}
           >
             {themeOptions.map((option) => (
-              <MenuItem key={option.value} value={option.value}>
+              <option key={option.value} value={option.value}>
                 {option.label}
-              </MenuItem>
+              </option>
             ))}
           </TextField>
         </Box>

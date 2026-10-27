@@ -6,10 +6,12 @@ import type {
   LoginResponse,
   RegisterData,
   RegisterResponse,
-  ThemePreference,
   UpdateAccountData,
   UpdatePreferencesResponse,
+  UserPreferences,
 } from "./auth.types";
+
+export type UpdateUserPreferencesData = Partial<UserPreferences>;
 
 export async function registerUser(
   data: RegisterData,
@@ -48,10 +50,12 @@ export function changePassword(data: ChangePasswordData) {
   return api.patch("/auth/me/password", data);
 }
 
-export async function updateUserPreferences(theme: ThemePreference) {
+export async function updateUserPreferences(
+  preferences: UpdateUserPreferencesData,
+) {
   const response = await api.patch<UpdatePreferencesResponse>(
     "/auth/me/preferences",
-    { theme },
+    preferences,
   );
 
   return response.data;

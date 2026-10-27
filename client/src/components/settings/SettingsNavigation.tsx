@@ -2,7 +2,7 @@ import { Box, Tab, Tabs, useMediaQuery, useTheme } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import PaletteIcon from "@mui/icons-material/Palette";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import { grey } from "@mui/material/colors";
+import TuneRounded from "@mui/icons-material/TuneRounded";
 import type { Dispatch, SetStateAction } from "react";
 import type { SettingsTab } from "../types";
 
@@ -21,6 +21,12 @@ const settingsTabs: {
     icon: <AccountCircleIcon fontSize="small" />,
     value: "account",
   },
+  {
+    label: "General",
+    icon: <TuneRounded fontSize="small" />,
+    value: "general",
+  },
+
   {
     label: "Appearance",
     icon: <PaletteIcon fontSize="small" />,
@@ -49,7 +55,7 @@ function SettingsNavigation({
         borderBottom: { xs: 1, md: 0 },
         borderColor: {
           xs: "transparent",
-          md: grey[300],
+          md: "divider",
         },
         pr: { xs: 0, md: 2 },
         pb: { xs: 2, md: 0 },

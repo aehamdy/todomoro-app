@@ -13,6 +13,7 @@ import AppearanceSettings from "./AppearanceSettings";
 import AboutSettings from "./AboutSettings";
 import SettingsNavigation from "./SettingsNavigation";
 import type { SettingsTab } from "../types";
+import GeneralSettings from "./GeneralSettings";
 
 type SettingsDialogProps = {
   isModalOpen: boolean;
@@ -58,6 +59,7 @@ function SettingsDialog({ isModalOpen, setIsModalOpen }: SettingsDialogProps) {
             }}
           >
             {activeTab === "account" && <AccountSettings />}
+            {activeTab === "general" && <GeneralSettings />}
             {activeTab === "appearance" && <AppearanceSettings />}
             {activeTab === "about" && <AboutSettings />}
           </Box>
