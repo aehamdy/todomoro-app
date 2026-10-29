@@ -1,8 +1,12 @@
 import { Box, LinearProgress, Stack, Typography } from "@mui/material";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
 import { formatCreationDate, formatRelativeTime } from "../overview.utils";
+import { useNavigate } from "react-router-dom";
+import { ROUTES } from "../../../routes/paths";
 
 type RecentProjectItemProps = {
+  projectId: string;
   projectsLength: number;
   projectTitle: string;
   projectColor: string;
@@ -14,6 +18,7 @@ type RecentProjectItemProps = {
 };
 
 function RecentProjectItem({
+  projectId,
   projectsLength,
   projectTitle,
   projectColor,
@@ -23,8 +28,15 @@ function RecentProjectItem({
   completedTasks,
   totalTasks,
 }: RecentProjectItemProps) {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate(ROUTES.projectById(projectId));
+  };
+
   return (
     <Stack
+      onClick={handleClick}
       sx={{
         flexDirection: "column",
         alignItems: { xs: "stretch", sm: "center" },
@@ -36,6 +48,22 @@ function RecentProjectItem({
         p: 1.5,
         bgcolor: "background.default",
         borderRadius: 2,
+        cursor: "pointer",
+        transition: "background-color 150ms ease",
+        "&:hover": {
+          bgcolor: "action.hover",
+        },
+        "&:focus-visible": {
+          outline: "2px solid",
+          outlineColor: "primary.main",
+          outlineOffset: 2,
+        },
+
+        "&:hover .project-navigation-icon": {
+          opacity: 1,
+          transform: "translateX(0)",
+          color: "primary.main",
+        },
       }}
     >
       {/* Project name and creation date */}
@@ -46,12 +74,27 @@ function RecentProjectItem({
           minWidth: 0,
         }}
       >
-        <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
-          {/* <Box sx={{ color: project.color }}>
-                        <FolderRoundedIcon />
-                      </Box> */}
-
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            gap: 0.5,
+          }}
+        >
           <Typography sx={{ fontWeight: 600 }}>{projectTitle}</Typography>
+
+          <ArrowForwardRoundedIcon
+            className="project-navigation-icon"
+            fontSize="small"
+            sx={{
+              flexShrink: 0,
+              color: "text.secondary",
+              opacity: 0.5,
+              transform: "translateX(-4px)",
+              transition: "opacity 150ms ease, transform 150ms ease",
+            }}
+          />
         </Box>
 
         <Box
