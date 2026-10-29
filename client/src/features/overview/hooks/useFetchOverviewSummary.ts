@@ -1,9 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { fetchOverviewSummary } from "../overview.api";
 
+export const OVERVIEW_QUERY_KEY = ["overview"] as const;
+
 export function useFetchOverviewSummary() {
   const query = useQuery({
-    queryKey: ["dashboard"],
+    queryKey: OVERVIEW_QUERY_KEY,
     queryFn: fetchOverviewSummary,
   });
 
