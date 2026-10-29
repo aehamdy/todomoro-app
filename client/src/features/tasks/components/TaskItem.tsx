@@ -20,7 +20,7 @@ import { useAuth } from "../../auth/useAuth";
 
 type TaskItemProps = {
   task: Task;
-  onClick?: () => void;
+  onClick: () => void;
 };
 
 function TaskItem({ task, onClick }: TaskItemProps) {
