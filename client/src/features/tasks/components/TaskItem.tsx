@@ -20,7 +20,7 @@ import { useAuth } from "../../auth/useAuth";
 
 type TaskItemProps = {
   task: Task;
-  onClick: () => void;
+  onClick?: () => void;
 };
 
 function TaskItem({ task, onClick }: TaskItemProps) {
@@ -28,8 +28,8 @@ function TaskItem({ task, onClick }: TaskItemProps) {
   const { toggleTask, isToggling, error, isError } = useToggleTask();
   const [showError, setShowError] = useState(false);
 
-  const includesNote = task.note.length > 0;
-  const includesSubtasks = task.subtasks.some((item) => !item.isCompleted);
+  const includesNote = task.note?.length > 0;
+  const includesSubtasks = task.subtasks?.some((item) => !item.isCompleted);
 
   const handleToggle = async () => {
     const isCompleting = !task.isCompleted;

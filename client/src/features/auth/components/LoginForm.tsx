@@ -49,7 +49,7 @@ function LoginForm() {
 
       queryClient.setQueryData(AUTH_QUERY_KEY, response);
 
-      navigate(ROUTES.dashboard, { replace: true });
+      navigate(ROUTES.overview, { replace: true });
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
         setServerError(
