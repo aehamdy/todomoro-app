@@ -1,11 +1,9 @@
-import { Chip, List, Paper, Stack } from "@mui/material";
+import { List, Paper } from "@mui/material";
 import { useFetchTasks } from "../hooks/useFetchTasks";
 import TaskItem from "./TaskItem";
 import TasksEmptyList from "./TasksEmptyList";
 import AppLoader from "../../../components/ui/AppLoader";
 import ErrorAlert from "../../../components/ui/ErrorAlert";
-import { priorityColors } from "../task.constants";
-import { blue } from "@mui/material/colors";
 import { useOutletContext } from "react-router-dom";
 import type { DashboardOutletContext } from "../../../components/layout/DashboardLayout";
 import { useEffect } from "react";
@@ -14,16 +12,6 @@ type TaskListProps = {
   projectId: string | null;
   onTaskCountChange?: (completed: number, incomplete: number) => void;
 };
-
-const PRIORITY_OPTIONS: {
-  label: string;
-  value: "low" | "medium" | "high" | "urgent";
-}[] = [
-  { label: "Low", value: "low" },
-  { label: "Medium", value: "medium" },
-  { label: "High", value: "high" },
-  { label: "Urgent", value: "urgent" },
-];
 
 function TaskList({ projectId, onTaskCountChange }: TaskListProps) {
   const { setSelectedTask } = useOutletContext<DashboardOutletContext>();
@@ -64,43 +52,6 @@ function TaskList({ projectId, onTaskCountChange }: TaskListProps) {
         bgcolor: "background.paper",
       }}
     >
-      <Stack
-        direction="row"
-        sx={{
-          display: "dlex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          mb: 2,
-        }}
-      >
-        <Chip
-          label={`${completedCount}/${tasks.length}`}
-          size="medium"
-          sx={{ fontSize: "14px", color: "white", bgcolor: blue[400] }}
-        />
-
-        <Stack
-          direction="row"
-          sx={{
-            justifyContent: "space-between",
-            alignItems: "center",
-            gap: 1,
-          }}
-        >
-          {PRIORITY_OPTIONS.map((option) => (
-            <Chip
-              key={option.value}
-              label={option.label}
-              size="medium"
-              sx={{
-                color: `${priorityColors[option.value].text}`,
-                bgcolor: `${priorityColors[option.value].bg}`,
-              }}
-            />
-          ))}
-        </Stack>
-      </Stack>
-
       {tasks.length === 0 ? (
         <TasksEmptyList />
       ) : (
