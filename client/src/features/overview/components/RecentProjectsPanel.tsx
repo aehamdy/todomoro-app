@@ -76,6 +76,7 @@ function RecentProjectsPanel({ projects }: RecentProjectsPanelProps) {
               return (
                 <RecentProjectItem
                   key={project._id}
+                  projectId={project._id}
                   projectsLength={projects.length}
                   projectTitle={project.title}
                   projectColor={project.color}
