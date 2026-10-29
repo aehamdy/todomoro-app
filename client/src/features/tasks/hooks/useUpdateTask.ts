@@ -3,6 +3,7 @@ import type { UpdateTaskRequest } from "../task.types";
 import { TASKS_QUERY_KEY } from "./useFetchTasks";
 import { updateTask } from "../api/task.api";
 import { PROJECTS_QUERY_KEY } from "../../projects/hooks/useFetchProjects";
+import { OVERVIEW_QUERY_KEY } from "../../overview/hooks/useFetchOverviewSummary";
 
 export function useUpdateTask() {
   const queryClient = useQueryClient();
@@ -23,6 +24,10 @@ export function useUpdateTask() {
 
       queryClient.invalidateQueries({
         queryKey: PROJECTS_QUERY_KEY,
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: OVERVIEW_QUERY_KEY,
       });
     },
   });
