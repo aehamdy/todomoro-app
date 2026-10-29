@@ -3,12 +3,16 @@ import { useMemo } from "react";
 import TaskItem from "../../tasks/components/TaskItem";
 import type { Task } from "../../tasks/task.types";
 import TodayTasksHeader from "./TodayTasksHeader";
+import { useOutletContext } from "react-router-dom";
+import type { DashboardOutletContext } from "../../../components/layout/DashboardLayout";
 
 type TodayTasksPanelProps = {
   tasks: Task[];
 };
 
 function TodayTasksPanel({ tasks }: TodayTasksPanelProps) {
+  const { setSelectedTask } = useOutletContext<DashboardOutletContext>();
+
   const completedCount = useMemo(
     () => tasks?.filter((task) => task.isCompleted).length,
     [tasks],
@@ -95,7 +99,13 @@ function TodayTasksPanel({ tasks }: TodayTasksPanelProps) {
           ) : (
             <Stack spacing={0}>
               {tasks.map((task) => {
-                return <TaskItem key={task._id} task={task} />;
+                return (
+                  <TaskItem
+                    key={task._id}
+                    task={task}
+                    onClick={() => setSelectedTask(task)}
+                  />
+                );
               })}
             </Stack>
           )}
