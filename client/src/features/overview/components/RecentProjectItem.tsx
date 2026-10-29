@@ -1,9 +1,10 @@
-import { Box, LinearProgress, Stack, Typography } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
 import { formatCreationDate, formatRelativeTime } from "../overview.utils";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../../routes/paths";
+import CompletionProgress from "../../../components/common/CompletionProgress";
 
 type RecentProjectItemProps = {
   projectId: string;
@@ -12,9 +13,8 @@ type RecentProjectItemProps = {
   projectColor: string;
   creationDate: string;
   updateDate: string;
-  progress: number;
+  incompleteTasks: number;
   completedTasks: number;
-  totalTasks: number;
 };
 
 function RecentProjectItem({
@@ -24,11 +24,12 @@ function RecentProjectItem({
   projectColor,
   creationDate,
   updateDate,
-  progress,
+  incompleteTasks,
   completedTasks,
-  totalTasks,
 }: RecentProjectItemProps) {
   const navigate = useNavigate();
+
+  const totalTasks = completedTasks + incompleteTasks;
 
   const handleClick = () => {
     navigate(ROUTES.projectById(projectId));
@@ -105,9 +106,7 @@ function RecentProjectItem({
             color: "text.secondary",
           }}
         >
-          <Box
-          //   sx={{ color: "primary.main" }}
-          >
+          <Box>
             <CalendarMonthIcon fontSize="small" />
           </Box>
 
@@ -124,34 +123,11 @@ function RecentProjectItem({
         </Box>
       </Stack>
 
-      {/* Completion progress */}
-      <Stack sx={{ flex: 1, width: "100%", gap: 0.75, minWidth: 0 }}>
-        <Typography
-          variant="caption"
-          sx={{
-            flexShrink: 0,
-            fontWeight: 700,
-            color: "text.secondary",
-          }}
-        >
-          {progress}%
-        </Typography>
-
-        <LinearProgress
-          variant="determinate"
-          value={progress}
-          aria-label={`${projectTitle} completion progress`}
-          sx={{
-            height: 6,
-            borderRadius: 10,
-            bgcolor: "action.hover",
-            "& .MuiLinearProgress-bar": {
-              bgcolor: projectColor,
-              borderRadius: 10,
-            },
-          }}
-        />
-      </Stack>
+      <CompletionProgress
+        completed={completedTasks}
+        incomplete={incompleteTasks}
+        color={projectColor}
+      />
 
       {/* Project details */}
       <Stack sx={{ gap: 1, width: "100%" }}>

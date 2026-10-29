@@ -67,11 +67,6 @@ function RecentProjectsPanel({ projects }: RecentProjectsPanelProps) {
             {projects?.map((project) => {
               const completedTasks = project.completedTasks;
               const incompleteTasks = project.incompleteTasks;
-              const totalTasks = completedTasks + incompleteTasks;
-              const progress =
-                totalTasks > 0
-                  ? Math.round((completedTasks / totalTasks) * 100)
-                  : 0;
 
               return (
                 <RecentProjectItem
@@ -82,9 +77,8 @@ function RecentProjectsPanel({ projects }: RecentProjectsPanelProps) {
                   projectColor={project.color}
                   creationDate={project.createdAt}
                   updateDate={project.updatedAt}
-                  progress={progress}
                   completedTasks={completedTasks}
-                  totalTasks={totalTasks}
+                  incompleteTasks={incompleteTasks}
                 />
               );
             })}

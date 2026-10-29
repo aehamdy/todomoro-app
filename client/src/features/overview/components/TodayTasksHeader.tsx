@@ -1,15 +1,7 @@
 import { Box, Stack, Typography } from "@mui/material";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 
-type TodayTasksHeaderProps = {
-  completedCount: number;
-  tasksLength: number;
-};
-
-function TodayTasksHeader({
-  completedCount,
-  tasksLength,
-}: TodayTasksHeaderProps) {
+function TodayTasksHeader() {
   return (
     <Stack
       sx={{
@@ -22,10 +14,6 @@ function TodayTasksHeader({
       <Box>
         <Typography variant="h6" sx={{ fontWeight: 700 }}>
           Today's focus
-        </Typography>
-
-        <Typography variant="body2" sx={{ mt: 0.5, color: "text.secondary" }}>
-          {completedCount} of {tasksLength} tasks completed
         </Typography>
       </Box>
 

@@ -1,10 +1,11 @@
-import { Box, LinearProgress, Paper, Stack, Typography } from "@mui/material";
+import { Box, Paper, Stack, Typography } from "@mui/material";
 import { useMemo } from "react";
 import TaskItem from "../../tasks/components/TaskItem";
 import type { Task } from "../../tasks/task.types";
 import TodayTasksHeader from "./TodayTasksHeader";
 import { useOutletContext } from "react-router-dom";
 import type { DashboardOutletContext } from "../../../components/layout/DashboardLayout";
+import CompletionProgress from "../../../components/common/CompletionProgress";
 
 type TodayTasksPanelProps = {
   tasks: Task[];
@@ -18,9 +19,14 @@ function TodayTasksPanel({ tasks }: TodayTasksPanelProps) {
     [tasks],
   );
 
-  if (!tasks) return <div>No data yet</div>;
+  const incompleteCount = useMemo(
+    () => tasks?.filter((task) => !task.isCompleted).length,
+    [tasks],
+  );
 
-  const progress = tasks.length > 0 ? (completedCount / tasks.length) * 100 : 0;
+  const total = completedCount + incompleteCount;
+
+  if (!tasks) return <div>No data yet</div>;
 
   return (
     <Paper
@@ -43,24 +49,13 @@ function TodayTasksPanel({ tasks }: TodayTasksPanelProps) {
         }}
       >
         {/* Header */}
-        <TodayTasksHeader
-          completedCount={completedCount}
-          tasksLength={tasks.length}
-        />
+        <TodayTasksHeader />
 
         {/* Progress */}
-        <LinearProgress
-          variant="determinate"
-          value={progress}
-          sx={{
-            height: 6,
-            borderRadius: 10,
-            bgcolor: "action.hover",
-            "& .MuiLinearProgress-bar": {
-              borderRadius: 10,
-              bgcolor: "success.main",
-            },
-          }}
+        <CompletionProgress
+          completed={completedCount}
+          incomplete={incompleteCount}
+          label={`${completedCount} of ${total} tasks completed`}
         />
 
         <Box
