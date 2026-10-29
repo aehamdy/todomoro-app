@@ -10,6 +10,7 @@ const taskSchema = new Schema(
       maxlength: [100, "Title cannot exceed 100 characters "],
     },
     isCompleted: { type: Boolean, default: false },
+    completedAt: { type: Date, default: null },
     priority: {
       type: String,
       enum: ["low", "medium", "high", "urgent"],
