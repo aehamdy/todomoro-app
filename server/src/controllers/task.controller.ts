@@ -55,7 +55,6 @@ export const getTasks: RequestHandler = async (req, res, next) => {
     let projectFilter = {};
 
     if (projectId === "general") {
-      // Tasks that don't belong to any project
       projectFilter = {
         $or: [{ project: null }, { project: { $exists: false } }],
       };
@@ -63,7 +62,6 @@ export const getTasks: RequestHandler = async (req, res, next) => {
       typeof projectId === "string" &&
       mongoose.isValidObjectId(projectId)
     ) {
-      // Tasks belonging to the selected project
       projectFilter = { project: projectId };
     } else {
       res.status(400).json({
@@ -160,12 +158,19 @@ export const updateTask: RequestHandler = async (req, res, next) => {
 
     const input = req.body as UpdateTaskInput;
 
+    const updateData = {
+      ...input,
+      ...(input.isCompleted !== undefined && {
+        completedAt: input.isCompleted ? new Date() : null,
+      }),
+    };
+
     const task = await Task.findOneAndUpdate(
       {
         _id: taskId,
         user: userId,
       },
-      { $set: input },
+      { $set: updateData },
       {
         new: true,
         runValidators: true,
