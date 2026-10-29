@@ -4,9 +4,9 @@ import LoginPage from "./pages/Login";
 import ProtectedRoute from "./features/auth/components/ProtectedRoute";
 import { ROUTES } from "./routes/paths";
 import DashboardLayout from "./components/layout/DashboardLayout";
-import DashboardPage from "./pages/Dashboard";
 import TasksPage from "./pages/Tasks";
 import ProjectPage from "./pages/ProjectPage";
+import OverviewPage from "./pages/Overview";
 
 function App() {
   return (
@@ -18,13 +18,13 @@ function App() {
       {/* Protected routes */}
       <Route element={<ProtectedRoute />}>
         <Route element={<DashboardLayout />}>
-          <Route path={ROUTES.dashboard} element={<DashboardPage />} />
+          <Route path={ROUTES.overview} element={<OverviewPage />} />
           <Route path={ROUTES.tasks} element={<TasksPage />} />
           <Route path={ROUTES.project} element={<ProjectPage />} />
         </Route>
       </Route>
 
-      <Route path="*" element={<Navigate to={ROUTES.dashboard} replace />} />
+      <Route path="*" element={<Navigate to={ROUTES.overview} replace />} />
     </Routes>
   );
 }

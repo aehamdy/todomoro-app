@@ -9,8 +9,8 @@ import type { TNavItem } from "../types";
 const navItems: TNavItem[] = [
   {
     id: 1,
-    label: "Dashboard",
-    to: ROUTES.dashboard,
+    label: "Overview",
+    to: ROUTES.overview,
     icon: <SpaceDashboardRoundedIcon />,
   },
   {

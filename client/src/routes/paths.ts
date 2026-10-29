@@ -4,7 +4,7 @@ export const ROUTES = {
   register: "/register",
   forgotPassword: "/forgot-password",
   resetPassword: "reset-password",
-  dashboard: "/dashboard",
+  overview: "/overview",
   tasks: "/tasks",
   project: "/projects/:projectId",
   projectById: (projectId: string) => `/projects/${projectId}`,
