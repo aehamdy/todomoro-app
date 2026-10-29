@@ -137,7 +137,14 @@ function TaskDetailsSidebar({ taskId, onClose }: TaskDetailsSidebarProps) {
             isSaving={isUpdating}
           />
 
-          <TaskProject taskId={taskId} projectId={task.project} />
+          <TaskProject
+            taskId={taskId}
+            projectId={
+              task.project && typeof task.project !== "string"
+                ? task.project._id
+                : task.project
+            }
+          />
 
           <TaskPrioritySelector
             priority={task.priority}

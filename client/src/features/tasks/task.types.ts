@@ -10,7 +10,7 @@ export interface Task {
   dueDate: string | null;
   note: string;
   user: string;
-  project: string | null;
+  project: string | TaskProject | null;
   subtasks: Subtask[];
   createdAt: string;
   updatedAt: string;
@@ -63,3 +63,9 @@ export interface UpdateTaskResponse {
     task: Task;
   };
 }
+
+export type TaskProject = {
+  _id: string;
+  title: string;
+  color: string;
+};
