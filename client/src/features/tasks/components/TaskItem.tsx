@@ -17,13 +17,15 @@ import DescriptionOutlined from "@mui/icons-material/DescriptionOutlined";
 import FormatListBulletedRounded from "@mui/icons-material/FormatListBulletedRounded";
 import { playTaskCompletionSound } from "../utils/playTaskCompletionSound";
 import { useAuth } from "../../auth/useAuth";
+import TaskProjectInfo from "../../overview/components/TaskProjectInfo";
 
 type TaskItemProps = {
   task: Task;
   onClick: () => void;
+  displayProject?: boolean;
 };
 
-function TaskItem({ task, onClick }: TaskItemProps) {
+function TaskItem({ task, onClick, displayProject = false }: TaskItemProps) {
   const { user } = useAuth();
   const { toggleTask, isToggling, error, isError } = useToggleTask();
   const [showError, setShowError] = useState(false);
@@ -48,6 +50,10 @@ function TaskItem({ task, onClick }: TaskItemProps) {
   };
 
   const dueDate = task.dueDate ? formatDateTime(task.dueDate) : "No due date";
+
+  const project =
+    // task.project && typeof task.project !== "string" ? task.project : null;
+    task.project && typeof task.project !== "string" ? task.project : null;
 
   return (
     <>
@@ -125,9 +131,18 @@ function TaskItem({ task, onClick }: TaskItemProps) {
                 )}
               </Stack>
 
-              <Typography variant="caption" sx={{ color: grey[500] }}>
-                {dueDate}
-              </Typography>
+              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                {displayProject && (
+                  <TaskProjectInfo
+                    projectTitle={project?.title}
+                    projectColor={project?.color}
+                  />
+                )}
+
+                <Typography variant="caption" sx={{ color: grey[500] }}>
+                  {dueDate}
+                </Typography>
+              </Box>
             </Stack>
           }
         />

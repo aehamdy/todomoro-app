@@ -1,6 +1,7 @@
 import { Box, Chip, Stack, Typography } from "@mui/material";
 import { getDayLabel } from "../overview.utils";
 import type { TaskPriority } from "../../tasks/task.types";
+import TaskProjectInfo from "./TaskProjectInfo";
 
 type TaskInformationProps = {
   taskDuedate: string;
@@ -56,7 +57,7 @@ function TaskInformation({
         }}
         useFlexGap
       >
-        <Box
+        {/* <Box
           sx={{
             width: 7,
             height: 7,
@@ -68,7 +69,11 @@ function TaskInformation({
 
         <Typography variant="caption" color="text.secondary" noWrap>
           {projectTitle ?? "Tasks"}
-        </Typography>
+        </Typography> */}
+        <TaskProjectInfo
+          projectTitle={projectTitle}
+          projectColor={projectColor}
+        />
 
         <Chip
           size="small"

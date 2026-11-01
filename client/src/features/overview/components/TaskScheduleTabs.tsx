@@ -1,9 +1,10 @@
 import { Stack, Tab, Tabs, Typography } from "@mui/material";
 
 type TaskScheduleTabsProps = {
-  activeTab: "overdue" | "upcoming";
+  activeTab: "overdue" | "upcoming" | "completed";
   overdueCount: number;
   upcomingCount: number;
+  completedCount: number;
   onChange: (value: "overdue" | "upcoming") => void;
 };
 
@@ -11,6 +12,7 @@ function TaskScheduleTabs({
   activeTab,
   overdueCount,
   upcomingCount,
+  completedCount,
   onChange,
 }: TaskScheduleTabsProps) {
   const tabs = [
@@ -25,6 +27,12 @@ function TaskScheduleTabs({
       label: "Upcoming",
       count: upcomingCount,
       color: "warning.main",
+    },
+    {
+      value: "completed",
+      label: "Completed",
+      count: completedCount,
+      color: "success.main",
     },
   ] as const;
 
@@ -44,7 +52,7 @@ function TaskScheduleTabs({
                 flexDirection: "row",
                 alignItems: "center",
                 gap: 1,
-                color: tab.color,
+                color: tab.value === activeTab ? tab.color : "secondary.main",
               }}
             >
               <Typography variant="body2" sx={{ fontWeight: 600 }}>

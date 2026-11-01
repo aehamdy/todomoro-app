@@ -9,9 +9,14 @@ import TaskSchedulePanel from "../features/overview/components/TaskSchedulePanel
 function OverviewPage() {
   const { data } = useFetchOverviewSummary();
 
-  const summary = data?.data.summary;
   const todayTasks = data?.data.todayTasks;
   const overdueTasks = data?.data.overdueTasks;
+  const summary = {
+    ...data?.data.summary,
+    dueToday: todayTasks?.length,
+    overdue: overdueTasks?.length,
+  };
+  const completedTasks = data?.data.completedTasks;
   const upcomingTasks = data?.data.upcomingTasks;
   const recentProjects = data?.data.recentProjects;
 
@@ -35,8 +40,9 @@ function OverviewPage() {
         <TodayTasksPanel tasks={todayTasks} />
 
         <TaskSchedulePanel
-          upcomingTasks={upcomingTasks}
           overdueTasks={overdueTasks}
+          upcomingTasks={upcomingTasks}
+          completedTasks={completedTasks}
         />
       </Box>
 
