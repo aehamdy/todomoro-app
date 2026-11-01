@@ -74,7 +74,7 @@ export const getTasks: RequestHandler = async (req, res, next) => {
     const tasks = await Task.find({
       user: userId,
       ...projectFilter,
-    });
+    }).select("-__v");
 
     res.status(200).json({
       status: "success",
@@ -113,7 +113,7 @@ export const getTaskById: RequestHandler = async (req, res, next) => {
     const task = await Task.findOne({
       _id: taskId,
       user: userId,
-    });
+    }).select("-__v");
 
     if (!task) {
       res.status(404).json({
@@ -175,7 +175,7 @@ export const updateTask: RequestHandler = async (req, res, next) => {
         new: true,
         runValidators: true,
       },
-    );
+    ).select("-__v");
 
     if (!task) {
       res.status(404).json({
@@ -319,7 +319,9 @@ export const updateSubtask: RequestHandler = async (req, res, next) => {
       return;
     }
 
-    const task = await Task.findOne({ _id: taskId, user: userId });
+    const task = await Task.findOne({ _id: taskId, user: userId }).select(
+      "-__v",
+    );
 
     if (!task) {
       res.status(404).json({
