@@ -29,11 +29,10 @@ export const getOverviewSummary: RequestHandler = async (req, res, next) => {
     const [
       activeTasks,
       completedToday,
-      dueToday,
-      overdue,
       todayTasks,
       overdueTasks,
       upcomingTasks,
+      completedTasks,
       recentProjects,
     ] = await Promise.all([
       // Active tasks
@@ -44,19 +43,6 @@ export const getOverviewSummary: RequestHandler = async (req, res, next) => {
         user: userId,
         isCompleted: true,
         completedAt: { $gte: startOfToday, $lt: startOfTomorrow },
-      }),
-
-      // Due today tasks
-      Task.countDocuments({
-        user: userId,
-        dueDate: { $gte: startOfToday, $lt: startOfTomorrow },
-      }),
-
-      // Overdue tasks
-      Task.countDocuments({
-        user: userId,
-        isCompleted: false,
-        dueDate: { $lt: startOfToday, $ne: null },
       }),
 
       // Today's tasks
@@ -84,6 +70,15 @@ export const getOverviewSummary: RequestHandler = async (req, res, next) => {
         .select("-__v")
         .populate("project", "title color")
         .sort({ dueDate: 1 }),
+
+      // Completed tasks
+      Task.find({
+        user: userId,
+        isCompleted: true,
+      })
+        .select("-__v")
+        .populate("project", "title color")
+        .sort({ completedAt: -1 }),
 
       // Recent projects with completed and incomplete task counts
       Project.aggregate([
@@ -141,13 +136,12 @@ export const getOverviewSummary: RequestHandler = async (req, res, next) => {
       data: {
         summary: {
           activeTasks,
-          dueToday,
           completedToday,
-          overdue,
         },
         todayTasks,
         overdueTasks,
         upcomingTasks,
+        completedTasks,
         recentProjects,
       },
     });
