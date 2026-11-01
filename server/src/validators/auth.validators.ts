@@ -1,5 +1,18 @@
 import { z } from "zod";
 
+const themeOptions = [
+  "light",
+  "dark",
+  "system",
+  "ocean",
+  "midnight",
+  "ivory",
+  "lavender",
+  "sunset",
+  "emerald-dark",
+  "carbon",
+];
+
 export const registerSchema = z
   .object({
     name: z
@@ -63,7 +76,7 @@ export const changePasswordSchema = z.object({
 
 export const updatePreferencesSchema = z
   .object({
-    theme: z.enum(["light", "dark", "system"]).optional(),
+    theme: z.enum(themeOptions).optional(),
     taskCompletionSoundEnabled: z.boolean().optional(),
   })
   .refine((preferences) => Object.keys(preferences).length > 0, {
