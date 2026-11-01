@@ -1,5 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 /* eslint-disable react-hooks/set-state-in-effect */
+
 import {
   createContext,
   useContext,
@@ -10,7 +11,6 @@ import {
 } from "react";
 import { CssBaseline, useMediaQuery } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
-import type { PaletteMode } from "@mui/material/styles";
 import { useAuth } from "../features/auth/useAuth";
 import type { ThemePreference } from "../features/auth/auth.types";
 import { getAppTheme } from "./theme";
@@ -42,14 +42,15 @@ export function AppThemeProvider({ children }: AppThemeProviderProps) {
     setThemePreference(savedTheme);
   }, [savedTheme]);
 
-  const resolvedMode: PaletteMode =
+  // Resolve the selected preference into the appropriate palette.
+  const resolvedTheme: ThemePreference =
     themePreference === "system"
       ? prefersDarkMode
         ? "dark"
         : "light"
       : themePreference;
 
-  const theme = useMemo(() => getAppTheme(resolvedMode), [resolvedMode]);
+  const theme = useMemo(() => getAppTheme(resolvedTheme), [resolvedTheme]);
 
   const contextValue = useMemo(
     () => ({

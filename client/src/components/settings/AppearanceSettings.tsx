@@ -9,8 +9,18 @@ const themeOptions: {
   label: string;
   value: ThemePreference;
 }[] = [
+  // light themes
   { label: "Light", value: "light" },
+  { label: "Ocean Light", value: "ocean" },
+  { label: "Ivory Light", value: "ivory" },
+  { label: "Lavender Light", value: "lavender" },
+  { label: "Sunset Ember", value: "sunset" },
+  // dark themes
   { label: "Dark", value: "dark" },
+  { label: "Midnight Dark", value: "midnight" },
+  { label: "Emerald Dark", value: "emerald-dark" },
+  { label: "Carbon", value: "carbon" },
+  // system
   { label: "System", value: "system" },
 ];
 

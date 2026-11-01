@@ -62,6 +62,14 @@ function TaskItem({ task, onClick }: TaskItemProps) {
           borderRadius: "8px",
           cursor: "pointer",
           overflow: "hidden",
+          transition:
+            "transform 200ms cubic-bezier(0.4, 0, 0.2, 1), box-shadow 200ms cubic-bezier(0.4, 0, 0.2, 1), border-color 200ms cubic-bezier(0.4, 0, 0.2, 1)",
+
+          "&:hover": {
+            transform: "translateY(-2px)",
+            boxShadow:
+              "0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04)",
+          },
         }}
         onClick={onClick}
       >

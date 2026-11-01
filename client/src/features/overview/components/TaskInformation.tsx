@@ -1,5 +1,5 @@
 import { Box, Chip, Stack, Typography } from "@mui/material";
-import { formatTime, getDayLabel } from "../overview.utils";
+import { getDayLabel } from "../overview.utils";
 import type { TaskPriority } from "../../tasks/task.types";
 
 type TaskInformationProps = {
@@ -36,7 +36,7 @@ function TaskInformation({
           color: "text.secondary",
         }}
       >
-        {getDayLabel(taskDuedate)} · {formatTime(taskDuedate)}
+        {getDayLabel(taskDuedate)}
       </Typography>
 
       <Typography
@@ -67,7 +67,7 @@ function TaskInformation({
         />
 
         <Typography variant="caption" color="text.secondary" noWrap>
-          {projectTitle ?? "General task"}
+          {projectTitle ?? "Tasks"}
         </Typography>
 
         <Chip
