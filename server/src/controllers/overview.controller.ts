@@ -32,6 +32,7 @@ export const getOverviewSummary: RequestHandler = async (req, res, next) => {
       dueToday,
       overdue,
       todayTasks,
+      overdueTasks,
       upcomingTasks,
       recentProjects,
     ] = await Promise.all([
@@ -62,7 +63,17 @@ export const getOverviewSummary: RequestHandler = async (req, res, next) => {
       Task.find({
         user: userId,
         dueDate: { $gte: startOfToday, $lt: startOfTomorrow },
-      }),
+      }).select("-__v"),
+
+      // Overdue tasks
+      Task.find({
+        user: userId,
+        isCompleted: false,
+        dueDate: { $lt: startOfTomorrow, $ne: null },
+      })
+        .select("-__v")
+        .populate("project", "title color")
+        .sort({ dueDate: 1 }),
 
       // Upcoming tasks
       Task.find({
@@ -70,6 +81,7 @@ export const getOverviewSummary: RequestHandler = async (req, res, next) => {
         isCompleted: false,
         dueDate: { $gte: startOfTomorrow, $lt: startOfNextWeek },
       })
+        .select("-__v")
         .populate("project", "title color")
         .sort({ dueDate: 1 }),
 
@@ -134,6 +146,7 @@ export const getOverviewSummary: RequestHandler = async (req, res, next) => {
           overdue,
         },
         todayTasks,
+        overdueTasks,
         upcomingTasks,
         recentProjects,
       },
