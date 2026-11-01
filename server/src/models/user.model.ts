@@ -1,5 +1,18 @@
 import mongoose, { Schema, type InferSchemaType } from "mongoose";
 
+const themeValues = [
+  "light",
+  "dark",
+  "system",
+  "ocean",
+  "midnight",
+  "ivory",
+  "lavender",
+  "sunset",
+  "emerald-dark",
+  "carbon",
+];
+
 const userSchema = new Schema(
   {
     name: {
@@ -28,7 +41,7 @@ const userSchema = new Schema(
       theme: {
         type: String,
         enum: {
-          values: ["light", "dark", "system"],
+          values: themeValues,
           message: "Theme must be light, dark, or system",
         },
         default: "system",
