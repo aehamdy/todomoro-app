@@ -10,19 +10,29 @@ import TaskScheduleTabs from "./TaskScheduleTabs";
 import UpcomingTaskItem from "./UpcomingTaskItem";
 
 type TaskSchedulePanelProps = {
-  upcomingTasks: Task[];
   overdueTasks: Task[];
+  upcomingTasks: Task[];
+  completedTasks: Task[];
 };
 
 function TaskSchedulePanel({
-  upcomingTasks,
   overdueTasks,
+  upcomingTasks,
+  completedTasks,
 }: TaskSchedulePanelProps) {
-  const [activeTab, setActiveTab] = useState<"overdue" | "upcoming">("overdue");
+  const [activeTab, setActiveTab] = useState<
+    "overdue" | "upcoming" | "completed"
+  >("overdue");
 
   const { setSelectedTask } = useOutletContext<DashboardOutletContext>();
 
-  const displayedTasks = activeTab === "overdue" ? overdueTasks : upcomingTasks;
+  const selectedTab = {
+    overdue: overdueTasks,
+    upcoming: upcomingTasks,
+    completed: completedTasks,
+  };
+
+  const displayedTasks = selectedTab[activeTab];
 
   return (
     <Paper
@@ -42,6 +52,7 @@ function TaskSchedulePanel({
           activeTab={activeTab}
           overdueCount={overdueTasks?.length}
           upcomingCount={upcomingTasks?.length}
+          completedCount={completedTasks?.length}
           onChange={setActiveTab}
         />
 
@@ -82,12 +93,13 @@ function TaskSchedulePanel({
             </Box>
           ) : (
             <Stack spacing={0}>
-              {activeTab === "overdue"
+              {activeTab === "overdue" || activeTab === "completed"
                 ? displayedTasks?.map((task) => (
                     <TaskItem
                       key={task._id}
                       task={task}
                       onClick={() => setSelectedTask(task)}
+                      displayProject
                     />
                   ))
                 : displayedTasks?.map((task) => (
