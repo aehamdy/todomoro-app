@@ -1,16 +1,17 @@
 import { Box } from "@mui/material";
 import TodayTasksPanel from "../features/overview/components/TodayTasksPanel";
-import UpcomingTasksPanel from "../features/overview/components/UpcomingTasksPanel";
 import RecentProjectsPanel from "../features/overview/components/RecentProjectsPanel";
 import { useFetchOverviewSummary } from "../features/overview/hooks/useFetchOverviewSummary";
 import OverviewGreeting from "../features/overview/components/OverviewGreeting";
 import OverviewSummary from "../features/overview/components/OverviewSummary";
+import TaskSchedulePanel from "../features/overview/components/TaskSchedulePanel";
 
 function OverviewPage() {
   const { data } = useFetchOverviewSummary();
 
   const summary = data?.data.summary;
   const todayTasks = data?.data.todayTasks;
+  const overdueTasks = data?.data.overdueTasks;
   const upcomingTasks = data?.data.upcomingTasks;
   const recentProjects = data?.data.recentProjects;
 
@@ -33,7 +34,10 @@ function OverviewPage() {
       >
         <TodayTasksPanel tasks={todayTasks} />
 
-        <UpcomingTasksPanel tasks={upcomingTasks} />
+        <TaskSchedulePanel
+          upcomingTasks={upcomingTasks}
+          overdueTasks={overdueTasks}
+        />
       </Box>
 
       <RecentProjectsPanel projects={recentProjects} />
