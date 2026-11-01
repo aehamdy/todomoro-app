@@ -1,4 +1,14 @@
-export type ThemePreference = "system" | "light" | "dark";
+export type ThemePreference =
+  | "light"
+  | "dark"
+  | "ocean"
+  | "midnight"
+  | "ivory"
+  | "lavender"
+  | "system"
+  | "sunset"
+  | "emerald-dark"
+  | "carbon";
 
 export interface RegisterData {
   name: string;

@@ -30,7 +30,7 @@ function UpcomingTasksHeader({ tasksLength }: UpcomingTasksHeaderProps) {
           }}
         >
           You have
-          <Typography sx={{ fontWeight: 600, color: "warning.main" }}>
+          <Typography sx={{ fontWeight: 600, color: "primary.main" }}>
             {tasksLength} tasks
           </Typography>
           for the next 7 days
