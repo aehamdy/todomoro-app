@@ -59,14 +59,16 @@ function TaskScheduleTabs({
                 {tab.label}
               </Typography>
 
-              <Typography
-                variant="caption"
-                sx={{
-                  fontWeight: 700,
-                }}
-              >
-                ({tab.count})
-              </Typography>
+              {tab.value !== "completed" && (
+                <Typography
+                  variant="caption"
+                  sx={{
+                    fontWeight: 700,
+                  }}
+                >
+                  ({tab.count})
+                </Typography>
+              )}
             </Stack>
           }
         />
