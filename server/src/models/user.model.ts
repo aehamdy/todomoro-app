@@ -11,6 +11,9 @@ const themeValues = [
   "sunset",
   "emerald-dark",
   "carbon",
+  "olive-amber",
+  "citrus-grove",
+  "desert-oasis",
 ];
 
 const userSchema = new Schema(

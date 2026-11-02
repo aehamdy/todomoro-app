@@ -11,6 +11,9 @@ const themeOptions = [
   "sunset",
   "emerald-dark",
   "carbon",
+  "olive-amber",
+  "citrus-grove",
+  "desert-oasis",
 ];
 
 export const registerSchema = z
