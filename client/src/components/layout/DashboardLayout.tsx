@@ -84,7 +84,8 @@ function DashboardLayout() {
             minWidth: 0,
             height: "100%",
             overflow: "visible",
-            bgcolor: "background.paper",
+            // bgcolor: "background.paper",
+            bgcolor: "background.sidebar",
             display: isMobile ? "none" : "block",
             transition: "width 250ms ease",
           }}

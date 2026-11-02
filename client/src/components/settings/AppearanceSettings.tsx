@@ -1,6 +1,5 @@
 import { useState } from "react";
-import type { ChangeEvent } from "react";
-import { Alert, Box, TextField, Typography } from "@mui/material";
+import { Alert, Box, MenuItem, TextField, Typography } from "@mui/material";
 import type { ThemePreference } from "../../features/auth/auth.types";
 import { useAppTheme } from "../../theme/AppThemeProvider";
 import { useUpdateUserPreferences } from "../../features/auth/useUpdateUserPreferences";
@@ -15,10 +14,13 @@ const themeOptions: {
   { label: "Ivory Light", value: "ivory" },
   { label: "Lavender Light", value: "lavender" },
   { label: "Sunset Ember", value: "sunset" },
+  { label: "Desert Oasis", value: "desert-oasis" },
+  { label: "Olive Amber", value: "olive-amber" },
   // dark themes
   { label: "Dark", value: "dark" },
   { label: "Midnight Dark", value: "midnight" },
   { label: "Emerald Dark", value: "emerald-dark" },
+  { value: "citrus-grove", label: "Citrus Grove" },
   { label: "Carbon", value: "carbon" },
   // system
   { label: "System", value: "system" },
@@ -30,7 +32,7 @@ function AppearanceSettings() {
 
   const [saveError, setSaveError] = useState(false);
 
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const nextTheme = event.target.value as ThemePreference;
     const previousTheme = themePreference;
 
@@ -65,11 +67,6 @@ function AppearanceSettings() {
             onChange={handleChange}
             size="small"
             disabled={updatePreferences.isPending}
-            slotProps={{
-              select: {
-                native: true,
-              },
-            }}
             sx={{
               width: 200,
               "& .MuiOutlinedInput-root": {
@@ -86,9 +83,9 @@ function AppearanceSettings() {
             }}
           >
             {themeOptions.map((option) => (
-              <option key={option.value} value={option.value}>
+              <MenuItem key={option.value} value={option.value}>
                 {option.label}
-              </option>
+              </MenuItem>
             ))}
           </TextField>
         </Box>
