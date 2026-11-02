@@ -45,7 +45,7 @@ function NavItem({ item, generalTasksLength }: NavItemProps) {
 
       <ListItemText primary={item.label} />
 
-      {item.to === ROUTES.tasks && (
+      {item.to === ROUTES.tasks && generalTasksLength > 0 && (
         <Chip
           label={generalTasksLength}
           size="small"

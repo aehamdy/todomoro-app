@@ -1,4 +1,4 @@
-import { Box, Paper, Stack, Typography } from "@mui/material";
+import { Box, Paper, Stack } from "@mui/material";
 import { useMemo } from "react";
 import TaskItem from "../../tasks/components/TaskItem";
 import type { Task } from "../../tasks/task.types";
@@ -6,6 +6,7 @@ import TodayTasksHeader from "./TodayTasksHeader";
 import { useOutletContext } from "react-router-dom";
 import type { DashboardOutletContext } from "../../../components/layout/DashboardLayout";
 import CompletionProgress from "../../../components/common/CompletionProgress";
+import EmptyTaskList from "../../tasks/components/EmptyTaskList";
 
 type TodayTasksPanelProps = {
   tasks: Task[];
@@ -25,8 +26,6 @@ function TodayTasksPanel({ tasks }: TodayTasksPanelProps) {
   );
 
   const total = completedCount + incompleteCount;
-
-  if (!tasks) return <div>No data yet</div>;
 
   return (
     <Paper
@@ -77,20 +76,12 @@ function TodayTasksPanel({ tasks }: TodayTasksPanelProps) {
         >
           {/* Task list */}
           {tasks.length === 0 ? (
-            <Box
-              sx={{
-                py: 5,
-                textAlign: "center",
-                color: "text.secondary",
-              }}
-            >
-              <Typography variant="body1" sx={{ fontweight: 600 }}>
-                You&apos;re all caught up!
-              </Typography>
-              <Typography variant="body2" sx={{ mt: 0.5 }}>
-                Nothing scheduled for today.
-              </Typography>
-            </Box>
+            <EmptyTaskList
+              title={"You're all caught up!"}
+              description={
+                "You don't have any tasks scheduled for today. Enjoy the extra time or plan something new!"
+              }
+            />
           ) : (
             <Stack spacing={0}>
               {tasks.map((task) => {

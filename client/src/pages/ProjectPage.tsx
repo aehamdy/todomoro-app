@@ -41,13 +41,15 @@ function ProjectPage() {
         </>
       )}
 
-      <Stack sx={{ display: isLoadingData ? "none" : "block" }}>
-        <TaskList
-          projectId={projectId}
-          onTaskCountChange={handleTaskCountChange}
-          setIsLoadingData={setIsLoadingData}
-        />
-      </Stack>
+      {
+        <Stack sx={{ display: isLoadingData ? "none" : "block" }}>
+          <TaskList
+            projectId={projectId}
+            onTaskCountChange={handleTaskCountChange}
+            setIsLoadingData={setIsLoadingData}
+          />
+        </Stack>
+      }
     </Stack>
   );
 }

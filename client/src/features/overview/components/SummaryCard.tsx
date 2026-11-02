@@ -81,6 +81,8 @@ function SummaryCard({
         <Stack
           className="inner-content-box"
           sx={{
+            minHeight: { xs: "90px", md: "110px" },
+            justifyContent: "center",
             gap: 3,
             py: 2,
             px: 1.5,
@@ -92,6 +94,7 @@ function SummaryCard({
           <SummaryCardValue value={value} label={label} />
 
           <SummaryCardMessage
+            value={value}
             accentColor={accentColor}
             secondaryIcon={secondaryIcon}
             message={message}
