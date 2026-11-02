@@ -2,13 +2,13 @@ import { List } from "@mui/material";
 import ProjectItem from "./ProjectItem";
 import type { TProject } from "../project.types";
 import { useFetchProjects } from "../hooks/useFetchProjects";
-import AppLoader from "../../../components/ui/AppLoader";
 import ErrorAlert from "../../../components/ui/ErrorAlert";
+import RecentProjectItemSkeleton from "../../overview/components/skeletons/RecentProjectItemSkeleton";
 
 function ProjectsList() {
   const { projects, isLoading, isError, error } = useFetchProjects();
 
-  if (isLoading) return <AppLoader message="Loading projects..." size={22} />;
+  if (isLoading) return <RecentProjectItemSkeleton count={5} />;
 
   if (isError) {
     return (

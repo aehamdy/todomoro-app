@@ -21,8 +21,6 @@ type DashboardSummaryProps = {
 };
 
 function OverviewSummary({ summary }: DashboardSummaryProps) {
-  if (!summary) return <div>No data yet</div>;
-
   const totalTasksValue = summary.activeTasks;
   const completedTasksValue = summary.completedToday;
   const dueValue = summary.dueToday;

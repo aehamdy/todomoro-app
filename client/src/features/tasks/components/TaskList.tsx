@@ -2,18 +2,22 @@ import { List, Paper } from "@mui/material";
 import { useFetchTasks } from "../hooks/useFetchTasks";
 import TaskItem from "./TaskItem";
 import TasksEmptyList from "./TasksEmptyList";
-import AppLoader from "../../../components/ui/AppLoader";
 import ErrorAlert from "../../../components/ui/ErrorAlert";
 import { useOutletContext } from "react-router-dom";
 import type { DashboardOutletContext } from "../../../components/layout/DashboardLayout";
-import { useEffect } from "react";
+import { useEffect, type Dispatch, type SetStateAction } from "react";
 
 type TaskListProps = {
   projectId: string | null;
   onTaskCountChange?: (completed: number, incomplete: number) => void;
+  setIsLoadingData?: Dispatch<SetStateAction<boolean>>;
 };
 
-function TaskList({ projectId, onTaskCountChange }: TaskListProps) {
+function TaskList({
+  projectId,
+  onTaskCountChange,
+  setIsLoadingData,
+}: TaskListProps) {
   const { setSelectedTask } = useOutletContext<DashboardOutletContext>();
 
   const { tasks, isLoading, error, isError, refetch } =
@@ -29,7 +33,9 @@ function TaskList({ projectId, onTaskCountChange }: TaskListProps) {
     }
   }, [completedCount, incompleteCount, isLoading, isError, onTaskCountChange]);
 
-  if (isLoading) return <AppLoader message="Loading tasks..." />;
+  useEffect(() => {
+    setIsLoadingData?.(isLoading);
+  }, [isLoading, setIsLoadingData]);
 
   if (isError) {
     return (
