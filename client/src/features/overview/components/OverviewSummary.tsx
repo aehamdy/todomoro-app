@@ -34,7 +34,10 @@ function OverviewSummary({ summary }: DashboardSummaryProps) {
       value: summary.activeTasks,
       label: totalTasksValue === 1 ? "Active Task" : "Active Tasks",
       secondaryIcon: <TrendingUpIcon />,
-      message: "Keep making progress",
+      message:
+        summary.activeTasks === 0
+          ? "You're free to start something new"
+          : "Keep the momentum going!",
       status: "neutral",
     },
     {
@@ -44,7 +47,10 @@ function OverviewSummary({ summary }: DashboardSummaryProps) {
       value: summary.completedToday,
       label: completedTasksValue === 1 ? "Task" : "Tasks",
       secondaryIcon: <DoneAllIcon />,
-      message: "Completed today",
+      message:
+        summary.completedToday === 0
+          ? "Your first win is waiting!"
+          : "Great work! Keep it up!",
       status: "success",
     },
 
@@ -55,7 +61,10 @@ function OverviewSummary({ summary }: DashboardSummaryProps) {
       value: summary.dueToday,
       label: dueValue === 1 ? "Task" : "Tasks",
       secondaryIcon: <AccessTimeIcon />,
-      message: "Stay on track",
+      message:
+        summary.dueToday === 0
+          ? "Nothing on your schedule today"
+          : "Make today count!",
       status: "warning",
     },
     {
@@ -107,7 +116,12 @@ function OverviewSummary({ summary }: DashboardSummaryProps) {
           />
         </Box>
       ),
-      message: overdueValue === 1 ? "Needs attention" : "Need attention",
+      message:
+        summary.overdue === 0
+          ? "You're all caught up. Well done!"
+          : summary.overdue === 1
+            ? "Needs your attention"
+            : "Need your attention",
       status: "error",
     },
   ] as const;

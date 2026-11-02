@@ -162,10 +162,7 @@ function CreateTaskForm({ projectId, onSuccess }: CreateTaskFormProps) {
                     aria-expanded={Boolean(priorityAnchor)}
                     disabled={isCreating}
                     onClick={(event) => setPriorityAnchor(event.currentTarget)}
-                    color={
-                      selectedPriority === "medium" ? "default" : "primary"
-                    }
-                    sx={{ flexShrink: 0 }}
+                    sx={{ flexShrink: 0, color: "primary.main" }}
                   >
                     <FlagOutlinedIcon />
                   </IconButton>
@@ -222,8 +219,7 @@ function CreateTaskForm({ projectId, onSuccess }: CreateTaskFormProps) {
               aria-expanded={Boolean(dateAnchor)}
               disabled={isCreating}
               onClick={(event) => setDateAnchor(event.currentTarget)}
-              color={selectedDueDate ? "primary" : "default"}
-              sx={{ flexShrink: 0 }}
+              sx={{ flexShrink: 0, color: "primary.main" }}
             >
               <CalendarMonthOutlinedIcon />
             </IconButton>

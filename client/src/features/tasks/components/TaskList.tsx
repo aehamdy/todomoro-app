@@ -1,11 +1,11 @@
 import { List, Paper } from "@mui/material";
 import { useFetchTasks } from "../hooks/useFetchTasks";
 import TaskItem from "./TaskItem";
-import TasksEmptyList from "./TasksEmptyList";
 import ErrorAlert from "../../../components/ui/ErrorAlert";
 import { useOutletContext } from "react-router-dom";
 import type { DashboardOutletContext } from "../../../components/layout/DashboardLayout";
 import { useEffect, type Dispatch, type SetStateAction } from "react";
+import EmptyTaskList from "./EmptyTaskList";
 
 type TaskListProps = {
   projectId: string | null;
@@ -59,7 +59,16 @@ function TaskList({
       }}
     >
       {tasks.length === 0 ? (
-        <TasksEmptyList />
+        <EmptyTaskList
+          title={
+            projectId ? "No tasks in this project" : "No tasks in this list"
+          }
+          description={
+            projectId
+              ? "Add tasks to this project to keep everything organized."
+              : "Create your first task and start organizing your day."
+          }
+        />
       ) : (
         <List
           sx={{

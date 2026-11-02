@@ -2,21 +2,31 @@ import { Box, Typography } from "@mui/material";
 import type { ReactNode } from "react";
 
 type SummaryCardMessageProps = {
+  value: number;
   accentColor: string;
   secondaryIcon: ReactNode;
   message: string;
 };
 
 function SummaryCardMessage({
+  value,
   accentColor,
   secondaryIcon,
   message,
 }: SummaryCardMessageProps) {
   return (
-    <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
-      <Box className="card-secondary-icon" sx={{ color: accentColor }}>
-        {secondaryIcon}
-      </Box>
+    <Box
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        gap: 1.5,
+      }}
+    >
+      {value > 0 && (
+        <Box className="card-secondary-icon" sx={{ color: accentColor }}>
+          {secondaryIcon}
+        </Box>
+      )}
 
       <Typography
         className="card-message-text"

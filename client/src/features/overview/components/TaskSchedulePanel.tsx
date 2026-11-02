@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useOutletContext } from "react-router-dom";
-import { Box, Paper, Stack, Typography } from "@mui/material";
+import { Box, Paper, Stack } from "@mui/material";
 
 import type { Task } from "../../tasks/task.types";
 import type { DashboardOutletContext } from "../../../components/layout/DashboardLayout";
@@ -8,6 +8,7 @@ import type { DashboardOutletContext } from "../../../components/layout/Dashboar
 import TaskItem from "../../tasks/components/TaskItem";
 import TaskScheduleTabs from "./TaskScheduleTabs";
 import UpcomingTaskItem from "./UpcomingTaskItem";
+import EmptyTaskList from "../../tasks/components/EmptyTaskList";
 
 type TaskSchedulePanelProps = {
   overdueTasks: Task[];
@@ -72,25 +73,22 @@ function TaskSchedulePanel({
           }}
         >
           {displayedTasks?.length === 0 ? (
-            <Box
-              sx={{
-                py: 5,
-                textAlign: "center",
-                color: "text.secondary",
-              }}
-            >
-              <Typography variant="body1" sx={{ fontWeight: 600 }}>
-                {activeTab === "upcoming"
-                  ? "Your schedule is clear"
-                  : "You're all caught up!"}
-              </Typography>
-
-              <Typography variant="body2" sx={{ mt: 0.5 }}>
-                {activeTab === "upcoming"
-                  ? "No upcoming tasks for the next 7 days."
-                  : "You have no overdue tasks."}
-              </Typography>
-            </Box>
+            <EmptyTaskList
+              title={
+                activeTab === "overdue"
+                  ? "You're all caught up!"
+                  : activeTab === "upcoming"
+                    ? "Your schedule is clear"
+                    : "Nothing completed yet"
+              }
+              description={
+                activeTab === "overdue"
+                  ? "You don't have any overdue tasks. Keep it that way!"
+                  : activeTab === "upcoming"
+                    ? "You don't have any upcoming tasks for the next 7 days."
+                    : "Completed tasks will appear here."
+              }
+            />
           ) : (
             <Stack spacing={0}>
               {activeTab === "overdue" || activeTab === "completed"
