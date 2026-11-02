@@ -15,6 +15,7 @@ import SubtasksList from "./SubtasksList";
 import TaskProject from "./TaskProject";
 import { playTaskCompletionSound } from "../utils/playTaskCompletionSound";
 import { useAuth } from "../../auth/useAuth";
+import TaskDetailsSidebarSkeleton from "./skeletons/TaskDetailsSidebarSkeleton";
 
 type TaskDetailsSidebarProps = {
   taskId: string;
@@ -30,7 +31,7 @@ function TaskDetailsSidebar({ taskId, onClose }: TaskDetailsSidebarProps) {
   const { deleteTask, isDeleting, isError: isDeleteError } = useDeleteTask();
 
   if (isLoading) {
-    return <div>Loading task details...</div>;
+    return <TaskDetailsSidebarSkeleton />;
   }
 
   if (isError || !task) {

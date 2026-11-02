@@ -4,9 +4,12 @@ import TaskList from "../features/tasks/components/TaskList";
 import { Stack } from "@mui/material";
 import { useCallback, useState } from "react";
 import TaskOverview from "../components/common/TaskOverview";
+import TasksPageSkeleton from "../features/tasks/components/skeletons/TasksPageSkeleton";
 
 function ProjectPage() {
   const { projectId } = useParams<{ projectId: string }>();
+
+  const [isLoadingData, setIsLoadingData] = useState(true);
 
   const [completedCount, setCompletedCount] = useState(0);
   const [incompleteCount, setIncompleteCount] = useState(0);
@@ -25,14 +28,26 @@ function ProjectPage() {
 
   return (
     <Stack spacing={3}>
-      <TaskOverview completed={completedCount} incomplete={incompleteCount} />
+      {isLoadingData ? (
+        <TasksPageSkeleton />
+      ) : (
+        <>
+          <TaskOverview
+            completed={completedCount}
+            incomplete={incompleteCount}
+          />
 
-      <CreateTaskForm projectId={projectId} />
+          <CreateTaskForm projectId={projectId} />
+        </>
+      )}
 
-      <TaskList
-        projectId={projectId}
-        onTaskCountChange={handleTaskCountChange}
-      />
+      <Stack sx={{ display: isLoadingData ? "none" : "block" }}>
+        <TaskList
+          projectId={projectId}
+          onTaskCountChange={handleTaskCountChange}
+          setIsLoadingData={setIsLoadingData}
+        />
+      </Stack>
     </Stack>
   );
 }

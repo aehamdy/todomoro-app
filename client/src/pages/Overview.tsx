@@ -5,9 +5,12 @@ import { useFetchOverviewSummary } from "../features/overview/hooks/useFetchOver
 import OverviewGreeting from "../features/overview/components/OverviewGreeting";
 import OverviewSummary from "../features/overview/components/OverviewSummary";
 import TaskSchedulePanel from "../features/overview/components/TaskSchedulePanel";
+import OverviewPageSkeleton from "../features/overview/components/skeletons/OverviewPageSkeleton";
 
 function OverviewPage() {
-  const { data } = useFetchOverviewSummary();
+  const { data, isLoading } = useFetchOverviewSummary();
+
+  if (isLoading) return <OverviewPageSkeleton />;
 
   const todayTasks = data?.data.todayTasks;
   const overdueTasks = data?.data.overdueTasks;
