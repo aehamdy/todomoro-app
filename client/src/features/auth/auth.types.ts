@@ -8,7 +8,10 @@ export type ThemePreference =
   | "system"
   | "sunset"
   | "emerald-dark"
-  | "carbon";
+  | "carbon"
+  | "olive-amber"
+  | "citrus-grove"
+  | "desert-oasis";
 
 export interface RegisterData {
   name: string;
