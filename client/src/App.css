@@ -1,3 +1,7 @@
+body {
+  cursor: url("/cursors/main-cursor.svg"), auto;
+}
+
 .counter {
   font-size: 16px;
   padding: 5px 10px;
