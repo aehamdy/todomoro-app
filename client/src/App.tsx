@@ -7,6 +7,7 @@ import DashboardLayout from "./components/layout/DashboardLayout";
 import TasksPage from "./pages/Tasks";
 import ProjectPage from "./pages/ProjectPage";
 import OverviewPage from "./pages/Overview";
+import "./App.css";
 
 function App() {
   return (
