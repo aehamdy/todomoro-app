@@ -1,3 +1,5 @@
+import type { PomodoroPreferences } from "../pomodoro/pomodoro.types";
+
 export type ThemePreference =
   | "light"
   | "dark"
@@ -72,6 +74,7 @@ export type ChangePasswordData = {
 export type UserPreferences = {
   theme: ThemePreference;
   taskCompletionSoundEnabled: boolean;
+  pomodoro: PomodoroPreferences;
 };
 
 export type UpdatePreferencesResponse = {
