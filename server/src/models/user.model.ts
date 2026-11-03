@@ -1,4 +1,5 @@
 import mongoose, { Schema, type InferSchemaType } from "mongoose";
+import { boolean } from "zod";
 
 const themeValues = [
   "light",
@@ -14,6 +15,28 @@ const themeValues = [
   "olive-amber",
   "citrus-grove",
   "desert-oasis",
+];
+
+const pomodoroAlarmSounds = ["default", "bell", "digital", "gentle"];
+
+const pomodoroBackgroundSounds = [
+  "none",
+  "white-noise",
+  "pink-noise",
+  "brown-noise",
+  "rain",
+  "ocean",
+  "forest",
+  "fireplace",
+  "cafe",
+];
+
+const pomodoroWidgetThemes = [
+  "midnight",
+  "warm-sand",
+  "forest",
+  "lavender",
+  "rose",
 ];
 
 const userSchema = new Schema(
@@ -51,6 +74,43 @@ const userSchema = new Schema(
       },
 
       taskCompletionSoundEnabled: { type: Boolean, default: true },
+
+      pomodoro: {
+        focusDuration: { type: Number, min: 1, max: 480, default: 25 },
+        shortBreakDuration: { type: Number, min: 1, max: 480, default: 5 },
+        longBreakDuration: { type: Number, min: 1, max: 480, default: 15 },
+        longBreakInterval: { type: Number, min: 1, max: 90, default: 4 },
+
+        autoStartNextPomodoro: { type: Boolean, default: false },
+        autoStartBreak: { type: Boolean, default: false },
+        disableBreaks: { type: Boolean, default: false },
+
+        alarmVolume: { type: Number, min: 0, max: 100, default: 70 },
+        focusAlarmSound: {
+          type: String,
+          enum: pomodoroAlarmSounds,
+          default: "default",
+        },
+        breakAlarmSound: {
+          type: String,
+          enum: pomodoroAlarmSounds,
+          default: "default",
+        },
+
+        whiteNoiseVolume: { type: Number, min: 0, max: 100, default: 30 },
+        selectedWhiteNoise: {
+          type: String,
+          enum: pomodoroBackgroundSounds,
+          default: "none",
+        },
+        autoPlayWhiteNoise: { type: Boolean, default: false },
+
+        widgetTheme: {
+          type: String,
+          enum: pomodoroWidgetThemes,
+          default: "midnight",
+        },
+      },
     },
   },
 

@@ -16,6 +16,33 @@ const themeOptions = [
   "desert-oasis",
 ];
 
+const pomodoroAlarmSoundOptions = [
+  "default",
+  "bell",
+  "digital",
+  "gentle",
+] as const;
+
+const pomodoroBackgroundSoundOptions = [
+  "none",
+  "white-noise",
+  "pink-noise",
+  "brown-noise",
+  "rain",
+  "ocean",
+  "forest",
+  "fireplace",
+  "cafe",
+] as const;
+
+const pomodoroWidgetThemeOptions = [
+  "midnight",
+  "warm-sand",
+  "forest",
+  "lavender",
+  "rose",
+] as const;
+
 export const registerSchema = z
   .object({
     name: z
@@ -77,11 +104,50 @@ export const changePasswordSchema = z.object({
   newPassword: z.string().min(8).max(20),
 });
 
+export const pomodoroPreferencesSchema = z
+  .object({
+    focusDuration: z.number().int().min(1).max(480).optional(),
+
+    shortBreakDuration: z.number().int().min(1).max(480).optional(),
+
+    longBreakDuration: z.number().int().min(1).max(480).optional(),
+
+    longBreakInterval: z.number().int().min(2).max(90).optional(),
+
+    autoStartNextPomodoro: z.boolean().optional(),
+
+    autoStartBreak: z.boolean().optional(),
+
+    disableBreaks: z.boolean().optional(),
+
+    alarmVolume: z.number().int().min(0).max(100).optional(),
+
+    focusAlarmSound: z.enum(pomodoroAlarmSoundOptions).optional(),
+
+    breakAlarmSound: z.enum(pomodoroAlarmSoundOptions).optional(),
+
+    whiteNoiseVolume: z.number().int().min(0).max(100).optional(),
+
+    selectedWhiteNoise: z.enum(pomodoroBackgroundSoundOptions).optional(),
+
+    autoPlayWhiteNoise: z.boolean().optional(),
+
+    widgetTheme: z.enum(pomodoroWidgetThemeOptions).optional(),
+  })
+  .strict()
+  .refine((preferences) => Object.keys(preferences).length > 0, {
+    message: "At least one Pomodoro preference must be provided",
+  });
+
 export const updatePreferencesSchema = z
   .object({
     theme: z.enum(themeOptions).optional(),
+
     taskCompletionSoundEnabled: z.boolean().optional(),
+
+    pomodoro: pomodoroPreferencesSchema.optional(),
   })
+  .strict()
   .refine((preferences) => Object.keys(preferences).length > 0, {
     message: "At least one preference must be provided",
   });

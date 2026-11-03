@@ -114,8 +114,50 @@ export const getMe: RequestHandler = async (req, res, next) => {
           email: user.email,
           preferences: {
             theme: user.preferences?.theme ?? "system",
+
             taskCompletionSoundEnabled:
               user.preferences?.taskCompletionSoundEnabled ?? true,
+
+            pomodoro: {
+              focusDuration: user.preferences?.pomodoro?.focusDuration ?? 25,
+
+              shortBreakDuration:
+                user.preferences?.pomodoro?.shortBreakDuration ?? 5,
+
+              longBreakDuration:
+                user.preferences?.pomodoro?.longBreakDuration ?? 15,
+
+              longBreakInterval:
+                user.preferences?.pomodoro?.longBreakInterval ?? 4,
+
+              autoStartNextPomodoro:
+                user.preferences?.pomodoro?.autoStartNextPomodoro ?? false,
+
+              autoStartBreak:
+                user.preferences?.pomodoro?.autoStartBreak ?? false,
+
+              disableBreaks: user.preferences?.pomodoro?.disableBreaks ?? false,
+
+              alarmVolume: user.preferences?.pomodoro?.alarmVolume ?? 70,
+
+              focusAlarmSound:
+                user.preferences?.pomodoro?.focusAlarmSound ?? "default",
+
+              breakAlarmSound:
+                user.preferences?.pomodoro?.breakAlarmSound ?? "default",
+
+              whiteNoiseVolume:
+                user.preferences?.pomodoro?.whiteNoiseVolume ?? 30,
+
+              selectedWhiteNoise:
+                user.preferences?.pomodoro?.selectedWhiteNoise ?? "none",
+
+              autoPlayWhiteNoise:
+                user.preferences?.pomodoro?.autoPlayWhiteNoise ?? false,
+
+              widgetTheme:
+                user.preferences?.pomodoro?.widgetTheme ?? "midnight",
+            },
           },
           createdAt: user.createdAt,
         },
@@ -270,7 +312,7 @@ export const changePassword: RequestHandler = async (req, res, next) => {
 export const updatePreferences: RequestHandler = async (req, res, next) => {
   try {
     const userId = req.userId;
-    const { theme, taskCompletionSoundEnabled } =
+    const { theme, taskCompletionSoundEnabled, pomodoro } =
       req.body as UpdatePreferencesInput;
 
     const user = await User.findById(userId);
@@ -294,6 +336,12 @@ export const updatePreferences: RequestHandler = async (req, res, next) => {
       );
     }
 
+    if (pomodoro !== undefined) {
+      for (const [key, value] of Object.entries(pomodoro)) {
+        user.set(`preferences.pomodoro.${key}`, value);
+      }
+    }
+
     await user.save();
 
     res.status(200).json({
@@ -301,8 +349,11 @@ export const updatePreferences: RequestHandler = async (req, res, next) => {
       data: {
         preferences: {
           theme: user.get("preferences.theme") ?? "system",
+
           taskCompletionSoundEnabled:
             user.get("preferences.taskCompletionSoundEnabled") ?? true,
+
+          pomodoro: user.get("preferences.pomodoro"),
         },
       },
     });
