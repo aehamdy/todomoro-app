@@ -13,7 +13,8 @@ import PomodoroControls from "./PomodoroControls";
 import PomodoroSessionSelector from "./PomodoroSessionSelector";
 import { usePomodoroTimer } from "../hooks/usePomodoroTimer";
 import type { PomodoroPreferences } from "../pomodoro.types";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { useBackgroundSound } from "../hooks/useBackgroundSound";
 
 interface PomodoroTimerContainerProps {
   preferences: PomodoroPreferences;
@@ -46,9 +47,77 @@ function PomodoroTimerContainer({ preferences }: PomodoroTimerContainerProps) {
     nextSession,
   } = usePomodoroTimer({ preferences });
 
+  const {
+    play: playBackgroundSound,
+    pause: pauseBackgroundSound,
+    stop: stopBackgroundSound,
+  } = useBackgroundSound({
+    sound: preferences.selectedBackgroundSound,
+    volume: preferences.backgroundSoundVolume,
+  });
+
+  const handleStart = useCallback(() => {
+    start();
+
+    if (preferences.autoPlayBackgroundSound) {
+      void playBackgroundSound().catch((error: unknown) => {
+        console.error("Failed to play background sound:", error);
+      });
+    }
+  }, [start, preferences.autoPlayBackgroundSound, playBackgroundSound]);
+
+  const handleResume = useCallback(() => {
+    resume();
+
+    if (preferences.autoPlayBackgroundSound) {
+      void playBackgroundSound().catch((error: unknown) => {
+        console.error("Failed to resume background sound:", error);
+      });
+    }
+  }, [resume, preferences.autoPlayBackgroundSound, playBackgroundSound]);
+
   const isSessionLocked =
     timer.status === "running" || timer.status === "paused";
 
+  useEffect(() => {
+    if (timer.status === "paused") {
+      pauseBackgroundSound();
+      return;
+    }
+
+    if (timer.status === "idle" || timer.status === "stopped") {
+      stopBackgroundSound();
+      return;
+    }
+
+    // A completed session is immediately handled by usePomodoroTimer.
+    // Wait for the resulting next-session state.
+    if (timer.status === "completed") {
+      return;
+    }
+
+    if (
+      timer.status === "running" &&
+      preferences.autoPlayBackgroundSound &&
+      preferences.selectedBackgroundSound !== "none"
+    ) {
+      void playBackgroundSound().catch((error: unknown) => {
+        console.error("Failed to play background sound:", error);
+      });
+
+      return;
+    }
+
+    stopBackgroundSound();
+  }, [
+    timer.status,
+    timer.sessionType,
+    preferences.autoPlayBackgroundSound,
+    preferences.selectedBackgroundSound,
+    playBackgroundSound,
+    pauseBackgroundSound,
+    stopBackgroundSound,
+  ]);
   return (
     <Paper
       variant="outlined"
@@ -96,9 +165,9 @@ function PomodoroTimerContainer({ preferences }: PomodoroTimerContainerProps) {
 
             <PomodoroControls
               timer={timer}
-              onStart={start}
+              onStart={handleStart}
               onPause={pause}
-              onResume={resume}
+              onResume={handleResume}
               onStop={stop}
               onReset={reset}
               onNext={nextSession}
@@ -119,9 +188,9 @@ function PomodoroTimerContainer({ preferences }: PomodoroTimerContainerProps) {
 
             <PomodoroControls
               timer={timer}
-              onStart={start}
+              onStart={handleStart}
               onPause={pause}
-              onResume={resume}
+              onResume={handleResume}
               onStop={stop}
               onReset={reset}
               onNext={nextSession}

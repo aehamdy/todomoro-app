@@ -12,6 +12,7 @@ import {
 import { useAuth } from "../../auth/hooks/useAuth";
 import { useUpdateUserPreferences } from "../../auth/hooks/useUpdateUserPreferences";
 import PomodoroAlarmSettings from "./PomodoroAlarmSettings";
+import PomodoroBackgroundSoundSettings from "./PomodoroBackgroundSoundSettings";
 
 type PomodoroField =
   | "focusDuration"
@@ -311,6 +312,10 @@ function PomodoroSettings() {
       <Divider />
 
       <PomodoroAlarmSettings />
+
+      <Divider />
+
+      <PomodoroBackgroundSoundSettings />
     </Stack>
   );
 }
