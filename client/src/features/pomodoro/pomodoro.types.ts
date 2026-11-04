@@ -1,3 +1,6 @@
+import type { AuthUser } from "../auth/auth.types";
+import type { useUpdateUserPreferences } from "../auth/hooks/useUpdateUserPreferences";
+
 export type PomodoroSessionType = "focus" | "shortBreak" | "longBreak";
 
 export type PomodoroSessionStatus =
@@ -67,3 +70,8 @@ export interface PomodoroTimerState {
   pausedAt: number | null;
   focusSessionsInCycle: number;
 }
+
+export type PomodoroSettingsProps = {
+  user: AuthUser;
+  updatePreferences: ReturnType<typeof useUpdateUserPreferences>;
+};
