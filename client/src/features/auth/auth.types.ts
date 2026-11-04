@@ -74,6 +74,7 @@ export type ChangePasswordData = {
 export type UserPreferences = {
   theme: ThemePreference;
   taskCompletionSoundEnabled: boolean;
+  addNewTasksToTop: boolean;
   pomodoro: PomodoroPreferences;
 };
 

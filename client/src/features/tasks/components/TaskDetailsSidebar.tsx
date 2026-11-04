@@ -1,7 +1,7 @@
 import { Alert, Box, Divider, Stack } from "@mui/material";
 import { useTaskDetails } from "../hooks/useTaskDetails";
 import { useDeleteTask } from "../hooks/useDeleteTask";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useUpdateTask } from "../hooks/useUpdateTask";
 import TaskTitle from "./TaskTitle";
 import TaskDueDate from "./TaskDueDate";
@@ -29,6 +29,16 @@ function TaskDetailsSidebar({ taskId, onClose }: TaskDetailsSidebarProps) {
   const { task, isLoading, isError } = useTaskDetails(taskId);
   const { updateTask, isUpdating, isError: isUpdateError } = useUpdateTask();
   const { deleteTask, isDeleting, isError: isDeleteError } = useDeleteTask();
+
+  const addNewTasksToTop = user?.preferences.addNewTasksToTop ?? false;
+
+  const displayedSubtasks = useMemo(() => {
+    const subtasks = task?.subtasks ?? [];
+
+    if (!addNewTasksToTop) return subtasks;
+
+    return [...subtasks].reverse();
+  }, [task, addNewTasksToTop]);
 
   if (isLoading) {
     return <TaskDetailsSidebarSkeleton />;
@@ -162,7 +172,7 @@ function TaskDetailsSidebar({ taskId, onClose }: TaskDetailsSidebarProps) {
 
         <Divider sx={{ my: 1 }} />
 
-        <SubtasksList taskId={taskId} subtasks={task.subtasks} />
+        <SubtasksList taskId={taskId} subtasks={displayedSubtasks} />
       </Stack>
 
       <TaskDetailsFooter

@@ -4,8 +4,9 @@ import TaskItem from "./TaskItem";
 import ErrorAlert from "../../../components/ui/ErrorAlert";
 import { useOutletContext } from "react-router-dom";
 import type { DashboardOutletContext } from "../../../components/layout/DashboardLayout";
-import { useEffect, type Dispatch, type SetStateAction } from "react";
+import { useEffect, useMemo, type Dispatch, type SetStateAction } from "react";
 import EmptyTaskList from "./EmptyTaskList";
+import { useAuth } from "../../auth/hooks/useAuth";
 
 type TaskListProps = {
   projectId: string | null;
@@ -22,10 +23,19 @@ function TaskList({
 
   const { tasks, isLoading, error, isError, refetch } =
     useFetchTasks(projectId);
+  const { user } = useAuth();
 
   const completedCount = tasks.filter((task) => task.isCompleted).length;
 
   const incompleteCount = tasks.length - completedCount;
+
+  const addNewTasksToTop = user?.preferences.addNewTasksToTop ?? false;
+
+  const displayedTasks = useMemo(() => {
+    if (!addNewTasksToTop) return tasks;
+
+    return [...tasks].reverse();
+  }, [tasks, addNewTasksToTop]);
 
   useEffect(() => {
     if (!isLoading && !isError) {
@@ -84,7 +94,7 @@ function TaskList({
             },
           }}
         >
-          {tasks.map((task) => (
+          {displayedTasks.map((task) => (
             <TaskItem
               key={task._id}
               task={task}
