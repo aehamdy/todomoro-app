@@ -19,7 +19,12 @@ export type PomodoroSound =
   | "fireplace"
   | "cafe";
 
-export type PomodoroAlarmSound = "default" | "bell" | "digital" | "gentle";
+export type PomodoroAlarmSound =
+  | "none"
+  | "default"
+  | "bell"
+  | "digital"
+  | "gentle";
 
 export type PomodoroWidgetTheme =
   | "midnight"

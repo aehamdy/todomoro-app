@@ -2,7 +2,7 @@ import type {
   PomodoroPreferences,
   PomodoroSessionType,
   PomodoroTimerState,
-} from "./pomodoro.types";
+} from "./../pomodoro.types";
 
 export function getSessionDuration(
   sessionType: PomodoroSessionType,

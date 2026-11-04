@@ -9,7 +9,8 @@ import {
   getNextSession,
   getRemainingTime,
   getSessionDuration,
-} from "../pomodoro.utils";
+} from "../utils/pomodoro.utils";
+import { playAlarm, unlockAlarmAudio } from "../utils/alarmSound.utils";
 
 interface UsePomodoroTimerProps {
   preferences: PomodoroPreferences;
@@ -69,6 +70,20 @@ export function usePomodoroTimer({ preferences }: UsePomodoroTimerProps) {
 
     completionHandledRef.current = true;
 
+    // Play the alarm for the session that just finished.
+    const sound =
+      timer.sessionType === "focus"
+        ? preferences.focusAlarmSound
+        : preferences.breakAlarmSound;
+
+    void playAlarm({
+      sound,
+      volume: preferences.alarmVolume,
+    }).catch((error: unknown) => {
+      console.error("Failed to play Pomodoro alarm:", error);
+    });
+
+    // Determine and prepare the next session.
     const next = getNextSession(
       timer.sessionType,
       timer.focusSessionsInCycle,
@@ -106,6 +121,10 @@ export function usePomodoroTimer({ preferences }: UsePomodoroTimerProps) {
 
   // Start the timer.
   const start = useCallback(() => {
+    void unlockAlarmAudio().catch((error: unknown) => {
+      console.error("Failed to initialize alarm audio:", error);
+    });
+
     setTimer((current) => {
       if (
         current.status === "running" ||
@@ -115,7 +134,6 @@ export function usePomodoroTimer({ preferences }: UsePomodoroTimerProps) {
         return current;
       }
 
-      // Use the latest preferences when starting an idle timer.
       const freshTimer = createTimerState(
         current.sessionType,
         preferences,
@@ -152,6 +170,10 @@ export function usePomodoroTimer({ preferences }: UsePomodoroTimerProps) {
 
   // Resume the timer.
   const resume = useCallback(() => {
+    void unlockAlarmAudio().catch((error: unknown) => {
+      console.error("Failed to initialize alarm audio:", error);
+    });
+
     setTimer((current) => {
       if (current.status !== "paused") {
         return current;
