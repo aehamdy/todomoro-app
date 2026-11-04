@@ -30,10 +30,14 @@ const pomodoroBackgroundSoundOptions = [
   "pink-noise",
   "brown-noise",
   "rain",
-  "ocean",
-  "forest",
   "fireplace",
   "cafe",
+  "library",
+  "classroom",
+  "ocean-shore",
+  "bonfire",
+  "forest",
+  "wind",
 ] as const;
 
 const pomodoroWidgetThemeOptions = [
@@ -127,11 +131,11 @@ export const pomodoroPreferencesSchema = z
 
     breakAlarmSound: z.enum(pomodoroAlarmSoundOptions).optional(),
 
-    whiteNoiseVolume: z.number().int().min(0).max(100).optional(),
+    backgroundSoundVolume: z.number().int().min(0).max(100).optional(),
 
-    selectedWhiteNoise: z.enum(pomodoroBackgroundSoundOptions).optional(),
+    selectedBackgroundSound: z.enum(pomodoroBackgroundSoundOptions).optional(),
 
-    autoPlayWhiteNoise: z.boolean().optional(),
+    autoPlayBackgroundSound: z.boolean().optional(),
 
     widgetTheme: z.enum(pomodoroWidgetThemeOptions).optional(),
   })
