@@ -15,6 +15,7 @@ import { usePomodoroTimer } from "../hooks/usePomodoroTimer";
 import type { PomodoroPreferences } from "../pomodoro.types";
 import { useCallback, useEffect, useState } from "react";
 import { useBackgroundSound } from "../hooks/useBackgroundSound";
+import { usePomodoroDocumentTitle } from "../hooks/usePomodoroDocumentTitle";
 
 interface PomodoroTimerContainerProps {
   preferences: PomodoroPreferences;
@@ -46,6 +47,8 @@ function PomodoroTimerContainer({ preferences }: PomodoroTimerContainerProps) {
     selectSession,
     nextSession,
   } = usePomodoroTimer({ preferences });
+
+  usePomodoroDocumentTitle(timer);
 
   const {
     play: playBackgroundSound,
