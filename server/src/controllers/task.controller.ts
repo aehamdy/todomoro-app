@@ -74,7 +74,9 @@ export const getTasks: RequestHandler = async (req, res, next) => {
     const tasks = await Task.find({
       user: userId,
       ...projectFilter,
-    }).select("-__v");
+    })
+      .sort({ createdAt: 1, _id: 1 })
+      .select("-__v");
 
     res.status(200).json({
       status: "success",

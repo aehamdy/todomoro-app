@@ -78,6 +78,8 @@ const userSchema = new Schema(
 
       taskCompletionSoundEnabled: { type: Boolean, default: true },
 
+      addNewTasksToTop: { type: Boolean, default: true },
+
       pomodoro: {
         focusDuration: { type: Number, min: 1, max: 480, default: 25 },
         shortBreakDuration: { type: Number, min: 1, max: 480, default: 5 },
