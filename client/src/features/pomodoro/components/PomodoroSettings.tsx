@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import { useAuth } from "../../auth/hooks/useAuth";
 import { useUpdateUserPreferences } from "../../auth/hooks/useUpdateUserPreferences";
+import PomodoroAlarmSettings from "./PomodoroAlarmSettings";
 
 type PomodoroField =
   | "focusDuration"
@@ -256,7 +257,7 @@ function PomodoroSettings() {
 
       <Divider />
 
-      <Stack spacing={2}>
+      <Stack spacing={4}>
         <Stack spacing={0.5}>
           <Typography variant="h6">Automation</Typography>
 
@@ -306,6 +307,10 @@ function PomodoroSettings() {
           })}
         </Stack>
       </Stack>
+
+      <Divider />
+
+      <PomodoroAlarmSettings />
     </Stack>
   );
 }
