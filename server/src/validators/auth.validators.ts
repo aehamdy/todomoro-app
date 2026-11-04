@@ -150,6 +150,8 @@ export const updatePreferencesSchema = z
 
     taskCompletionSoundEnabled: z.boolean().optional(),
 
+    addNewTasksToTop: z.boolean().optional(),
+
     pomodoro: pomodoroPreferencesSchema.optional(),
   })
   .strict()

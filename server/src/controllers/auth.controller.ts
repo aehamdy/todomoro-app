@@ -118,6 +118,8 @@ export const getMe: RequestHandler = async (req, res, next) => {
             taskCompletionSoundEnabled:
               user.preferences?.taskCompletionSoundEnabled ?? true,
 
+            addNewTasksToTop: user.preferences?.addNewTasksToTop ?? true,
+
             pomodoro: {
               focusDuration: user.preferences?.pomodoro?.focusDuration ?? 25,
 
@@ -312,7 +314,7 @@ export const changePassword: RequestHandler = async (req, res, next) => {
 export const updatePreferences: RequestHandler = async (req, res, next) => {
   try {
     const userId = req.userId;
-    const { theme, taskCompletionSoundEnabled, pomodoro } =
+    const { theme, taskCompletionSoundEnabled, addNewTasksToTop, pomodoro } =
       req.body as UpdatePreferencesInput;
 
     const user = await User.findById(userId);
@@ -336,6 +338,10 @@ export const updatePreferences: RequestHandler = async (req, res, next) => {
       );
     }
 
+    if (addNewTasksToTop !== undefined) {
+      user.set("preferences.addNewTasksToTop", addNewTasksToTop);
+    }
+
     if (pomodoro !== undefined) {
       for (const [key, value] of Object.entries(pomodoro)) {
         user.set(`preferences.pomodoro.${key}`, value);
@@ -352,6 +358,8 @@ export const updatePreferences: RequestHandler = async (req, res, next) => {
 
           taskCompletionSoundEnabled:
             user.get("preferences.taskCompletionSoundEnabled") ?? true,
+
+          addNewTasksToTop: user.get("preferences.addNewTasksToTop") ?? true,
 
           pomodoro: user.get("preferences.pomodoro"),
         },
