@@ -14,9 +14,9 @@ export const DEFAULT_POMODORO_PREFERENCES: PomodoroPreferences = {
   focusAlarmSound: "default",
   breakAlarmSound: "default",
 
-  whiteNoiseVolume: 30,
-  selectedWhiteNoise: "none",
-  autoPlayWhiteNoise: false,
+  backgroundSoundVolume: 30,
+  selectedBackgroundSound: "none",
+  autoPlayBackgroundSound: false,
 
   widgetTheme: "midnight",
 };

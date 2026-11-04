@@ -14,10 +14,14 @@ export type PomodoroSound =
   | "pink-noise"
   | "brown-noise"
   | "rain"
-  | "ocean"
-  | "forest"
   | "fireplace"
-  | "cafe";
+  | "cafe"
+  | "library"
+  | "classroom"
+  | "ocean-shore"
+  | "bonfire"
+  | "forest"
+  | "wind";
 
 export type PomodoroAlarmSound =
   | "none"
@@ -47,9 +51,9 @@ export interface PomodoroPreferences {
   focusAlarmSound: PomodoroAlarmSound;
   breakAlarmSound: PomodoroAlarmSound;
 
-  whiteNoiseVolume: number;
-  selectedWhiteNoise: PomodoroSound;
-  autoPlayWhiteNoise: boolean;
+  backgroundSoundVolume: number;
+  selectedBackgroundSound: PomodoroSound;
+  autoPlayBackgroundSound: boolean;
 
   widgetTheme: PomodoroWidgetTheme;
 }
