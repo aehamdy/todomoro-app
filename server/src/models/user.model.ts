@@ -1,5 +1,4 @@
 import mongoose, { Schema, type InferSchemaType } from "mongoose";
-import { boolean } from "zod";
 
 const themeValues = [
   "light",
@@ -52,7 +51,7 @@ const userSchema = new Schema(
       type: String,
       unique: true,
       required: [true, "Email is required"],
-      lowerCase: true,
+      lowercase: true,
       trim: true,
       maxLength: [254, "Email cannot exceed 254 characters"],
     },
@@ -79,7 +78,7 @@ const userSchema = new Schema(
         focusDuration: { type: Number, min: 1, max: 480, default: 25 },
         shortBreakDuration: { type: Number, min: 1, max: 480, default: 5 },
         longBreakDuration: { type: Number, min: 1, max: 480, default: 15 },
-        longBreakInterval: { type: Number, min: 1, max: 90, default: 4 },
+        longBreakInterval: { type: Number, min: 2, max: 90, default: 4 },
 
         autoStartNextPomodoro: { type: Boolean, default: false },
         autoStartBreak: { type: Boolean, default: false },
