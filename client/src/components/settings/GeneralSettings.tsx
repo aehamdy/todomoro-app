@@ -1,6 +1,6 @@
 import { FormControlLabel, Stack, Switch, Typography } from "@mui/material";
-import { useAuth } from "../../features/auth/useAuth";
-import { useUpdateUserPreferences } from "../../features/auth/useUpdateUserPreferences";
+import { useAuth } from "../../features/auth/hooks/useAuth";
+import { useUpdateUserPreferences } from "../../features/auth/hooks/useUpdateUserPreferences";
 
 function GeneralSettings() {
   const { user } = useAuth();

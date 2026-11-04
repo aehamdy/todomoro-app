@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 import { Box, Button, Stack, TextField, Typography } from "@mui/material";
 import EmailChangeModal from "./EmailChangeModal";
 import PasswordChangeModal from "./PasswordChangeModal";
-import { useUpdateAccount } from "../../features/auth/useUpdateAccount";
-import { useAuth } from "../../features/auth/useAuth";
+import { useAuth } from "../../features/auth/hooks/useAuth";
+import { useUpdateAccount } from "../../features/auth/hooks/useUpdateAccount";
 
 function AccountSettings() {
   const { user, isLoading } = useAuth();

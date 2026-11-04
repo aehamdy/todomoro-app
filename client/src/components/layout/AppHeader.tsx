@@ -2,7 +2,7 @@ import { useState } from "react";
 import { AppBar, Avatar, Box, Stack, Toolbar, Typography } from "@mui/material";
 import { ArrowDropDown, TaskAlt } from "@mui/icons-material";
 import SettingsDialog from "../settings/SettingsDialog";
-import { useAuth } from "../../features/auth/useAuth";
+import { useAuth } from "../../features/auth/hooks/useAuth";
 import AccountDropdown from "./AccountDropdown";
 
 function AppHeader() {

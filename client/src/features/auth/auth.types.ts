@@ -77,9 +77,21 @@ export type UserPreferences = {
   pomodoro: PomodoroPreferences;
 };
 
+export type UpdatePreferencesData = {
+  theme?: ThemePreference;
+  taskCompletionSoundEnabled?: boolean;
+  pomodoro?: Partial<PomodoroPreferences>;
+};
+
 export type UpdatePreferencesResponse = {
   status: "success";
   data: {
     preferences: UserPreferences;
   };
+};
+
+export type UpdateUserPreferencesData = Partial<
+  Omit<UserPreferences, "pomodoro">
+> & {
+  pomodoro?: Partial<PomodoroPreferences>;
 };

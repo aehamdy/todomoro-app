@@ -14,7 +14,7 @@ import type { TaskPriority } from "../task.types";
 import SubtasksList from "./SubtasksList";
 import TaskProject from "./TaskProject";
 import { playTaskCompletionSound } from "../utils/playTaskCompletionSound";
-import { useAuth } from "../../auth/useAuth";
+import { useAuth } from "../../auth/hooks/useAuth";
 import TaskDetailsSidebarSkeleton from "./skeletons/TaskDetailsSidebarSkeleton";
 
 type TaskDetailsSidebarProps = {

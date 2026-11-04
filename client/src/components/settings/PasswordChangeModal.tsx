@@ -10,7 +10,7 @@ import {
   Stack,
   TextField,
 } from "@mui/material";
-import { useChangePassword } from "../../features/auth/useChangePassword";
+import { useChangePassword } from "../../features/auth/hooks/useChangePassword";
 
 type PasswordChangeModalProps = {
   isPasswordDialogOpen: boolean;

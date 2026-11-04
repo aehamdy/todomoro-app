@@ -11,7 +11,7 @@ import {
 } from "react";
 import { CssBaseline, useMediaQuery } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
-import { useAuth } from "../features/auth/useAuth";
+import { useAuth } from "../features/auth/hooks/useAuth";
 import type { ThemePreference } from "../features/auth/auth.types";
 import { getAppTheme } from "./theme";
 

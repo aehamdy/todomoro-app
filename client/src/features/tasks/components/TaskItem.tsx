@@ -16,7 +16,7 @@ import TaskCheckbox from "./TaskCheckbox";
 import DescriptionOutlined from "@mui/icons-material/DescriptionOutlined";
 import FormatListBulletedRounded from "@mui/icons-material/FormatListBulletedRounded";
 import { playTaskCompletionSound } from "../utils/playTaskCompletionSound";
-import { useAuth } from "../../auth/useAuth";
+import { useAuth } from "../../auth/hooks/useAuth";
 import TaskProjectInfo from "../../overview/components/TaskProjectInfo";
 
 type TaskItemProps = {

@@ -14,6 +14,7 @@ import AboutSettings from "./AboutSettings";
 import SettingsNavigation from "./SettingsNavigation";
 import type { SettingsTab } from "../types";
 import GeneralSettings from "./GeneralSettings";
+import PomodoroSettings from "../../features/pomodoro/components/PomodoroSettings";
 
 type SettingsDialogProps = {
   isModalOpen: boolean;
@@ -60,6 +61,7 @@ function SettingsDialog({ isModalOpen, setIsModalOpen }: SettingsDialogProps) {
           >
             {activeTab === "account" && <AccountSettings />}
             {activeTab === "general" && <GeneralSettings />}
+            {activeTab === "pomodoro-timer" && <PomodoroSettings />}
             {activeTab === "appearance" && <AppearanceSettings />}
             {activeTab === "about" && <AboutSettings />}
           </Box>
