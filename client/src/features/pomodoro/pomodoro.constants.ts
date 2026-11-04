@@ -1,7 +1,7 @@
 import type { PomodoroPreferences, PomodoroTimerState } from "./pomodoro.types";
 
 export const DEFAULT_POMODORO_PREFERENCES: PomodoroPreferences = {
-  focusDuration: 1,
+  focusDuration: 25,
   shortBreakDuration: 5,
   longBreakDuration: 15,
   longBreakInterval: 4,
