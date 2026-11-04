@@ -10,7 +10,7 @@ import {
   Stack,
   TextField,
 } from "@mui/material";
-import { useUpdateAccount } from "../../features/auth/useUpdateAccount";
+import { useUpdateAccount } from "../../features/auth/hooks/useUpdateAccount";
 
 type EmailChangeModalProps = {
   isEmailDialogOpen: boolean;

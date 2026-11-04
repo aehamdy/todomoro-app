@@ -17,7 +17,7 @@ import { useDeleteSubtask } from "../hooks/useDeleteSubtask";
 import { useState } from "react";
 import DeleteModal from "../../../components/common/DeleteModal";
 import { playTaskCompletionSound } from "../utils/playTaskCompletionSound";
-import { useAuth } from "../../auth/useAuth";
+import { useAuth } from "../../auth/hooks/useAuth";
 
 type SubtaskItemProps = {
   taskId: string;

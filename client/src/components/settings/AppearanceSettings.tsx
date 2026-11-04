@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Alert, Box, MenuItem, TextField, Typography } from "@mui/material";
 import type { ThemePreference } from "../../features/auth/auth.types";
 import { useAppTheme } from "../../theme/AppThemeProvider";
-import { useUpdateUserPreferences } from "../../features/auth/useUpdateUserPreferences";
+import { useUpdateUserPreferences } from "../../features/auth/hooks/useUpdateUserPreferences";
 
 const themeOptions: {
   label: string;

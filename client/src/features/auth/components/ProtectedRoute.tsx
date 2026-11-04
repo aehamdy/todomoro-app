@@ -2,7 +2,7 @@ import { Navigate, Outlet, useLocation } from "react-router-dom";
 import AppLoader from "../../../components/ui/AppLoader";
 import ErrorAlert from "../../../components/ui/ErrorAlert";
 import { ROUTES } from "../../../routes/paths";
-import { useAuth } from "../useAuth";
+import { useAuth } from "../hooks/useAuth";
 
 function ProtectedRoute() {
   const { user, isLoading, error, isUnauthenticated } = useAuth();

@@ -14,7 +14,7 @@ import { useForm } from "react-hook-form";
 import { loginUser } from "../auth.api";
 import { loginSchema, type LoginFormValues } from "../auth.schema";
 import { useQueryClient } from "@tanstack/react-query";
-import { AUTH_QUERY_KEY } from "../useAuth";
+import { AUTH_QUERY_KEY } from "../hooks/useAuth";
 import { ROUTES } from "../../../routes/paths";
 
 interface LoginLocationState {

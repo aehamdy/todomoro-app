@@ -8,10 +8,8 @@ import type {
   RegisterResponse,
   UpdateAccountData,
   UpdatePreferencesResponse,
-  UserPreferences,
+  UpdateUserPreferencesData,
 } from "./auth.types";
-
-export type UpdateUserPreferencesData = Partial<UserPreferences>;
 
 export async function registerUser(
   data: RegisterData,

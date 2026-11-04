@@ -8,6 +8,7 @@ import {
   createTimerState,
   getNextSession,
   getRemainingTime,
+  getSessionDuration,
 } from "../pomodoro.utils";
 
 interface UsePomodoroTimerProps {
@@ -18,9 +19,10 @@ export function usePomodoroTimer({ preferences }: UsePomodoroTimerProps) {
   const [timer, setTimer] = useState<PomodoroTimerState>(() =>
     createTimerState("focus", preferences),
   );
+
   const completionHandledRef = useRef(false);
 
-  // Keep the displayed remaining time synchronized with the end timestamp.
+  // Keep the displayed timer synchronized with its end timestamp.
   useEffect(() => {
     if (timer.status !== "running" || timer.endTime === null) {
       return;
@@ -54,6 +56,7 @@ export function usePomodoroTimer({ preferences }: UsePomodoroTimerProps) {
     return () => window.clearInterval(intervalId);
   }, [timer.status, timer.endTime]);
 
+  // Handle completed sessions.
   useEffect(() => {
     if (timer.status !== "completed") {
       completionHandledRef.current = false;
@@ -73,9 +76,9 @@ export function usePomodoroTimer({ preferences }: UsePomodoroTimerProps) {
     );
 
     const shouldAutoStart =
-      timer.sessionType === "focus"
-        ? preferences.autoStartBreak
-        : preferences.autoStartNextPomodoro;
+      next.sessionType === "focus"
+        ? preferences.autoStartNextPomodoro
+        : preferences.autoStartBreak;
 
     setTimer(() => {
       const nextTimer = createTimerState(
@@ -101,6 +104,7 @@ export function usePomodoroTimer({ preferences }: UsePomodoroTimerProps) {
     preferences,
   ]);
 
+  // Start the timer.
   const start = useCallback(() => {
     setTimer((current) => {
       if (
@@ -111,15 +115,23 @@ export function usePomodoroTimer({ preferences }: UsePomodoroTimerProps) {
         return current;
       }
 
+      // Use the latest preferences when starting an idle timer.
+      const freshTimer = createTimerState(
+        current.sessionType,
+        preferences,
+        current.focusSessionsInCycle,
+      );
+
       return {
-        ...current,
+        ...freshTimer,
         status: "running",
-        endTime: Date.now() + current.remainingTime * 1000,
+        endTime: Date.now() + freshTimer.remainingTime * 1000,
         pausedAt: null,
       };
     });
-  }, []);
+  }, [preferences]);
 
+  // Pause the timer.
   const pause = useCallback(() => {
     setTimer((current) => {
       if (current.status !== "running" || current.endTime === null) {
@@ -138,6 +150,7 @@ export function usePomodoroTimer({ preferences }: UsePomodoroTimerProps) {
     });
   }, []);
 
+  // Resume the timer.
   const resume = useCallback(() => {
     setTimer((current) => {
       if (current.status !== "paused") {
@@ -153,6 +166,7 @@ export function usePomodoroTimer({ preferences }: UsePomodoroTimerProps) {
     });
   }, []);
 
+  // Stop the timer.
   const stop = useCallback(() => {
     setTimer((current) =>
       createTimerState(
@@ -163,6 +177,7 @@ export function usePomodoroTimer({ preferences }: UsePomodoroTimerProps) {
     );
   }, [preferences]);
 
+  // Reset the current session.
   const reset = useCallback(() => {
     setTimer((current) =>
       createTimerState(
@@ -173,15 +188,14 @@ export function usePomodoroTimer({ preferences }: UsePomodoroTimerProps) {
     );
   }, [preferences]);
 
+  // Manually select a session.
   const selectSession = useCallback(
     (sessionType: PomodoroSessionType) => {
       setTimer((current) => {
-        // Don't switch to the same session.
         if (current.sessionType === sessionType) {
           return current;
         }
 
-        // Don't silently discard an active session.
         if (current.status === "running" || current.status === "paused") {
           return current;
         }
@@ -196,6 +210,7 @@ export function usePomodoroTimer({ preferences }: UsePomodoroTimerProps) {
     [preferences],
   );
 
+  // Manually move to the next session.
   const nextSession = useCallback(() => {
     setTimer((current) => {
       if (current.status !== "completed") {
@@ -216,8 +231,21 @@ export function usePomodoroTimer({ preferences }: UsePomodoroTimerProps) {
     });
   }, [preferences]);
 
+  // Reflect updated preferences in idle timers without an effect.
+  const isIdle = timer.status === "idle" || timer.status === "stopped";
+
+  const currentDuration = getSessionDuration(timer.sessionType, preferences);
+
+  const displayedTimer = isIdle
+    ? {
+        ...timer,
+        duration: currentDuration,
+        remainingTime: currentDuration,
+      }
+    : timer;
+
   return {
-    timer,
+    timer: displayedTimer,
     start,
     pause,
     resume,

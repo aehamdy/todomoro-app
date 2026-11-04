@@ -1,7 +1,12 @@
 import type { ReactElement } from "react";
 import type { AuthUser } from "../features/auth/auth.types";
 
-export type SettingsTab = "account" | "general" | "appearance" | "about";
+export type SettingsTab =
+  | "account"
+  | "general"
+  | "appearance"
+  | "about"
+  | "pomodoro-timer";
 
 export interface AuthResponse {
   status: string;

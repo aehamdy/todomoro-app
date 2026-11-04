@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { getCurrentUser } from "./auth.api";
-import type { CurrentUserResponse } from "./auth.types";
+import { getCurrentUser } from "../auth.api";
+import type { CurrentUserResponse } from "../auth.types";
 
 export const AUTH_QUERY_KEY = ["auth", "user"] as const;
 

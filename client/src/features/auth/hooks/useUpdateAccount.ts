@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { updateAccount } from "./auth.api";
+import { updateAccount } from "../auth.api";
+import type { CurrentUserResponse } from "../auth.types";
 import { AUTH_QUERY_KEY } from "./useAuth";
-import type { CurrentUserResponse } from "./auth.types";
 
 export function useUpdateAccount() {
   const queryClient = useQueryClient();

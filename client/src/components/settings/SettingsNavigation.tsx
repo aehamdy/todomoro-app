@@ -1,8 +1,9 @@
 import { Box, Tab, Tabs, useMediaQuery, useTheme } from "@mui/material";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import PaletteIcon from "@mui/icons-material/Palette";
+import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
+import PaletteOutlinedIcon from "@mui/icons-material/PaletteOutlined";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import TuneRounded from "@mui/icons-material/TuneRounded";
+import TimerOutlinedIcon from "@mui/icons-material/TimerOutlined";
 import type { Dispatch, SetStateAction } from "react";
 import type { SettingsTab } from "../types";
 
@@ -18,7 +19,7 @@ const settingsTabs: {
 }[] = [
   {
     label: "Account",
-    icon: <AccountCircleIcon fontSize="small" />,
+    icon: <AccountCircleOutlinedIcon fontSize="small" />,
     value: "account",
   },
   {
@@ -26,10 +27,14 @@ const settingsTabs: {
     icon: <TuneRounded fontSize="small" />,
     value: "general",
   },
-
+  {
+    label: "Pomodoro Timer",
+    icon: <TimerOutlinedIcon fontSize="small" />,
+    value: "pomodoro-timer",
+  },
   {
     label: "Appearance",
-    icon: <PaletteIcon fontSize="small" />,
+    icon: <PaletteOutlinedIcon fontSize="small" />,
     value: "appearance",
   },
   {
