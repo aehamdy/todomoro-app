@@ -17,6 +17,7 @@ const themeOptions = [
 ];
 
 const pomodoroAlarmSoundOptions = [
+  "none",
   "default",
   "bell",
   "digital",

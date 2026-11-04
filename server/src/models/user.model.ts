@@ -16,7 +16,7 @@ const themeValues = [
   "desert-oasis",
 ];
 
-const pomodoroAlarmSounds = ["default", "bell", "digital", "gentle"];
+const pomodoroAlarmSounds = ["none", "default", "bell", "digital", "gentle"];
 
 const pomodoroBackgroundSounds = [
   "none",
