@@ -146,14 +146,14 @@ export const getMe: RequestHandler = async (req, res, next) => {
               breakAlarmSound:
                 user.preferences?.pomodoro?.breakAlarmSound ?? "default",
 
-              whiteNoiseVolume:
-                user.preferences?.pomodoro?.whiteNoiseVolume ?? 30,
+              backgroundSoundVolume:
+                user.preferences?.pomodoro?.backgroundSoundVolume ?? 30,
 
-              selectedWhiteNoise:
-                user.preferences?.pomodoro?.selectedWhiteNoise ?? "none",
+              selectedBackgroundSound:
+                user.preferences?.pomodoro?.selectedBackgroundSound ?? "none",
 
-              autoPlayWhiteNoise:
-                user.preferences?.pomodoro?.autoPlayWhiteNoise ?? false,
+              autoPlayBackgroundSound:
+                user.preferences?.pomodoro?.autoPlayBackgroundSound ?? false,
 
               widgetTheme:
                 user.preferences?.pomodoro?.widgetTheme ?? "midnight",

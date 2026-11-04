@@ -24,10 +24,14 @@ const pomodoroBackgroundSounds = [
   "pink-noise",
   "brown-noise",
   "rain",
-  "ocean",
-  "forest",
   "fireplace",
   "cafe",
+  "library",
+  "classroom",
+  "ocean-shore",
+  "bonfire",
+  "forest",
+  "wind",
 ];
 
 const pomodoroWidgetThemes = [
@@ -96,13 +100,13 @@ const userSchema = new Schema(
           default: "default",
         },
 
-        whiteNoiseVolume: { type: Number, min: 0, max: 100, default: 30 },
-        selectedWhiteNoise: {
+        backgroundSoundVolume: { type: Number, min: 0, max: 100, default: 30 },
+        selectedBackgroundSound: {
           type: String,
           enum: pomodoroBackgroundSounds,
           default: "none",
         },
-        autoPlayWhiteNoise: { type: Boolean, default: false },
+        autoPlayBackgroundSound: { type: Boolean, default: false },
 
         widgetTheme: {
           type: String,
