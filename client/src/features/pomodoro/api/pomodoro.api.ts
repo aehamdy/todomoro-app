@@ -1,9 +1,9 @@
-import api from "../../lib/api";
-import { POMODORO_ROUTES } from "./pomodoro.routes";
+import api from "../../../lib/api";
+import { POMODORO_ROUTES } from "../pomodoro.routes";
 import type {
   CreatePomodoroSessionRequest,
   CreatePomodoroSessionResponse,
-} from "./pomodoro.types";
+} from "../types/pomodoro.types";
 
 export async function createPomodoroSession(
   sessionData: CreatePomodoroSessionRequest,

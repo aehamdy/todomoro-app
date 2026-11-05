@@ -18,7 +18,7 @@ import { playAlarm } from "../utils/alarmSound.utils";
 import type {
   PomodoroAlarmSound,
   PomodoroPreferences,
-} from "../pomodoro.types";
+} from "../types/pomodoro.types";
 
 type AlarmPreferenceField =
   | "alarmVolume"
