@@ -4,7 +4,11 @@ import {
   getPomodoroStatsDateKeys,
   getPomodoroStatsDateRange,
 } from "../utils/pomodoro-stats.utils.js";
-import type { GetPomodoroStatsQuery } from "../types/pomodoro-stats.types.js";
+import type {
+  GetPomodoroStatsQuery,
+  PomodoroProjectStat,
+  PomodoroTaskStat,
+} from "../types/pomodoro-stats.types.js";
 import { Types } from "mongoose";
 
 interface DailyPomodoroStat {
@@ -21,6 +25,8 @@ interface PomodoroStatsAggregationResult {
     completedLongBreakSessions: number;
   }[];
   dailyStats: DailyPomodoroStat[];
+  taskStats: PomodoroTaskStat[];
+  projectStats: PomodoroProjectStat[];
 }
 
 export const getPomodoroStats: RequestHandler = async (req, res, next) => {
@@ -130,6 +136,102 @@ export const getPomodoroStats: RequestHandler = async (req, res, next) => {
                 },
               },
             ],
+            taskStats: [
+              {
+                $match: {
+                  sessionType: "focus",
+                },
+              },
+              {
+                $group: {
+                  _id: "$task",
+                  focusTimeSeconds: {
+                    $sum: "$actualDurationSeconds",
+                  },
+                  completedSessions: {
+                    $sum: 1,
+                  },
+                },
+              },
+              {
+                $lookup: {
+                  from: "tasks",
+                  localField: "_id",
+                  foreignField: "_id",
+                  as: "task",
+                },
+              },
+              {
+                $unwind: {
+                  path: "$task",
+                  preserveNullAndEmptyArrays: true,
+                },
+              },
+              {
+                $project: {
+                  _id: 0,
+                  taskId: "$_id",
+                  taskTitle: {
+                    $ifNull: ["$task.title", "Unassigned"],
+                  },
+                  focusTimeSeconds: 1,
+                  completedSessions: 1,
+                },
+              },
+              {
+                $sort: {
+                  focusTimeSeconds: -1,
+                },
+              },
+            ],
+            projectStats: [
+              {
+                $match: {
+                  sessionType: "focus",
+                },
+              },
+              {
+                $group: {
+                  _id: "$project",
+                  focusTimeSeconds: {
+                    $sum: "$actualDurationSeconds",
+                  },
+                  completedSessions: {
+                    $sum: 1,
+                  },
+                },
+              },
+              {
+                $lookup: {
+                  from: "projects",
+                  localField: "_id",
+                  foreignField: "_id",
+                  as: "project",
+                },
+              },
+              {
+                $unwind: {
+                  path: "$project",
+                  preserveNullAndEmptyArrays: true,
+                },
+              },
+              {
+                $project: {
+                  _id: 0,
+                  projectId: "$_id",
+                  projectTitle: {
+                    $ifNull: ["$project.title", "Unassigned"],
+                  },
+                  focusTimeSeconds: 1,
+                  completedSessions: 1,
+                },
+              },
+              {
+                $sort: {
+                  focusTimeSeconds: -1,
+                },
+              },
+            ],
           },
         },
       ]);
@@ -161,6 +263,8 @@ export const getPomodoroStats: RequestHandler = async (req, res, next) => {
           completedLongBreakSessions: 0,
         },
         dailyStats,
+        taskStats: result?.taskStats ?? [],
+        projectStats: result?.projectStats ?? [],
       },
     });
   } catch (error) {
