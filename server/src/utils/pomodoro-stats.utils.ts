@@ -179,3 +179,30 @@ export function getPomodoroStatsDateRange(
     ),
   };
 }
+
+export function getPomodoroStatsDateKeys(
+  startDate: Date,
+  endDate: Date,
+  timezone: string,
+): string[] {
+  let currentDate = getDatePartsInTimezone(startDate, timezone);
+
+  const lastDate = getDatePartsInTimezone(endDate, timezone);
+
+  const dates: string[] = [];
+
+  while (
+    Date.UTC(currentDate.year, currentDate.month - 1, currentDate.day) <
+    Date.UTC(lastDate.year, lastDate.month - 1, lastDate.day)
+  ) {
+    const year = currentDate.year;
+    const month = String(currentDate.month).padStart(2, "0");
+    const day = String(currentDate.day).padStart(2, "0");
+
+    dates.push(`${year}-${month}-${day}`);
+
+    currentDate = addCalendarDays(currentDate, 1);
+  }
+
+  return dates;
+}

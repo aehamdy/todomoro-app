@@ -1,8 +1,27 @@
 import { RequestHandler } from "express";
 import PomodoroSession from "../models/pomodoro-session.model.js";
-import { getPomodoroStatsDateRange } from "../utils/pomodoro-stats.utils.js";
+import {
+  getPomodoroStatsDateKeys,
+  getPomodoroStatsDateRange,
+} from "../utils/pomodoro-stats.utils.js";
 import type { GetPomodoroStatsQuery } from "../types/pomodoro-stats.types.js";
 import { Types } from "mongoose";
+
+interface DailyPomodoroStat {
+  date: string;
+  focusTimeSeconds: number;
+  completedSessions: number;
+}
+
+interface PomodoroStatsAggregationResult {
+  summary: {
+    totalFocusTimeSeconds: number;
+    completedFocusSessions: number;
+    completedShortBreakSessions: number;
+    completedLongBreakSessions: number;
+  }[];
+  dailyStats: DailyPomodoroStat[];
+}
 
 export const getPomodoroStats: RequestHandler = async (req, res, next) => {
   try {
@@ -21,106 +40,116 @@ export const getPomodoroStats: RequestHandler = async (req, res, next) => {
 
     const { startDate, endDate } = getPomodoroStatsDateRange(period, timezone);
 
-    const matchingSessions = await PomodoroSession.countDocuments({
-      user: new Types.ObjectId(userId),
-      completedAt: {
-        $gte: startDate,
-        $lt: endDate,
-      },
-    });
-
-    const [result] = await PomodoroSession.aggregate([
-      {
-        $match: {
-          user: new Types.ObjectId(userId),
-          completedAt: {
-            $gte: startDate,
-            $lt: endDate,
+    const [result] =
+      await PomodoroSession.aggregate<PomodoroStatsAggregationResult>([
+        {
+          $match: {
+            user: new Types.ObjectId(userId),
+            completedAt: {
+              $gte: startDate,
+              $lt: endDate,
+            },
           },
         },
-      },
-      {
-        $facet: {
-          summary: [
-            {
-              $group: {
-                _id: null,
-                totalFocusTimeSeconds: {
-                  $sum: {
-                    $cond: [
-                      { $eq: ["$sessionType", "focus"] },
-                      "$actualDurationSeconds",
-                      0,
-                    ],
+        {
+          $facet: {
+            summary: [
+              {
+                $group: {
+                  _id: null,
+                  totalFocusTimeSeconds: {
+                    $sum: {
+                      $cond: [
+                        { $eq: ["$sessionType", "focus"] },
+                        "$actualDurationSeconds",
+                        0,
+                      ],
+                    },
+                  },
+                  completedFocusSessions: {
+                    $sum: {
+                      $cond: [{ $eq: ["$sessionType", "focus"] }, 1, 0],
+                    },
+                  },
+                  completedShortBreakSessions: {
+                    $sum: {
+                      $cond: [{ $eq: ["$sessionType", "shortBreak"] }, 1, 0],
+                    },
+                  },
+                  completedLongBreakSessions: {
+                    $sum: {
+                      $cond: [{ $eq: ["$sessionType", "longBreak"] }, 1, 0],
+                    },
                   },
                 },
-                completedFocusSessions: {
-                  $sum: {
-                    $cond: [{ $eq: ["$sessionType", "focus"] }, 1, 0],
+              },
+              {
+                $project: {
+                  _id: 0,
+                  totalFocusTimeSeconds: 1,
+                  completedFocusSessions: 1,
+                  completedShortBreakSessions: 1,
+                  completedLongBreakSessions: 1,
+                },
+              },
+            ],
+            dailyStats: [
+              {
+                $match: {
+                  sessionType: "focus",
+                },
+              },
+              {
+                $group: {
+                  _id: {
+                    $dateToString: {
+                      format: "%Y-%m-%d",
+                      date: "$completedAt",
+                      timezone,
+                    },
+                  },
+                  focusTimeSeconds: {
+                    $sum: "$actualDurationSeconds",
+                  },
+                  completedSessions: {
+                    $sum: 1,
                   },
                 },
-                completedShortBreakSessions: {
-                  $sum: {
-                    $cond: [{ $eq: ["$sessionType", "shortBreak"] }, 1, 0],
-                  },
-                },
-                completedLongBreakSessions: {
-                  $sum: {
-                    $cond: [{ $eq: ["$sessionType", "longBreak"] }, 1, 0],
-                  },
+              },
+              {
+                $sort: {
+                  _id: 1,
                 },
               },
-            },
-            {
-              $project: {
-                _id: 0,
-                totalFocusTimeSeconds: 1,
-                completedFocusSessions: 1,
-                completedShortBreakSessions: 1,
-                completedLongBreakSessions: 1,
-              },
-            },
-          ],
-          dailyStats: [
-            {
-              $match: {
-                sessionType: "focus",
-              },
-            },
-            {
-              $group: {
-                _id: {
-                  $dateToString: {
-                    format: "%Y-%m-%d",
-                    date: "$completedAt",
-                    timezone,
-                  },
-                },
-                focusTimeSeconds: {
-                  $sum: "$actualDurationSeconds",
-                },
-                completedSessions: {
-                  $sum: 1,
+              {
+                $project: {
+                  _id: 0,
+                  date: "$_id",
+                  focusTimeSeconds: 1,
+                  completedSessions: 1,
                 },
               },
-            },
-            {
-              $sort: {
-                _id: 1,
-              },
-            },
-            {
-              $project: {
-                _id: 0,
-                date: "$_id",
-                focusTimeSeconds: 1,
-                completedSessions: 1,
-              },
-            },
-          ],
+            ],
+          },
         },
-      },
-    ]);
+      ]);
+
+    const dailyStatsMap = new Map(
+      (result?.dailyStats ?? []).map((item) => [item.date, item]),
+    );
+
+    const dailyStats = getPomodoroStatsDateKeys(
+      startDate,
+      endDate,
+      timezone,
+    ).map(
+      (date) =>
+        dailyStatsMap.get(date) ?? {
+          date,
+          focusTimeSeconds: 0,
+          completedSessions: 0,
+        },
+    );
 
     res.status(200).json({
       status: "success",
@@ -131,7 +160,7 @@ export const getPomodoroStats: RequestHandler = async (req, res, next) => {
           completedShortBreakSessions: 0,
           completedLongBreakSessions: 0,
         },
-        dailyStats: result?.dailyStats ?? [],
+        dailyStats,
       },
     });
   } catch (error) {
