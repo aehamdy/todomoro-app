@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type {
+  CompletedPomodoroSession,
   PomodoroPreferences,
+  PomodoroSessionContext,
   PomodoroSessionType,
   PomodoroTimerState,
 } from "../pomodoro.types";
@@ -14,14 +16,123 @@ import { playAlarm, unlockAlarmAudio } from "../utils/alarmSound.utils";
 
 interface UsePomodoroTimerProps {
   preferences: PomodoroPreferences;
+  onSessionComplete: (session: CompletedPomodoroSession) => void;
 }
 
-export function usePomodoroTimer({ preferences }: UsePomodoroTimerProps) {
+interface ActiveSessionTracking {
+  sessionId: string;
+  sessionType: PomodoroSessionType;
+  plannedDurationSeconds: number;
+  startedAt: Date;
+  runningStartedAt: number;
+  accumulatedRunningTime: number;
+  context: PomodoroSessionContext;
+}
+
+export function usePomodoroTimer({
+  preferences,
+  onSessionComplete,
+}: UsePomodoroTimerProps) {
   const [timer, setTimer] = useState<PomodoroTimerState>(() =>
     createTimerState("focus", preferences),
   );
 
   const completionHandledRef = useRef(false);
+
+  const activeSessionRef = useRef<ActiveSessionTracking | null>(null);
+
+  // Handle the completion of a Pomodoro session.
+  const handleSessionCompletion = useCallback(
+    (sessionType: PomodoroSessionType, focusSessionsInCycle: number) => {
+      const activeSession = activeSessionRef.current;
+
+      if (!activeSession) {
+        console.error("Completed Pomodoro session has no tracking data.");
+        return;
+      }
+
+      const completedAt = Date.now();
+
+      const actualDurationMs =
+        activeSession.accumulatedRunningTime +
+        (activeSession.runningStartedAt > 0
+          ? completedAt - activeSession.runningStartedAt
+          : 0);
+
+      const completedSession: CompletedPomodoroSession = {
+        sessionId: activeSession.sessionId,
+        sessionType: activeSession.sessionType,
+        plannedDurationSeconds: activeSession.plannedDurationSeconds,
+        actualDurationSeconds: Math.max(1, Math.round(actualDurationMs / 1000)),
+        startedAt: activeSession.startedAt.toISOString(),
+        completedAt: new Date(completedAt).toISOString(),
+        context: activeSession.context,
+      };
+
+      // Notify the container that the session has completed.
+      onSessionComplete(completedSession);
+
+      // Play the completion alarm.
+      const sound =
+        sessionType === "focus"
+          ? preferences.focusAlarmSound
+          : preferences.breakAlarmSound;
+
+      void playAlarm({
+        sound,
+        volume: preferences.alarmVolume,
+      }).catch((error: unknown) => {
+        console.error("Failed to play Pomodoro alarm:", error);
+      });
+
+      // Determine the next session.
+      const next = getNextSession(
+        sessionType,
+        focusSessionsInCycle,
+        preferences,
+      );
+
+      const shouldAutoStart =
+        next.sessionType === "focus"
+          ? preferences.autoStartNextPomodoro
+          : preferences.autoStartBreak;
+
+      // Discard the completed session's tracking data.
+      activeSessionRef.current = null;
+
+      const nextTimer = createTimerState(
+        next.sessionType,
+        preferences,
+        next.focusSessionsInCycle,
+      );
+
+      if (shouldAutoStart) {
+        const now = Date.now();
+
+        // Initialize tracking for the automatically started session.
+        activeSessionRef.current = {
+          sessionId: crypto.randomUUID(),
+          sessionType: next.sessionType,
+          plannedDurationSeconds: nextTimer.duration,
+          startedAt: new Date(now),
+          runningStartedAt: now,
+          accumulatedRunningTime: 0,
+          context: activeSession.context,
+        };
+
+        setTimer({
+          ...nextTimer,
+          status: "running",
+          endTime: now + nextTimer.duration * 1000,
+        });
+
+        return;
+      }
+
+      setTimer(nextTimer);
+    },
+    [onSessionComplete, preferences],
+  );
 
   // Keep the displayed timer synchronized with its end timestamp.
   useEffect(() => {
@@ -29,17 +140,20 @@ export function usePomodoroTimer({ preferences }: UsePomodoroTimerProps) {
       return;
     }
 
+    const endTime = timer.endTime;
+
+    // Allow the new running session to complete.
+    completionHandledRef.current = false;
+
     const updateRemainingTime = () => {
-      const remainingTime = getRemainingTime(timer.endTime!);
+      const remainingTime = getRemainingTime(endTime);
 
       if (remainingTime === 0) {
-        setTimer((current) => ({
-          ...current,
-          status: "completed",
-          remainingTime: 0,
-          endTime: null,
-          pausedAt: null,
-        }));
+        if (completionHandledRef.current) return;
+
+        completionHandledRef.current = true;
+
+        handleSessionCompletion(timer.sessionType, timer.focusSessionsInCycle);
 
         return;
       }
@@ -50,107 +164,72 @@ export function usePomodoroTimer({ preferences }: UsePomodoroTimerProps) {
       }));
     };
 
-    updateRemainingTime();
-
     const intervalId = window.setInterval(updateRemainingTime, 1000);
 
     return () => window.clearInterval(intervalId);
-  }, [timer.status, timer.endTime]);
-
-  // Handle completed sessions.
-  useEffect(() => {
-    if (timer.status !== "completed") {
-      completionHandledRef.current = false;
-      return;
-    }
-
-    if (completionHandledRef.current) {
-      return;
-    }
-
-    completionHandledRef.current = true;
-
-    // Play the alarm for the session that just finished.
-    const sound =
-      timer.sessionType === "focus"
-        ? preferences.focusAlarmSound
-        : preferences.breakAlarmSound;
-
-    void playAlarm({
-      sound,
-      volume: preferences.alarmVolume,
-    }).catch((error: unknown) => {
-      console.error("Failed to play Pomodoro alarm:", error);
-    });
-
-    // Determine and prepare the next session.
-    const next = getNextSession(
-      timer.sessionType,
-      timer.focusSessionsInCycle,
-      preferences,
-    );
-
-    const shouldAutoStart =
-      next.sessionType === "focus"
-        ? preferences.autoStartNextPomodoro
-        : preferences.autoStartBreak;
-
-    setTimer(() => {
-      const nextTimer = createTimerState(
-        next.sessionType,
-        preferences,
-        next.focusSessionsInCycle,
-      );
-
-      if (!shouldAutoStart) {
-        return nextTimer;
-      }
-
-      return {
-        ...nextTimer,
-        status: "running",
-        endTime: Date.now() + nextTimer.duration * 1000,
-      };
-    });
   }, [
     timer.status,
+    timer.endTime,
     timer.sessionType,
     timer.focusSessionsInCycle,
-    preferences,
+    handleSessionCompletion,
   ]);
 
-  // Start the timer.
-  const start = useCallback(() => {
-    void unlockAlarmAudio().catch((error: unknown) => {
-      console.error("Failed to initialize alarm audio:", error);
-    });
-
-    setTimer((current) => {
+  // Start the timer and initialize session tracking.
+  const start = useCallback(
+    (context: PomodoroSessionContext) => {
       if (
-        current.status === "running" ||
-        current.status === "paused" ||
-        current.status === "completed"
+        timer.status === "running" ||
+        timer.status === "paused" ||
+        timer.status === "completed"
       ) {
-        return current;
+        return;
       }
 
+      void unlockAlarmAudio().catch((error: unknown) => {
+        console.error("Failed to initialize alarm audio:", error);
+      });
+
+      const now = Date.now();
+
       const freshTimer = createTimerState(
-        current.sessionType,
+        timer.sessionType,
         preferences,
-        current.focusSessionsInCycle,
+        timer.focusSessionsInCycle,
       );
 
-      return {
+      activeSessionRef.current = {
+        sessionId: crypto.randomUUID(),
+        sessionType: timer.sessionType,
+        plannedDurationSeconds: freshTimer.duration,
+        startedAt: new Date(now),
+        runningStartedAt: now,
+        accumulatedRunningTime: 0,
+        context,
+      };
+
+      setTimer({
         ...freshTimer,
         status: "running",
-        endTime: Date.now() + freshTimer.remainingTime * 1000,
+        endTime: now + freshTimer.remainingTime * 1000,
         pausedAt: null,
-      };
-    });
-  }, [preferences]);
+      });
+    },
+    [timer, preferences],
+  );
 
-  // Pause the timer.
+  // Pause the timer and accumulate the current running period.
   const pause = useCallback(() => {
+    const now = Date.now();
+    const activeSession = activeSessionRef.current;
+
+    if (activeSession && activeSession.runningStartedAt > 0) {
+      activeSession.accumulatedRunningTime +=
+        now - activeSession.runningStartedAt;
+
+      activeSession.runningStartedAt = 0;
+    }
+
     setTimer((current) => {
       if (current.status !== "running" || current.endTime === null) {
         return current;
@@ -163,16 +242,23 @@ export function usePomodoroTimer({ preferences }: UsePomodoroTimerProps) {
         status: "paused",
         remainingTime,
         endTime: null,
-        pausedAt: Date.now(),
+        pausedAt: now,
       };
     });
   }, []);
 
-  // Resume the timer.
+  // Resume the timer and start a new running period.
   const resume = useCallback(() => {
     void unlockAlarmAudio().catch((error: unknown) => {
       console.error("Failed to initialize alarm audio:", error);
     });
+
+    const now = Date.now();
+    const activeSession = activeSessionRef.current;
+
+    if (activeSession) {
+      activeSession.runningStartedAt = now;
+    }
 
     setTimer((current) => {
       if (current.status !== "paused") {
@@ -182,14 +268,16 @@ export function usePomodoroTimer({ preferences }: UsePomodoroTimerProps) {
       return {
         ...current,
         status: "running",
-        endTime: Date.now() + current.remainingTime * 1000,
+        endTime: now + current.remainingTime * 1000,
         pausedAt: null,
       };
     });
   }, []);
 
-  // Stop the timer.
+  // Stop the timer and discard the unfinished session.
   const stop = useCallback(() => {
+    activeSessionRef.current = null;
+
     setTimer((current) =>
       createTimerState(
         current.sessionType,
@@ -199,8 +287,10 @@ export function usePomodoroTimer({ preferences }: UsePomodoroTimerProps) {
     );
   }, [preferences]);
 
-  // Reset the current session.
+  // Reset the current session and discard its tracking data.
   const reset = useCallback(() => {
+    activeSessionRef.current = null;
+
     setTimer((current) =>
       createTimerState(
         current.sessionType,

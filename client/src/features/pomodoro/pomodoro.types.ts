@@ -71,7 +71,57 @@ export interface PomodoroTimerState {
   focusSessionsInCycle: number;
 }
 
+export interface PomodoroSessionContext {
+  taskId: string | null;
+  projectId: string | null;
+}
+
+export interface CompletedPomodoroSession {
+  sessionId: string;
+  sessionType: PomodoroSessionType;
+  plannedDurationSeconds: number;
+  actualDurationSeconds: number;
+  startedAt: string;
+  completedAt: string;
+  context: PomodoroSessionContext;
+}
+
 export type PomodoroSettingsProps = {
   user: AuthUser;
   updatePreferences: ReturnType<typeof useUpdateUserPreferences>;
 };
+
+export interface CreatePomodoroSessionRequest {
+  sessionId: string;
+  sessionType: PomodoroSessionType;
+  plannedDurationSeconds: number;
+  actualDurationSeconds: number;
+  startedAt: string;
+  completedAt: string;
+  task: string | null;
+  project: string | null;
+  timezone: string;
+}
+
+export interface PomodoroSession {
+  _id: string;
+  sessionId: string;
+  sessionType: PomodoroSessionType;
+  plannedDurationSeconds: number;
+  actualDurationSeconds: number;
+  startedAt: string;
+  completedAt: string;
+  task: string | null;
+  project: string | null;
+  timezone: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreatePomodoroSessionResponse {
+  status: "success";
+  data: {
+    session: PomodoroSession;
+    alreadyRecorded: boolean;
+  };
+}
