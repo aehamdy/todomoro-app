@@ -9,6 +9,7 @@ import TaskItem from "../../tasks/components/TaskItem";
 import TaskScheduleTabs from "./TaskScheduleTabs";
 import UpcomingTaskItem from "./UpcomingTaskItem";
 import EmptyTaskList from "../../tasks/components/EmptyTaskList";
+import { getActivePomodoroTask } from "../../tasks/utils/getActivePomodoroTask";
 
 type TaskSchedulePanelProps = {
   overdueTasks: Task[];
@@ -25,7 +26,8 @@ function TaskSchedulePanel({
     "overdue" | "upcoming" | "completed"
   >("overdue");
 
-  const { setSelectedTask } = useOutletContext<DashboardOutletContext>();
+  const { setSelectedTask, setActivePomodoroTask } =
+    useOutletContext<DashboardOutletContext>();
 
   const selectedTab = {
     overdue: overdueTasks,
@@ -35,6 +37,9 @@ function TaskSchedulePanel({
 
   const displayedTasks = selectedTab[activeTab];
 
+  const handlePlayTask = (task: Task) => {
+    setActivePomodoroTask(getActivePomodoroTask(task));
+  };
   return (
     <Paper
       elevation={0}
@@ -98,6 +103,7 @@ function TaskSchedulePanel({
                       task={task}
                       onClick={() => setSelectedTask(task)}
                       displayProject
+                      onPlay={handlePlayTask}
                     />
                   ))
                 : displayedTasks?.map((task) => (

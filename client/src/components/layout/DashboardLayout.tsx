@@ -12,7 +12,7 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 
 import AppHeader from "./AppHeader";
 import AppSidebar from "./AppSidebar";
-import type { Task } from "../../features/tasks/task.types";
+import type { ActivePomodoroTask, Task } from "../../features/tasks/task.types";
 import TaskDetailsSidebar from "../../features/tasks/components/TaskDetailsSidebar";
 
 const HEADER_HEIGHT = 65;
@@ -21,10 +21,14 @@ const SIDEBAR_RAIL_WIDTH = 36;
 export type DashboardOutletContext = {
   selectedTask: Task | null;
   setSelectedTask: (task: Task | null) => void;
+  activePomodoroTask: ActivePomodoroTask | null;
+  setActivePomodoroTask: (task: ActivePomodoroTask | null) => void;
 };
 
 function DashboardLayout() {
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
+  const [activePomodoroTask, setActivePomodoroTask] =
+    useState<ActivePomodoroTask | null>(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const theme = useTheme();
@@ -94,6 +98,8 @@ function DashboardLayout() {
             mobileOpen={isSidebarOpen}
             onMobileClose={() => setIsSidebarOpen(false)}
             collapsed={!isSidebarOpen && !isMobile && !isDesktop}
+            activePomodoroTask={activePomodoroTask}
+            onClearActivePomodoroTask={() => setActivePomodoroTask(null)}
           />
 
           {/* Tablet sidebar toggle */}
@@ -143,6 +149,8 @@ function DashboardLayout() {
             context={{
               selectedTask,
               setSelectedTask,
+              activePomodoroTask,
+              setActivePomodoroTask,
             }}
           />
         </Box>
@@ -201,6 +209,8 @@ function DashboardLayout() {
               mobileOpen={isSidebarOpen}
               onMobileClose={() => setIsSidebarOpen(false)}
               collapsed={false}
+              activePomodoroTask={activePomodoroTask}
+              onClearActivePomodoroTask={() => setActivePomodoroTask(null)}
             />
           </Drawer>
 

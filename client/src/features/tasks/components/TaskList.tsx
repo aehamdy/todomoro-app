@@ -15,6 +15,8 @@ import {
 } from "react";
 import EmptyTaskList from "./EmptyTaskList";
 import { useAuth } from "../../auth/hooks/useAuth";
+import type { Task } from "../task.types";
+import { getActivePomodoroTask } from "../utils/getActivePomodoroTask";
 
 type TaskListProps = {
   projectId: string | null;
@@ -27,7 +29,8 @@ function TaskList({
   onTaskCountChange,
   setIsLoadingData,
 }: TaskListProps) {
-  const { setSelectedTask } = useOutletContext<DashboardOutletContext>();
+  const { setSelectedTask, setActivePomodoroTask } =
+    useOutletContext<DashboardOutletContext>();
   const [isShowCompleted, setIsShowCompleted] = useState<boolean>(false);
 
   const { tasks, isLoading, error, isError, refetch } =
@@ -47,6 +50,26 @@ function TaskList({
 
     return [...inCompleteTasks].reverse();
   }, [inCompleteTasks, addNewTasksToTop]);
+
+  // const handlePlayTask = useCallback(
+  //   (task: Task) => {
+  //     const project =
+  //       task.project && typeof task.project !== "string" ? task.project : null;
+
+  //     setActivePomodoroTask({
+  //       taskId: task._id,
+  //       title: task.title,
+  //       projectId:
+  //         project?._id ??
+  //         (typeof task.project === "string" ? task.project : null),
+  //       projectTitle: project?.title ?? null,
+  //     });
+  //   },
+  //   [setActivePomodoroTask],
+  // );
+  const handlePlayTask = (task: Task) => {
+    setActivePomodoroTask(getActivePomodoroTask(task));
+  };
 
   useEffect(() => {
     if (!isLoading && !isError) {
@@ -111,6 +134,7 @@ function TaskList({
                 key={task._id}
                 task={task}
                 onClick={() => setSelectedTask(task)}
+                onPlay={handlePlayTask}
               />
             ))}
           </List>

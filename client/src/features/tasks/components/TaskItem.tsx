@@ -2,6 +2,7 @@ import type { Task } from "../task.types";
 import {
   Alert,
   Box,
+  IconButton,
   ListItem,
   ListItemText,
   Snackbar,
@@ -14,6 +15,7 @@ import { useToggleTask } from "../hooks/useToggleTask";
 import { useState } from "react";
 import TaskCheckbox from "./TaskCheckbox";
 import DescriptionOutlined from "@mui/icons-material/DescriptionOutlined";
+import PlayCircleIcon from "@mui/icons-material/PlayCircle";
 import FormatListBulletedRounded from "@mui/icons-material/FormatListBulletedRounded";
 import { playTaskCompletionSound } from "../utils/playTaskCompletionSound";
 import { useAuth } from "../../auth/hooks/useAuth";
@@ -23,9 +25,15 @@ type TaskItemProps = {
   task: Task;
   onClick: () => void;
   displayProject?: boolean;
+  onPlay?: (task: Task) => void;
 };
 
-function TaskItem({ task, onClick, displayProject = false }: TaskItemProps) {
+function TaskItem({
+  task,
+  onClick,
+  displayProject = false,
+  onPlay,
+}: TaskItemProps) {
   const { user } = useAuth();
   const { toggleTask, isToggling, error, isError } = useToggleTask();
   const [showError, setShowError] = useState(false);
@@ -52,7 +60,6 @@ function TaskItem({ task, onClick, displayProject = false }: TaskItemProps) {
   const dueDate = task.dueDate ? formatDateTime(task.dueDate) : "No due date";
 
   const project =
-    // task.project && typeof task.project !== "string" ? task.project : null;
     task.project && typeof task.project !== "string" ? task.project : null;
 
   return (
@@ -90,59 +97,82 @@ function TaskItem({ task, onClick, displayProject = false }: TaskItemProps) {
           sx={{
             my: "auto",
             py: 1,
-            px: 2,
+            paddingInlineStart: task.isCompleted ? 2 : 0,
             borderInlineStart: "3px solid",
             borderColor: "background.paper",
           }}
           primary={
-            <Stack>
-              <Stack
-                sx={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
-                <Typography
+            <Stack sx={{ flexDirection: "row", gap: 1, paddingInlineEnd: 2 }}>
+              {!task.isCompleted && (
+                <IconButton
+                  aria-label="Play task"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onPlay?.(task);
+                  }}
                   sx={{
-                    fontWeight: 600,
-                    textDecoration: task.isCompleted ? "line-through" : "none",
-                    color: task.isCompleted ? "text.secondary" : "text.primary",
+                    p: 0.5,
+                    color: "primary.main",
+                    borderReadius: 0,
                   }}
                 >
-                  {task.title}
-                </Typography>
+                  <PlayCircleIcon sx={{ color: "inherit" }} />
+                </IconButton>
+              )}
 
-                {(includesNote || includesSubtasks) && (
-                  <Box
+              <Stack sx={{ flex: 1 }}>
+                <Stack
+                  sx={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <Typography
                     sx={{
-                      display: "flex",
-                      flexDirection: "row",
-                      alignItems: "center",
-                      gap: 1,
-                      color: "text.secondary",
+                      fontWeight: 600,
+                      textDecoration: task.isCompleted
+                        ? "line-through"
+                        : "none",
+                      color: task.isCompleted
+                        ? "text.secondary"
+                        : "text.primary",
                     }}
                   >
-                    {includesNote && <DescriptionOutlined fontSize="small" />}
-                    {includesSubtasks && (
-                      <FormatListBulletedRounded fontSize="small" />
-                    )}
-                  </Box>
-                )}
+                    {task.title}
+                  </Typography>
+
+                  {(includesNote || includesSubtasks) && (
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "row",
+                        alignItems: "center",
+                        gap: 1,
+                        color: "text.secondary",
+                      }}
+                    >
+                      {includesNote && <DescriptionOutlined fontSize="small" />}
+                      {includesSubtasks && (
+                        <FormatListBulletedRounded fontSize="small" />
+                      )}
+                    </Box>
+                  )}
+                </Stack>
+
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                  {displayProject && (
+                    <TaskProjectInfo
+                      projectTitle={project?.title}
+                      projectColor={project?.color}
+                    />
+                  )}
+
+                  <Typography variant="caption" sx={{ color: grey[500] }}>
+                    {dueDate}
+                  </Typography>
+                </Box>
               </Stack>
-
-              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                {displayProject && (
-                  <TaskProjectInfo
-                    projectTitle={project?.title}
-                    projectColor={project?.color}
-                  />
-                )}
-
-                <Typography variant="caption" sx={{ color: grey[500] }}>
-                  {dueDate}
-                </Typography>
-              </Box>
             </Stack>
           }
         />

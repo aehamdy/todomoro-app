@@ -69,3 +69,10 @@ export type TaskProject = {
   title: string;
   color: string;
 };
+
+export interface ActivePomodoroTask {
+  taskId: string;
+  title: string;
+  projectId: string | null;
+  projectTitle: string | null;
+}
