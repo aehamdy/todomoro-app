@@ -9,6 +9,7 @@ import csrfRouter from "./routes/csrf.routes.js";
 import taskRouter from "./routes/task.routes.ts";
 import projectRouter from "./routes/project.routes.ts";
 import overviewRouter from "./routes/overview.routes.ts";
+import pomodoroSessionRouter from "./routes/pomodoro-session.routes.ts";
 
 const app = express();
 
@@ -53,6 +54,7 @@ app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/tasks", taskRouter);
 app.use("/api/v1/projects", projectRouter);
 app.use("/api/v1/overview", overviewRouter);
+app.use("/api/v1/pomodoro-sessions", pomodoroSessionRouter);
 
 app.use(errorHandler);
 
