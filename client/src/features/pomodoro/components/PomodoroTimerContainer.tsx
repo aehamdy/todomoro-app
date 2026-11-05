@@ -14,11 +14,16 @@ import PomodoroTimer from "./PomodoroTimer";
 import PomodoroControls from "./PomodoroControls";
 import PomodoroSessionSelector from "./PomodoroSessionSelector";
 import { usePomodoroTimer } from "../hooks/usePomodoroTimer";
-import type { PomodoroPreferences } from "../pomodoro.types";
+import type {
+  CompletedPomodoroSession,
+  CreatePomodoroSessionRequest,
+  PomodoroPreferences,
+} from "../pomodoro.types";
 import { useCallback, useEffect, useState } from "react";
 import { useBackgroundSound } from "../hooks/useBackgroundSound";
 import { usePomodoroDocumentTitle } from "../hooks/usePomodoroDocumentTitle";
 import type { ActivePomodoroTask } from "../../tasks/task.types";
+import { useCreatePomodoroSession } from "../hooks/useCreatePomodoroSession";
 
 interface PomodoroTimerContainerProps {
   preferences: PomodoroPreferences;
@@ -48,18 +53,7 @@ function PomodoroTimerContainer({
 
   const shouldBeExpanded = isExpanded || Boolean(activeTask);
 
-  const {
-    timer,
-    start,
-    pause,
-    resume,
-    stop,
-    reset,
-    selectSession,
-    nextSession,
-  } = usePomodoroTimer({ preferences });
-
-  usePomodoroDocumentTitle(timer);
+  const { mutate: createPomodoroSession } = useCreatePomodoroSession();
 
   const {
     play: playBackgroundSound,
@@ -70,15 +64,61 @@ function PomodoroTimerContainer({
     volume: preferences.backgroundSoundVolume,
   });
 
+  const handleSessionComplete = useCallback(
+    (session: CompletedPomodoroSession) => {
+      const sessionData: CreatePomodoroSessionRequest = {
+        sessionId: session.sessionId,
+        sessionType: session.sessionType,
+        plannedDurationSeconds: session.plannedDurationSeconds,
+        actualDurationSeconds: session.actualDurationSeconds,
+        startedAt: session.startedAt,
+        completedAt: session.completedAt,
+        task: session.context.taskId,
+        project: session.context.projectId,
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+      };
+
+      createPomodoroSession(sessionData);
+    },
+    [createPomodoroSession],
+  );
+
+  const {
+    timer,
+    start,
+    pause,
+    resume,
+    stop,
+    reset,
+    selectSession,
+    nextSession,
+  } = usePomodoroTimer({
+    preferences,
+    onSessionComplete: handleSessionComplete,
+  });
+
+  usePomodoroDocumentTitle(timer);
+
+  const isSessionLocked =
+    timer.status === "running" || timer.status === "paused";
+
   const handleStart = useCallback(() => {
-    start();
+    start({
+      taskId: activeTask?.taskId ?? null,
+      projectId: activeTask?.projectId ?? null,
+    });
 
     if (preferences.autoPlayBackgroundSound) {
       void playBackgroundSound().catch((error: unknown) => {
         console.error("Failed to play background sound:", error);
       });
     }
-  }, [start, preferences.autoPlayBackgroundSound, playBackgroundSound]);
+  }, [
+    start,
+    activeTask,
+    preferences.autoPlayBackgroundSound,
+    playBackgroundSound,
+  ]);
 
   const handleResume = useCallback(() => {
     resume();
@@ -89,9 +129,6 @@ function PomodoroTimerContainer({
       });
     }
   }, [resume, preferences.autoPlayBackgroundSound, playBackgroundSound]);
-
-  const isSessionLocked =
-    timer.status === "running" || timer.status === "paused";
 
   useEffect(() => {
     if (timer.status === "paused") {
