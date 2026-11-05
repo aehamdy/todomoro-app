@@ -1,10 +1,18 @@
-import { List, Paper } from "@mui/material";
+import { Box, Button, List, Paper } from "@mui/material";
 import { useFetchTasks } from "../hooks/useFetchTasks";
 import TaskItem from "./TaskItem";
 import ErrorAlert from "../../../components/ui/ErrorAlert";
+import ExpandLessRoundedIcon from "@mui/icons-material/ExpandLessRounded";
+import ExpandMoreRoundedIcon from "@mui/icons-material/ExpandMoreRounded";
 import { useOutletContext } from "react-router-dom";
 import type { DashboardOutletContext } from "../../../components/layout/DashboardLayout";
-import { useEffect, useMemo, type Dispatch, type SetStateAction } from "react";
+import {
+  useEffect,
+  useMemo,
+  useState,
+  type Dispatch,
+  type SetStateAction,
+} from "react";
 import EmptyTaskList from "./EmptyTaskList";
 import { useAuth } from "../../auth/hooks/useAuth";
 
@@ -20,22 +28,25 @@ function TaskList({
   setIsLoadingData,
 }: TaskListProps) {
   const { setSelectedTask } = useOutletContext<DashboardOutletContext>();
+  const [isShowCompleted, setIsShowCompleted] = useState<boolean>(false);
 
   const { tasks, isLoading, error, isError, refetch } =
     useFetchTasks(projectId);
   const { user } = useAuth();
 
-  const completedCount = tasks.filter((task) => task.isCompleted).length;
+  const completedTasks = tasks.filter((task) => task.isCompleted);
+  const inCompleteTasks = tasks.filter((task) => !task.isCompleted);
 
+  const completedCount = completedTasks.length;
   const incompleteCount = tasks.length - completedCount;
 
   const addNewTasksToTop = user?.preferences.addNewTasksToTop ?? false;
 
   const displayedTasks = useMemo(() => {
-    if (!addNewTasksToTop) return tasks;
+    if (!addNewTasksToTop) return inCompleteTasks;
 
-    return [...tasks].reverse();
-  }, [tasks, addNewTasksToTop]);
+    return [...inCompleteTasks].reverse();
+  }, [inCompleteTasks, addNewTasksToTop]);
 
   useEffect(() => {
     if (!isLoading && !isError) {
@@ -80,28 +91,86 @@ function TaskList({
           }
         />
       ) : (
-        <List
-          sx={{
-            maxHeight: "450px",
-            overflowY: "auto",
+        <>
+          <List
+            sx={{
+              maxHeight: "450px",
+              overflowY: "auto",
 
-            "&::-webkit-scrollbar": {
-              width: "8px",
-            },
-            "&::-webkit-scrollbar-thumb": {
-              backgroundColor: "divider",
-              borderRadius: "4px",
-            },
-          }}
-        >
-          {displayedTasks.map((task) => (
-            <TaskItem
-              key={task._id}
-              task={task}
-              onClick={() => setSelectedTask(task)}
-            />
-          ))}
-        </List>
+              "&::-webkit-scrollbar": {
+                width: "8px",
+              },
+              "&::-webkit-scrollbar-thumb": {
+                backgroundColor: "divider",
+                borderRadius: "4px",
+              },
+            }}
+          >
+            {displayedTasks.map((task) => (
+              <TaskItem
+                key={task._id}
+                task={task}
+                onClick={() => setSelectedTask(task)}
+              />
+            ))}
+          </List>
+
+          {completedCount >= 1 && (
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Button
+                onClick={() => setIsShowCompleted(!isShowCompleted)}
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 1,
+                }}
+              >
+                {isShowCompleted ? (
+                  <>
+                    Hide completed tasks
+                    <ExpandLessRoundedIcon />
+                  </>
+                ) : (
+                  <>
+                    Show completed tasks
+                    <ExpandMoreRoundedIcon />
+                  </>
+                )}
+              </Button>
+            </Box>
+          )}
+
+          {isShowCompleted && (
+            <List
+              sx={{
+                maxHeight: "450px",
+                overflowY: "auto",
+
+                "&::-webkit-scrollbar": {
+                  width: "8px",
+                },
+                "&::-webkit-scrollbar-thumb": {
+                  backgroundColor: "divider",
+                  borderRadius: "4px",
+                },
+              }}
+            >
+              {completedTasks.map((task) => (
+                <TaskItem
+                  key={task._id}
+                  task={task}
+                  onClick={() => setSelectedTask(task)}
+                />
+              ))}
+            </List>
+          )}
+        </>
       )}
     </Paper>
   );
