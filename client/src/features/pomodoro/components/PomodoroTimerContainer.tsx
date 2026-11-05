@@ -147,6 +147,7 @@ function PomodoroTimerContainer({ preferences }: PomodoroTimerContainerProps) {
             size="small"
             aria-label={isExpanded ? "Collapse timer" : "Expand timer"}
             onClick={() => setIsExpanded((current) => !current)}
+            sx={{ color: "inherit" }}
           >
             {isExpanded ? <ExpandLessRoundedIcon /> : <ExpandMoreRoundedIcon />}
           </IconButton>

@@ -128,7 +128,7 @@ function DashboardLayout() {
           sx={{
             gridColumn: {
               xs: "1 / -1",
-              md: isSidebarOpen ? "span 8" : "2 / -1",
+              md: isSidebarOpen ? "span 9" : "2 / -1",
               lg: selectedTask ? "span 7" : "span 10",
             },
             minWidth: 0,
