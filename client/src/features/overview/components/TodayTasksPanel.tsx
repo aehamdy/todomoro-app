@@ -7,13 +7,15 @@ import { useOutletContext } from "react-router-dom";
 import type { DashboardOutletContext } from "../../../components/layout/DashboardLayout";
 import CompletionProgress from "../../../components/common/CompletionProgress";
 import EmptyTaskList from "../../tasks/components/EmptyTaskList";
+import { getActivePomodoroTask } from "../../tasks/utils/getActivePomodoroTask";
 
 type TodayTasksPanelProps = {
   tasks: Task[];
 };
 
 function TodayTasksPanel({ tasks }: TodayTasksPanelProps) {
-  const { setSelectedTask } = useOutletContext<DashboardOutletContext>();
+  const { setSelectedTask, setActivePomodoroTask } =
+    useOutletContext<DashboardOutletContext>();
 
   const completedCount = useMemo(
     () => tasks?.filter((task) => task.isCompleted).length,
@@ -27,6 +29,9 @@ function TodayTasksPanel({ tasks }: TodayTasksPanelProps) {
 
   const total = completedCount + incompleteCount;
 
+  const handlePlayTask = (task: Task) => {
+    setActivePomodoroTask(getActivePomodoroTask(task));
+  };
   return (
     <Paper
       elevation={0}
@@ -90,6 +95,7 @@ function TodayTasksPanel({ tasks }: TodayTasksPanelProps) {
                     key={task._id}
                     task={task}
                     onClick={() => setSelectedTask(task)}
+                    onPlay={handlePlayTask}
                   />
                 );
               })}

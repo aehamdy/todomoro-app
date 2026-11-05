@@ -4,10 +4,12 @@ import {
   IconButton,
   Paper,
   Stack,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import ExpandLessRoundedIcon from "@mui/icons-material/ExpandLessRounded";
 import ExpandMoreRoundedIcon from "@mui/icons-material/ExpandMoreRounded";
+import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import PomodoroTimer from "./PomodoroTimer";
 import PomodoroControls from "./PomodoroControls";
 import PomodoroSessionSelector from "./PomodoroSessionSelector";
@@ -16,9 +18,12 @@ import type { PomodoroPreferences } from "../pomodoro.types";
 import { useCallback, useEffect, useState } from "react";
 import { useBackgroundSound } from "../hooks/useBackgroundSound";
 import { usePomodoroDocumentTitle } from "../hooks/usePomodoroDocumentTitle";
+import type { ActivePomodoroTask } from "../../tasks/task.types";
 
 interface PomodoroTimerContainerProps {
   preferences: PomodoroPreferences;
+  activeTask: ActivePomodoroTask | null;
+  onClearActiveTask: () => void;
 }
 
 const SESSION_LABELS = {
@@ -34,8 +39,14 @@ function formatTime(totalSeconds: number): string {
   return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
 }
 
-function PomodoroTimerContainer({ preferences }: PomodoroTimerContainerProps) {
+function PomodoroTimerContainer({
+  preferences,
+  activeTask,
+  onClearActiveTask,
+}: PomodoroTimerContainerProps) {
   const [isExpanded, setIsExpanded] = useState(false);
+
+  const shouldBeExpanded = isExpanded || Boolean(activeTask);
 
   const {
     timer,
@@ -145,16 +156,20 @@ function PomodoroTimerContainer({ preferences }: PomodoroTimerContainerProps) {
 
           <IconButton
             size="small"
-            aria-label={isExpanded ? "Collapse timer" : "Expand timer"}
+            aria-label={shouldBeExpanded ? "Collapse timer" : "Expand timer"}
             onClick={() => setIsExpanded((current) => !current)}
             sx={{ color: "inherit" }}
           >
-            {isExpanded ? <ExpandLessRoundedIcon /> : <ExpandMoreRoundedIcon />}
+            {shouldBeExpanded ? (
+              <ExpandLessRoundedIcon />
+            ) : (
+              <ExpandMoreRoundedIcon />
+            )}
           </IconButton>
         </Box>
 
         {/* Compact view */}
-        {!isExpanded && (
+        {!shouldBeExpanded && (
           <Stack sx={{ gap: 0.5, alignItems: "center" }}>
             <Typography variant="caption" color="text.secondary">
               {SESSION_LABELS[timer.sessionType]}
@@ -180,8 +195,66 @@ function PomodoroTimerContainer({ preferences }: PomodoroTimerContainerProps) {
         )}
 
         {/* Expanded view */}
-        <Collapse in={isExpanded}>
+        <Collapse in={shouldBeExpanded}>
           <Stack spacing={2}>
+            {activeTask && (
+              <Box
+                sx={{
+                  p: 1.5,
+                  borderRadius: 2,
+                  bgcolor: "action.hover",
+                }}
+              >
+                <Stack
+                  sx={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    gap: 1,
+                  }}
+                >
+                  <Box sx={{ minWidth: 0 }}>
+                    <Typography
+                      variant="caption"
+                      sx={{ color: "primary.main" }}
+                    >
+                      Current Task
+                    </Typography>
+
+                    <Typography variant="body2" noWrap sx={{ fontWeight: 600 }}>
+                      {activeTask.title}
+                    </Typography>
+
+                    {activeTask.projectTitle && (
+                      <Typography
+                        variant="caption"
+                        sx={{
+                          color: "text.secondary",
+                        }}
+                        noWrap
+                      >
+                        {activeTask.projectTitle}
+                      </Typography>
+                    )}
+                  </Box>
+
+                  <Tooltip title="Clear active task">
+                    <IconButton
+                      size="small"
+                      aria-label="Clear active task"
+                      onClick={onClearActiveTask}
+                      sx={{ color: "text.secondary" }}
+                    >
+                      <CloseRoundedIcon
+                        fontSize="small"
+                        sx={{ color: "inherit" }}
+                      />
+                    </IconButton>
+                  </Tooltip>
+                </Stack>
+              </Box>
+            )}
+
             <PomodoroSessionSelector
               sessionType={timer.sessionType}
               onChange={selectSession}

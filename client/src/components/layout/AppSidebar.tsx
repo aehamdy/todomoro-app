@@ -2,14 +2,21 @@ import { Box, Divider, List } from "@mui/material";
 import NavList from "./NavList";
 import ProjectsSection from "../../features/projects/components/ProjectsSection";
 import PomodoroWidget from "../../features/pomodoro/components/PomodoroWidget";
+import type { ActivePomodoroTask } from "../../features/tasks/task.types";
 
 type AppSidebarProps = {
   collapsed?: boolean;
   mobileOpen?: boolean;
   onMobileClose?: () => void;
+  activePomodoroTask: ActivePomodoroTask | null;
+  onClearActivePomodoroTask: () => void;
 };
 
-function AppSidebar({ collapsed = false }: AppSidebarProps) {
+function AppSidebar({
+  collapsed = false,
+  activePomodoroTask,
+  onClearActivePomodoroTask,
+}: AppSidebarProps) {
   if (collapsed) return null;
 
   return (
@@ -32,7 +39,10 @@ function AppSidebar({ collapsed = false }: AppSidebarProps) {
       </Box>
 
       <Box sx={{ mt: "auto", flexShrink: 0 }}>
-        <PomodoroWidget />
+        <PomodoroWidget
+          activeTask={activePomodoroTask}
+          onClearActiveTask={onClearActivePomodoroTask}
+        />
       </Box>
     </List>
   );
