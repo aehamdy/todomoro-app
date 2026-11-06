@@ -6,6 +6,7 @@ import CreateTaskForm from "../features/tasks/components/CreateTaskForm";
 import TaskList from "../features/tasks/components/TaskList";
 import TaskOverview from "../components/common/TaskOverview";
 import TasksPageSkeleton from "../features/tasks/components/skeletons/TasksPageSkeleton";
+import { fadeScaleVariants } from "../animations/animationVariants";
 
 const MotionBox = motion.create(Box);
 
@@ -25,21 +26,6 @@ function ProjectPage() {
     },
     [],
   );
-
-  const sectionVariants = {
-    hidden: {
-      opacity: 0,
-      scale: shouldReduceMotion ? 1 : 0.97,
-    },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      transition: {
-        duration: shouldReduceMotion ? 0 : 0.4,
-        ease: "easeOut" as const,
-      },
-    },
-  };
 
   if (!projectId) {
     return null;
@@ -66,14 +52,14 @@ function ProjectPage() {
             gap: 3,
           }}
         >
-          <MotionBox variants={sectionVariants}>
+          <MotionBox variants={fadeScaleVariants}>
             <TaskOverview
               completed={completedCount}
               incomplete={incompleteCount}
             />
           </MotionBox>
 
-          <MotionBox variants={sectionVariants}>
+          <MotionBox variants={fadeScaleVariants}>
             <CreateTaskForm projectId={projectId} />
           </MotionBox>
         </MotionBox>
@@ -82,7 +68,7 @@ function ProjectPage() {
       <MotionBox
         initial="hidden"
         animate={isLoadingData ? "hidden" : "visible"}
-        variants={sectionVariants}
+        variants={fadeScaleVariants}
         sx={{
           display: isLoadingData ? "none" : "block",
         }}
