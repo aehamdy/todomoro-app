@@ -1,5 +1,5 @@
 import { Box, Button, Stack } from "@mui/material";
-import type { PomodoroTimerState } from "../pomodoro.types";
+import type { PomodoroTimerState } from "../types/pomodoro.types";
 
 interface PomodoroControlsProps {
   timer: PomodoroTimerState;

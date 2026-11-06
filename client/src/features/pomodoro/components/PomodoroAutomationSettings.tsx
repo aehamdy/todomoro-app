@@ -6,7 +6,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useState } from "react";
-import type { PomodoroSettingsProps } from "../pomodoro.types";
+import type { PomodoroSettingsProps } from "../types/pomodoro.types";
 
 type PomodoroToggleField =
   | "autoStartNextPomodoro"

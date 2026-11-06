@@ -13,7 +13,10 @@ import {
 import VolumeUpRoundedIcon from "@mui/icons-material/VolumeUpRounded";
 import { useAuth } from "../../auth/hooks/useAuth";
 import { useUpdateUserPreferences } from "../../auth/hooks/useUpdateUserPreferences";
-import type { PomodoroPreferences, PomodoroSound } from "../pomodoro.types";
+import type {
+  PomodoroPreferences,
+  PomodoroSound,
+} from "../types/pomodoro.types";
 
 type BackgroundSoundField =
   | "selectedBackgroundSound"

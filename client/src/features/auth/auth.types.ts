@@ -1,4 +1,4 @@
-import type { PomodoroPreferences } from "../pomodoro/pomodoro.types";
+import type { PomodoroPreferences } from "../pomodoro/types/pomodoro.types";
 
 export type ThemePreference =
   | "light"

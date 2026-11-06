@@ -1,4 +1,7 @@
-import type { PomodoroPreferences, PomodoroTimerState } from "./pomodoro.types";
+import type {
+  PomodoroPreferences,
+  PomodoroTimerState,
+} from "./types/pomodoro.types";
 
 export const DEFAULT_POMODORO_PREFERENCES: PomodoroPreferences = {
   focusDuration: 25,

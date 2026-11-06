@@ -1,4 +1,4 @@
-import type { PomodoroSound } from "../pomodoro.types";
+import type { PomodoroSound } from "../types/pomodoro.types";
 
 const BACKGROUND_SOUND_PATHS: Partial<Record<PomodoroSound, string>> = {
   bonfire: "sounds/background/bonfire.mp3",

@@ -18,7 +18,7 @@ import type {
   CompletedPomodoroSession,
   CreatePomodoroSessionRequest,
   PomodoroPreferences,
-} from "../pomodoro.types";
+} from "../types/pomodoro.types";
 import { useCallback, useEffect, useState } from "react";
 import { useBackgroundSound } from "../hooks/useBackgroundSound";
 import { usePomodoroDocumentTitle } from "../hooks/usePomodoroDocumentTitle";

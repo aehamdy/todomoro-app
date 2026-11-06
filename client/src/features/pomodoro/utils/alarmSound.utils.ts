@@ -1,4 +1,4 @@
-import type { PomodoroAlarmSound } from "../pomodoro.types";
+import type { PomodoroAlarmSound } from "../types/pomodoro.types";
 
 let audioContext: AudioContext | null = null;
 

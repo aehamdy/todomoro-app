@@ -1,5 +1,5 @@
 import { ToggleButton, ToggleButtonGroup } from "@mui/material";
-import type { PomodoroSessionType } from "../pomodoro.types";
+import type { PomodoroSessionType } from "../types/pomodoro.types";
 
 interface PomodoroSessionSelectorProps {
   sessionType: PomodoroSessionType;

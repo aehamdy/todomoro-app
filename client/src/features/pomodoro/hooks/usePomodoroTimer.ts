@@ -5,7 +5,7 @@ import type {
   PomodoroSessionContext,
   PomodoroSessionType,
   PomodoroTimerState,
-} from "../pomodoro.types";
+} from "../types/pomodoro.types";
 import {
   createTimerState,
   getNextSession,

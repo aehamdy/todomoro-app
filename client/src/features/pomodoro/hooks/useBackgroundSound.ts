@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import type { PomodoroSound } from "../pomodoro.types";
+import type { PomodoroSound } from "../types/pomodoro.types";
 import { getBackgroundSoundBuffer } from "../utils/backgroundSound.utils";
 
 interface UseBackgroundSoundOptions {
