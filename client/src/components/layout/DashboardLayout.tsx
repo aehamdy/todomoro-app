@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Outlet } from "react-router-dom";
+import { useOutlet } from "react-router-dom";
 import {
   Box,
   Drawer,
@@ -14,6 +14,7 @@ import AppHeader from "./AppHeader";
 import AppSidebar from "./AppSidebar";
 import type { ActivePomodoroTask, Task } from "../../features/tasks/task.types";
 import TaskDetailsSidebar from "../../features/tasks/components/TaskDetailsSidebar";
+import AnimatedOutlet from "../common/AnimatedOutlet";
 
 const HEADER_HEIGHT = 65;
 const SIDEBAR_RAIL_WIDTH = 36;
@@ -36,6 +37,13 @@ function DashboardLayout() {
   const isDesktop = useMediaQuery(theme.breakpoints.up("lg"));
 
   const closeTaskDetails = () => setSelectedTask(null);
+
+  const outlet = useOutlet({
+    selectedTask,
+    setSelectedTask,
+    activePomodoroTask,
+    setActivePomodoroTask,
+  });
 
   return (
     <Box
@@ -145,14 +153,15 @@ function DashboardLayout() {
             transition: "grid-column 250ms ease",
           }}
         >
-          <Outlet
+          {/* <Outlet
             context={{
               selectedTask,
               setSelectedTask,
               activePomodoroTask,
               setActivePomodoroTask,
             }}
-          />
+          /> */}
+          <AnimatedOutlet>{outlet}</AnimatedOutlet>
         </Box>
 
         {/* Inline task details on desktop */}
