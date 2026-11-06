@@ -1,5 +1,5 @@
-import type { AuthUser } from "../auth/auth.types";
-import type { useUpdateUserPreferences } from "../auth/hooks/useUpdateUserPreferences";
+import type { AuthUser } from "../../auth/auth.types";
+import type { useUpdateUserPreferences } from "../../auth/hooks/useUpdateUserPreferences";
 
 export type PomodoroSessionType = "focus" | "shortBreak" | "longBreak";
 

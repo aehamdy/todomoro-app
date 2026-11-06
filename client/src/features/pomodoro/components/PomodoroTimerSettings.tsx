@@ -7,7 +7,7 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import type { FocusEvent } from "react";
-import type { PomodoroSettingsProps } from "../pomodoro.types";
+import type { PomodoroSettingsProps } from "../types/pomodoro.types";
 
 type PomodoroField =
   | "focusDuration"

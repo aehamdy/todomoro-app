@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import type { PomodoroTimerState } from "../pomodoro.types";
+import type { PomodoroTimerState } from "../types/pomodoro.types";
 import { APP_NAME } from "../../../config/app";
 
 const SESSION_LABELS = {
