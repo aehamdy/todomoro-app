@@ -1,4 +1,5 @@
 import { Box, Divider, List } from "@mui/material";
+import { motion, useReducedMotion } from "motion/react";
 import NavList from "./NavList";
 import ProjectsSection from "../../features/projects/components/ProjectsSection";
 import PomodoroWidget from "../../features/pomodoro/components/PomodoroWidget";
@@ -12,11 +13,30 @@ type AppSidebarProps = {
   onClearActivePomodoroTask: () => void;
 };
 
+const MotionBox = motion.create(Box);
+
 function AppSidebar({
   collapsed = false,
   activePomodoroTask,
   onClearActivePomodoroTask,
 }: AppSidebarProps) {
+  const shouldReduceMotion = useReducedMotion();
+
+  const sectionVariants = {
+    hidden: {
+      opacity: 0,
+      scale: shouldReduceMotion ? 1 : 0.97,
+    },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      transition: {
+        duration: shouldReduceMotion ? 0 : 0.4,
+        ease: "easeOut" as const,
+      },
+    },
+  };
+
   if (collapsed) return null;
 
   return (
@@ -32,18 +52,49 @@ function AppSidebar({
         overflowX: "hidden",
       }}
     >
-      <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
-        <NavList />
-        <Divider />
-        <ProjectsSection />
-      </Box>
+      <MotionBox
+        initial="hidden"
+        animate="visible"
+        variants={{
+          visible: {
+            transition: {
+              staggerChildren: shouldReduceMotion ? 0 : 0.1,
+            },
+          },
+        }}
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          gap: 1,
+        }}
+      >
+        <MotionBox variants={sectionVariants}>
+          <NavList />
+        </MotionBox>
 
-      <Box sx={{ mt: "auto", flexShrink: 0 }}>
+        <MotionBox variants={sectionVariants}>
+          <Divider />
+        </MotionBox>
+
+        <MotionBox variants={sectionVariants}>
+          <ProjectsSection />
+        </MotionBox>
+      </MotionBox>
+
+      <MotionBox
+        initial="hidden"
+        animate="visible"
+        variants={sectionVariants}
+        sx={{
+          mt: "auto",
+          flexShrink: 0,
+        }}
+      >
         <PomodoroWidget
           activeTask={activePomodoroTask}
           onClearActiveTask={onClearActivePomodoroTask}
         />
-      </Box>
+      </MotionBox>
     </List>
   );
 }
