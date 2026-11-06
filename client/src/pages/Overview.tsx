@@ -7,6 +7,7 @@ import OverviewGreeting from "../features/overview/components/OverviewGreeting";
 import OverviewSummary from "../features/overview/components/OverviewSummary";
 import TaskSchedulePanel from "../features/overview/components/TaskSchedulePanel";
 import OverviewPageSkeleton from "../features/overview/components/skeletons/OverviewPageSkeleton";
+import { fadeScaleVariants } from "../animations/animationVariants";
 
 const MotionBox = motion.create(Box);
 
@@ -29,21 +30,6 @@ function OverviewPage() {
   const upcomingTasks = data?.data.upcomingTasks;
   const recentProjects = data?.data.recentProjects;
 
-  const sectionVariants = {
-    hidden: {
-      opacity: 0,
-      scale: 0.97,
-    },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      transition: {
-        duration: 0.4,
-        ease: "easeOut" as const,
-      },
-    },
-  };
-
   return (
     <MotionBox
       initial="hidden"
@@ -61,11 +47,11 @@ function OverviewPage() {
         gap: 3,
       }}
     >
-      <MotionBox variants={sectionVariants}>
+      <MotionBox variants={fadeScaleVariants}>
         <OverviewGreeting />
       </MotionBox>
 
-      <MotionBox variants={sectionVariants}>
+      <MotionBox variants={fadeScaleVariants}>
         <OverviewSummary summary={summary} />
       </MotionBox>
 
@@ -81,11 +67,11 @@ function OverviewPage() {
           alignItems: "start",
         }}
       >
-        <MotionBox variants={sectionVariants}>
+        <MotionBox variants={fadeScaleVariants}>
           <TodayTasksPanel tasks={todayTasks} />
         </MotionBox>
 
-        <MotionBox variants={sectionVariants}>
+        <MotionBox variants={fadeScaleVariants}>
           <TaskSchedulePanel
             overdueTasks={overdueTasks}
             upcomingTasks={upcomingTasks}
@@ -94,7 +80,7 @@ function OverviewPage() {
         </MotionBox>
       </Box>
 
-      <MotionBox variants={sectionVariants}>
+      <MotionBox variants={fadeScaleVariants}>
         <RecentProjectsPanel projects={recentProjects} />
       </MotionBox>
     </MotionBox>

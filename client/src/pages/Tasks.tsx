@@ -5,6 +5,7 @@ import TaskList from "../features/tasks/components/TaskList";
 import CreateTaskForm from "../features/tasks/components/CreateTaskForm";
 import TaskOverview from "../components/common/TaskOverview";
 import TasksPageSkeleton from "../features/tasks/components/skeletons/TasksPageSkeleton";
+import { fadeScaleVariants } from "../animations/animationVariants";
 
 const MotionBox = motion.create(Box);
 
@@ -18,21 +19,6 @@ function TasksPage() {
   const handleTaskCountChange = (completed: number, incomplete: number) => {
     setCompletedCount(completed);
     setIncompleteCount(incomplete);
-  };
-
-  const sectionVariants = {
-    hidden: {
-      opacity: 0,
-      scale: shouldReduceMotion ? 1 : 0.97,
-    },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      transition: {
-        duration: shouldReduceMotion ? 0 : 0.4,
-        ease: "easeOut" as const,
-      },
-    },
   };
 
   return (
@@ -56,14 +42,14 @@ function TasksPage() {
             gap: 3,
           }}
         >
-          <MotionBox variants={sectionVariants}>
+          <MotionBox variants={fadeScaleVariants}>
             <TaskOverview
               completed={completedCount}
               incomplete={incompleteCount}
             />
           </MotionBox>
 
-          <MotionBox variants={sectionVariants}>
+          <MotionBox variants={fadeScaleVariants}>
             <CreateTaskForm projectId={null} />
           </MotionBox>
         </MotionBox>
@@ -72,7 +58,7 @@ function TasksPage() {
       <MotionBox
         initial="hidden"
         animate={isLoadingData ? "hidden" : "visible"}
-        variants={sectionVariants}
+        variants={fadeScaleVariants}
         sx={{
           display: isLoadingData ? "none" : "block",
         }}
