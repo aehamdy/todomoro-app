@@ -8,6 +8,7 @@ import TasksPage from "./pages/Tasks";
 import ProjectPage from "./pages/ProjectPage";
 import OverviewPage from "./pages/Overview";
 import "./App.css";
+import StatisticsPage from "./pages/Statistics";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <Route path={ROUTES.overview} element={<OverviewPage />} />
           <Route path={ROUTES.tasks} element={<TasksPage />} />
           <Route path={ROUTES.project} element={<ProjectPage />} />
+          <Route path={ROUTES.statistics} element={<StatisticsPage />} />
         </Route>
       </Route>
 

@@ -19,12 +19,16 @@ function PageHeading({ title, description, action }: PageHeadingProps) {
       }}
     >
       <Box>
-        <Typography variant="h4" component="h1" sx={{ fontWeight: 700 }}>
+        <Typography
+          variant="h4"
+          component="h1"
+          sx={{ fontWeight: 700, color: "text.primary" }}
+        >
           {title}
         </Typography>
 
         {description && (
-          <Typography variant="body1" color="text.secondary" sx={{ mt: 1 }}>
+          <Typography variant="body1" sx={{ mt: 1, color: "text.secondary" }}>
             {description}
           </Typography>
         )}

@@ -233,7 +233,7 @@ function PomodoroTimerContainer({
 
         {/* Expanded view */}
         <Collapse in={shouldBeExpanded}>
-          <Stack spacing={2}>
+          <Stack sx={{ alignItems: "center", gap: 2 }}>
             {activeTask && (
               <Box
                 sx={{
