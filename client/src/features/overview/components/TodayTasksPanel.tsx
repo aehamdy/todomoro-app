@@ -96,6 +96,7 @@ function TodayTasksPanel({ tasks }: TodayTasksPanelProps) {
                     task={task}
                     onClick={() => setSelectedTask(task)}
                     onPlay={handlePlayTask}
+                    displayProject
                   />
                 );
               })}
