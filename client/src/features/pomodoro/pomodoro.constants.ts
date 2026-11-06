@@ -33,3 +33,5 @@ export const INITIAL_POMODORO_TIMER_STATE: PomodoroTimerState = {
   pausedAt: null,
   focusSessionsInCycle: 0,
 };
+
+export const POMODORO_STATS_QUERY_KEY = ["pomodoro-stats"] as const;

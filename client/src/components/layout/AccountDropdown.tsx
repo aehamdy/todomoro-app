@@ -1,8 +1,11 @@
 import { AccountCircleOutlined, SettingsOutlined } from "@mui/icons-material";
+import BarChartIcon from "@mui/icons-material/BarChart";
 import { Box, Divider, Menu, MenuItem, Stack, Typography } from "@mui/material";
 import LogoutButton from "./LogoutButton";
 import type { AuthUser } from "../../features/auth/auth.types";
 import type { Dispatch, SetStateAction } from "react";
+import { useNavigate } from "react-router-dom";
+import { ROUTES } from "../../routes/paths";
 
 type AccountDropdownProps = {
   user: AuthUser | null;
@@ -19,6 +22,8 @@ function AccountDropdown({
   anchorEl,
   isMenuOpen,
 }: AccountDropdownProps) {
+  const navigate = useNavigate();
+
   function handleCloseMenu() {
     setAnchorEl(null);
   }
@@ -26,6 +31,11 @@ function AccountDropdown({
   function handleOpenSettings() {
     handleCloseMenu();
     setIsModalOpen(true);
+  }
+
+  function handleOpenStatistics() {
+    handleCloseMenu();
+    navigate(ROUTES.statistics);
   }
 
   return (
@@ -81,6 +91,16 @@ function AccountDropdown({
             </Typography>
           </Box>
         </Stack>
+      </MenuItem>
+
+      <Divider />
+
+      <MenuItem onClick={handleOpenStatistics}>
+        <BarChartIcon
+          fontSize="small"
+          sx={{ mr: 1.5, color: "text.secondary" }}
+        />
+        Statistics
       </MenuItem>
 
       <Divider />
