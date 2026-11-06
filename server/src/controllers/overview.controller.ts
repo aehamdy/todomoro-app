@@ -49,7 +49,9 @@ export const getOverviewSummary: RequestHandler = async (req, res, next) => {
       Task.find({
         user: userId,
         dueDate: { $gte: startOfToday, $lt: startOfTomorrow },
-      }).select("-__v"),
+      })
+        .populate("project", "title color")
+        .select("-__v"),
 
       // Overdue tasks
       Task.find({
@@ -57,9 +59,9 @@ export const getOverviewSummary: RequestHandler = async (req, res, next) => {
         isCompleted: false,
         dueDate: { $lt: startOfTomorrow, $ne: null },
       })
-        .select("-__v")
         .populate("project", "title color")
-        .sort({ dueDate: 1 }),
+        .sort({ dueDate: 1 })
+        .select("-__v"),
 
       // Upcoming tasks
       Task.find({
@@ -67,18 +69,18 @@ export const getOverviewSummary: RequestHandler = async (req, res, next) => {
         isCompleted: false,
         dueDate: { $gte: startOfTomorrow, $lt: startOfNextWeek },
       })
-        .select("-__v")
         .populate("project", "title color")
-        .sort({ dueDate: 1 }),
+        .sort({ dueDate: 1 })
+        .select("-__v"),
 
       // Completed tasks
       Task.find({
         user: userId,
         isCompleted: true,
       })
-        .select("-__v")
         .populate("project", "title color")
-        .sort({ completedAt: -1 }),
+        .sort({ completedAt: -1 })
+        .select("-__v"),
 
       // Recent projects with completed and incomplete task counts
       Project.aggregate([
