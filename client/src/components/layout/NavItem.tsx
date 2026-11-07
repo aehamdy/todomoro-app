@@ -16,7 +16,6 @@ type NavItemProps = {
 function NavItem({ item, generalTasksLength }: NavItemProps) {
   return (
     <ListItemButton
-      key={item.to}
       component={NavLink}
       to={item.to}
       end

@@ -1,9 +1,12 @@
 import { useState } from "react";
 import { AppBar, Avatar, Box, Stack, Toolbar, Typography } from "@mui/material";
-import { ArrowDropDown, TaskAlt } from "@mui/icons-material";
+import { ArrowDropDown } from "@mui/icons-material";
 import SettingsDialog from "../settings/SettingsDialog";
 import { useAuth } from "../../features/auth/hooks/useAuth";
 import AccountDropdown from "./AccountDropdown";
+import AppLogo from "./AppLogo";
+import { Link } from "react-router-dom";
+import { ROUTES } from "../../routes/paths";
 
 function AppHeader() {
   const { user } = useAuth();
@@ -16,15 +19,6 @@ function AppHeader() {
   function handleOpenMenu(event: React.MouseEvent<HTMLElement>) {
     setAnchorEl(event.currentTarget);
   }
-
-  // function handleCloseMenu() {
-  //   setAnchorEl(null);
-  // }
-
-  // function handleOpenSettings() {
-  //   handleCloseMenu();
-  //   setIsModalOpen(true);
-  // }
 
   return (
     <>
@@ -46,26 +40,9 @@ function AppHeader() {
             justifyContent: "space-between",
           }}
         >
-          {/* App logo */}
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              gap: 1.25,
-            }}
-          >
-            <TaskAlt color="primary" fontSize="large" />
-
-            <Typography
-              variant="h5"
-              sx={{
-                fontWeight: 800,
-                color: "text.primary",
-              }}
-            >
-              Todomoro
-            </Typography>
-          </Box>
+          <Link to={ROUTES.overview}>
+            <AppLogo />
+          </Link>
 
           {/* Clickable account toolbar */}
           <Box>
