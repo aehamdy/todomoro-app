@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import type { PomodoroTimerState } from "../types/pomodoro.types";
-import { APP_NAME } from "../../../config/app";
+import { APP_CONFIG } from "../../../config/app";
 
 const SESSION_LABELS = {
   focus: "Focus",
@@ -19,12 +19,12 @@ function usePomodoroDocumentTitle(timer: PomodoroTimerState) {
   useEffect(() => {
     const updateDocumentTitle = () => {
       if (document.visibilityState === "visible") {
-        document.title = `${APP_NAME}`;
+        document.title = `${APP_CONFIG.APP.NAME}`;
         return;
       }
 
       if (timer.status !== "running" && timer.status !== "paused") {
-        document.title = `${APP_NAME}`;
+        document.title = `${APP_CONFIG.APP.NAME}`;
         return;
       }
 
@@ -44,7 +44,7 @@ function usePomodoroDocumentTitle(timer: PomodoroTimerState) {
 
     return () => {
       document.removeEventListener("visibilitychange", updateDocumentTitle);
-      document.title = `${APP_NAME}`;
+      document.title = `${APP_CONFIG.APP.NAME}`;
     };
   }, [timer.status, timer.remainingTime, timer.sessionType]);
 }
