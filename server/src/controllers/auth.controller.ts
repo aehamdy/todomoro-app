@@ -80,6 +80,46 @@ export const login: RequestHandler = async (req, res, next) => {
           id: user.id,
           name: user.name,
           email: user.email,
+          preferences: {
+            theme: user.preferences?.theme ?? "system",
+
+            taskCompletionSoundEnabled:
+              user.preferences?.taskCompletionSoundEnabled ?? true,
+
+            addNewTasksToTop: user.preferences?.addNewTasksToTop ?? true,
+
+            pomodoro: {
+              focusDuration: user.preferences?.pomodoro?.focusDuration ?? 25,
+              shortBreakDuration:
+                user.preferences?.pomodoro?.shortBreakDuration ?? 5,
+              longBreakDuration:
+                user.preferences?.pomodoro?.longBreakDuration ?? 15,
+              longBreakInterval:
+                user.preferences?.pomodoro?.longBreakInterval ?? 4,
+
+              autoStartNextPomodoro:
+                user.preferences?.pomodoro?.autoStartNextPomodoro ?? false,
+              autoStartBreak:
+                user.preferences?.pomodoro?.autoStartBreak ?? false,
+              disableBreaks: user.preferences?.pomodoro?.disableBreaks ?? false,
+
+              alarmVolume: user.preferences?.pomodoro?.alarmVolume ?? 70,
+              focusAlarmSound:
+                user.preferences?.pomodoro?.focusAlarmSound ?? "default",
+              breakAlarmSound:
+                user.preferences?.pomodoro?.breakAlarmSound ?? "default",
+
+              backgroundSoundVolume:
+                user.preferences?.pomodoro?.backgroundSoundVolume ?? 30,
+              selectedBackgroundSound:
+                user.preferences?.pomodoro?.selectedBackgroundSound ?? "none",
+              autoPlayBackgroundSound:
+                user.preferences?.pomodoro?.autoPlayBackgroundSound ?? false,
+
+              widgetTheme:
+                user.preferences?.pomodoro?.widgetTheme ?? "midnight",
+            },
+          },
           createdAt: user.createdAt,
         },
       },
