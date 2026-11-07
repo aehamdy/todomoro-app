@@ -15,7 +15,7 @@ function PomodoroWidget({
   const { user } = useAuth();
 
   const preferences =
-    user?.preferences.pomodoro ?? DEFAULT_POMODORO_PREFERENCES;
+    user?.preferences?.pomodoro ?? DEFAULT_POMODORO_PREFERENCES;
 
   return (
     <PomodoroTimerContainer
