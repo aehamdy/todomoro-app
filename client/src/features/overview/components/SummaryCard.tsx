@@ -50,10 +50,12 @@ function SummaryCard({
 
           "& .inner-content-box": {
             bgcolor: accentColor,
-            color: "white",
+            color: "primary.contrastText",
           },
 
           "& .card-secondary-icon": {
+            transition:
+              "border-color 0.2s ease, transform 0.2s ease, background-color 0.2s ease",
             color:
               status === "success"
                 ? "success.lighter"
@@ -66,7 +68,9 @@ function SummaryCard({
 
           "& .card-message-text": {
             opacity: 0.9,
-            color: "white",
+            color: "primary.contrastText",
+            transition:
+              "border-color 0.2s ease, transform 0.2s ease, background-color 0.2s ease",
           },
         },
       }}
