@@ -1,11 +1,11 @@
 import { Stack, Chip, Typography } from "@mui/material";
-import { APP_NAME, APP_VERSION } from "../../config/app";
+import { APP_CONFIG } from "../../config/app";
 
 function AboutSettings() {
   return (
     <Stack sx={{ gap: 2, color: "text.primary" }}>
       <Stack>
-        <Typography variant="h6">About {APP_NAME}</Typography>
+        <Typography variant="h6">About {APP_CONFIG.APP.NAME}</Typography>
 
         <Typography sx={{ mb: 2, color: "text.secondary" }}>
           Your personal space to organize tasks and projects.
@@ -21,7 +21,7 @@ function AboutSettings() {
       >
         <Typography variant="body2">Version</Typography>
         <Chip
-          label={`${APP_VERSION}`}
+          label={`${APP_CONFIG.APP.VERSION}`}
           size="small"
           variant="filled"
           sx={{ color: "text.secondary" }}
