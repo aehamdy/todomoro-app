@@ -171,8 +171,9 @@ function PomodoroTimerContainer({
   ]);
   return (
     <Paper
-      variant="outlined"
+      elevation={0}
       sx={{
+        bgcolor: "background.default",
         width: "100%",
         p: 1.5,
         borderRadius: 2,
