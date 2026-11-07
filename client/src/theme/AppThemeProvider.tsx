@@ -1,17 +1,14 @@
 /* eslint-disable react-refresh/only-export-components */
-/* eslint-disable react-hooks/set-state-in-effect */
 
 import {
   createContext,
   useContext,
-  useEffect,
   useMemo,
   useState,
   type ReactNode,
 } from "react";
 import { CssBaseline, useMediaQuery } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
-import { useAuth } from "../features/auth/hooks/useAuth";
 import type { ThemePreference } from "../features/auth/auth.types";
 import { getAppTheme } from "./theme";
 
@@ -29,18 +26,10 @@ type AppThemeProviderProps = {
 };
 
 export function AppThemeProvider({ children }: AppThemeProviderProps) {
-  const { user } = useAuth();
-
-  const savedTheme = user?.preferences?.theme ?? "system";
-
   const [themePreference, setThemePreference] =
-    useState<ThemePreference>(savedTheme);
+    useState<ThemePreference>("system");
 
   const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
-
-  useEffect(() => {
-    setThemePreference(savedTheme);
-  }, [savedTheme]);
 
   // Resolve the selected preference into the appropriate palette.
   const resolvedTheme: ThemePreference =
