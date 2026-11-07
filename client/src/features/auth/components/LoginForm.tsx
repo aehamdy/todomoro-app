@@ -108,6 +108,12 @@ function LoginForm() {
         size="large"
         fullWidth
         disabled={isSubmitting}
+        sx={{
+          color: "#222",
+          bgcolor: "rgba(255, 255, 255, 0.9)",
+          "&:hover": { bgcolor: "#fff", scale: 1.05 },
+          transition: "ease-in-out 200ms",
+        }}
       >
         {isSubmitting ? "Logging in..." : "Log in"}
       </Button>
@@ -115,14 +121,18 @@ function LoginForm() {
       <Typography
         variant="body2"
         color="text.secondary"
-        sx={{ textAlign: "center" }}
+        sx={{ textAlign: "center", color: "rgba(255, 255, 255, 0.55)" }}
       >
         Don't have an account?{" "}
         <Link
           component={RouterLink}
           to={ROUTES.register}
           underline="hover"
-          sx={{ fontWeight: 600 }}
+          sx={{
+            marginInlineStart: 0.5,
+            fontWeight: 600,
+            color: "rgba(255, 255, 255, 0.9)",
+          }}
         >
           Create an account
         </Link>
