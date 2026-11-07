@@ -123,6 +123,12 @@ function RegisterForm() {
         size="large"
         fullWidth
         disabled={isSubmitting}
+        sx={{
+          color: "#222",
+          bgcolor: "rgba(255, 255, 255, 0.9)",
+          "&:hover": { bgcolor: "#fff", scale: 1.05 },
+          transition: "ease-in-out 200ms",
+        }}
       >
         {isSubmitting ? "Creating account..." : "Create account"}
       </Button>
@@ -130,14 +136,18 @@ function RegisterForm() {
       <Typography
         variant="body2"
         color="text.secondary"
-        sx={{ textAlign: "center" }}
+        sx={{ textAlign: "center", color: "rgba(255, 255, 255, 0.55)" }}
       >
         Already have an account?{" "}
         <Link
           component={RouterLink}
           to={ROUTES.login}
           underline="hover"
-          sx={{ fontWeight: 600 }}
+          sx={{
+            marginInlineStart: 0.5,
+            fontWeight: 600,
+            color: "rgba(255, 255, 255, 0.9)",
+          }}
         >
           Log in
         </Link>
