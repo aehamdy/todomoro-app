@@ -78,6 +78,7 @@ function ProjectItem({ project }: ProjectItemProps) {
   const handleEditOpen = () => {
     setTitle(project.title);
     setDescription(project.description ?? "");
+    // setSelectedColor(project.color ?? "");
     setSelectedColor(project.color ?? "");
     setIsEditDialogOpen(true);
   };
@@ -134,9 +135,11 @@ function ProjectItem({ project }: ProjectItemProps) {
           flexGrow: 0,
           flexShrink: 0,
           display: "flex",
+          justifyContent: "space-between",
           alignItems: "center",
           position: "relative",
           px: 1,
+          fontSize: "10px",
           color: "text.secondary",
           bgcolor: isActive ? "action.selected" : "transparent",
           borderRadius: 2,
@@ -149,16 +152,41 @@ function ProjectItem({ project }: ProjectItemProps) {
           },
         }}
       >
-        <ListItemIcon
+        <Box
           sx={{
-            color: project.color || "inherit",
-            minWidth: 40,
+            display: "flex",
+            alignItems: "center",
+            width: "100%",
+            minWidth: 0,
+            flex: 1,
           }}
         >
-          <FolderRoundedIcon />
-        </ListItemIcon>
+          <ListItemIcon
+            sx={{
+              color: project.color || "inherit",
+              minWidth: 33,
+              flexShrink: 0,
+            }}
+          >
+            <FolderRoundedIcon />
+          </ListItemIcon>
 
-        <ListItemText primary={project.title} />
+          <ListItemText
+            primary={project.title}
+            sx={{
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+              minWidth: 0,
+              "& .MuiListItemText-primary": {
+                // fontSize: "14px",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+              },
+            }}
+          />
+        </Box>
 
         <Box
           sx={{
@@ -166,7 +194,7 @@ function ProjectItem({ project }: ProjectItemProps) {
             alignItems: "center",
             justifyContent: "flex-end",
             gap: 1,
-            minWidth: 36,
+            minWidth: 20,
             position: "relative",
           }}
         >
