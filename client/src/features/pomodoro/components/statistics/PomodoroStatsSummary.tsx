@@ -3,7 +3,6 @@ import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
 import TimerRoundedIcon from "@mui/icons-material/TimerRounded";
 import CoffeeRoundedIcon from "@mui/icons-material/CoffeeRounded";
 import WeekendRoundedIcon from "@mui/icons-material/WeekendRounded";
-
 import type { ReactNode } from "react";
 import type { PomodoroStatsSummary as PomodoroStatsSummaryData } from "../../types/pomodoro-stats.types";
 import { formatFocusTime } from "../../utils/pomodoro-stats.utils";
@@ -37,13 +36,13 @@ function PomodoroStatsSummary({ stats }: PomodoroStatsSummaryProps) {
       title: "Short Breaks",
       value: stats.completedShortBreakSessions,
       icon: <CoffeeRoundedIcon />,
-      color: "info.main",
+      color: "warning.main",
     },
     {
       title: "Long Breaks",
       value: stats.completedLongBreakSessions,
       icon: <WeekendRoundedIcon />,
-      color: "secondary.main",
+      color: "info.main",
     },
   ];
 
