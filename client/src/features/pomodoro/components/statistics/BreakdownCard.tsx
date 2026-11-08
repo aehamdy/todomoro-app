@@ -91,7 +91,7 @@ function BreakdownCard({
             </Typography>
           </Stack>
         ) : (
-          <Stack spacing={2.5}>
+          <Stack spacing={2.5} sx={{ height: "400px", overflow: "auto" }}>
             {items.map((item, index) => {
               const progress = (item.focusTimeSeconds / maxFocusTime) * 100;
 
@@ -121,9 +121,10 @@ function BreakdownCard({
                     <Typography
                       variant="body2"
                       sx={{
+                        flexShrink: 0,
                         fontWeight: 600,
                         whiteSpace: "nowrap",
-                        flexShrink: 0,
+                        color: "secondary.main",
                       }}
                     >
                       {formatFocusTime(item.focusTimeSeconds)}
@@ -152,7 +153,10 @@ function BreakdownCard({
                   </Box>
 
                   {/* Completed sessions count */}
-                  <Typography variant="caption" color="text.secondary">
+                  <Typography
+                    variant="caption"
+                    sx={{ color: "text.secondary" }}
+                  >
                     {item.completedSessions}{" "}
                     {item.completedSessions === 1
                       ? "focus session"

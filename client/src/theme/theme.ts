@@ -588,7 +588,8 @@ export function getAppTheme(preference: ThemePreference) {
     },
 
     typography: {
-      fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+      // fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+      fontFamily: '"Plus Jakarta Sans", sans-serif',
       button: {
         textTransform: "none",
         fontWeight: 600,

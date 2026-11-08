@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Box, Stack, Typography } from "@mui/material";
 import CurrentDateTime from "./CurrentDateTime";
+import { useAuth } from "../../auth/hooks/useAuth";
 
 type DayPeriod = "lateNight" | "morning" | "afternoon" | "evening" | "night";
 
@@ -94,14 +95,13 @@ function useDayPeriod(): DayPeriod {
   return period;
 }
 
-interface OverviewGreetingProps {
-  name?: string;
-}
-
-function OverviewGreeting({ name = "Ahmed" }: OverviewGreetingProps) {
+function OverviewGreeting() {
+  const { user } = useAuth();
   const period = useDayPeriod();
   const { greeting, subtitles } = CONTENT[period];
   const subtitle = pickSubtitle(subtitles, new Date());
+
+  const name = user?.name.split(" ")[0];
 
   return (
     <Box

@@ -81,7 +81,7 @@ function ProjectsList() {
         justifyContent: "start",
         gap: { xs: 1, md: 0.5 },
         minHeight: 0,
-        maxHeight: { xs: "280px", lg: "240px" },
+        maxHeight: { xs: "280px", lg: "230px" },
         pb: 0.5,
         px: 0.5,
         fontSize: "10px",
