@@ -40,8 +40,12 @@ function RecentProjectsPanel({ projects }: RecentProjectsPanelProps) {
         {projects?.length === 0 ? (
           <Box
             sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: 1,
+              width: "100%",
               py: 4,
-              textAlign: "center",
               color: "text.secondary",
             }}
           >
@@ -49,7 +53,7 @@ function RecentProjectsPanel({ projects }: RecentProjectsPanelProps) {
               No projects yet
             </Typography>
 
-            <Typography variant="body2" sx={{ mt: 0.5 }}>
+            <Typography variant="body2">
               Create a project to start organizing your tasks.
             </Typography>
           </Box>

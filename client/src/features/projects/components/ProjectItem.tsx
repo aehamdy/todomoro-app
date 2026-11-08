@@ -131,13 +131,15 @@ function ProjectItem({ project }: ProjectItemProps) {
       <ListItemButton
         onClick={handleProjectSelect}
         sx={{
+          flexGrow: 0,
+          flexShrink: 0,
           display: "flex",
           alignItems: "center",
+          position: "relative",
           px: 1,
           color: "text.secondary",
-          borderRadius: 2,
-          position: "relative",
           bgcolor: isActive ? "action.selected" : "transparent",
+          borderRadius: 2,
           ...(isActive && {
             color: "primary.main",
           }),
