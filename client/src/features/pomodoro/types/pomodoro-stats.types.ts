@@ -15,6 +15,8 @@ export interface PomodoroStatsSummary {
 export interface PomodoroDailyStat {
   date: string;
   focusTimeSeconds: number;
+  shortBreakTimeSeconds: number;
+  longBreakTimeSeconds: number;
   completedSessions: number;
 }
 
