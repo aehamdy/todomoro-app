@@ -10,7 +10,7 @@ function ProjectCreateButton() {
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [selectedColor, setSelectedColor] = useState<string>(PROJECT_COLORS[4]);
+  const [selectedColor, setSelectedColor] = useState<string>(PROJECT_COLORS[1]);
 
   const { createProject, isCreating, isError, error, reset } =
     useCreateProject();
