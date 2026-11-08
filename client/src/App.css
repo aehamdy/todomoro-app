@@ -1,5 +1,6 @@
 body {
   cursor: url("/cursors/main-cursor.svg"), auto;
+  font-family: '"Plus Jakarta Sans", sans-serif';
 }
 
 .counter {

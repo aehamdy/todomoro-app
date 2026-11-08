@@ -1,7 +1,7 @@
 {
-  "name": "client",
+  "name": "todomoro-client",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "overrides": {
     "minimatch": "^11.0.1"
