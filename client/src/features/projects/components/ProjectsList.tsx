@@ -1,5 +1,6 @@
-import { List } from "@mui/material";
+import { Box, List, Stack, Typography } from "@mui/material";
 import ProjectItem from "./ProjectItem";
+import FolderOpenOutlinedIcon from "@mui/icons-material/FolderOpenOutlined";
 import type { TProject } from "../project.types";
 import { useFetchProjects } from "../hooks/useFetchProjects";
 import ErrorAlert from "../../../components/ui/ErrorAlert";
@@ -22,15 +23,65 @@ function ProjectsList() {
     );
   }
 
+  if (projects.length === 0) {
+    return (
+      <Box
+        sx={{
+          height: "235px",
+          px: 2,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          bgcolor: "background.default",
+          border: "1px dashed",
+          borderColor: "divider",
+          borderRadius: 1,
+        }}
+      >
+        <Stack
+          sx={{
+            spacing: 1,
+            alignItems: "center",
+            textAlign: "center",
+            color: "text.secondary",
+          }}
+        >
+          <Box
+            sx={{
+              width: 48,
+              height: 48,
+              display: "grid",
+              placeItems: "center",
+              borderRadius: "50%",
+              bgcolor: "primary.lighter",
+              color: "text.secondary",
+            }}
+          >
+            <FolderOpenOutlinedIcon />
+          </Box>
+
+          <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
+            No projects yet
+          </Typography>
+
+          <Typography variant="body2" sx={{ maxWidth: 260 }}>
+            Create a project to start organizing your tasks.
+          </Typography>
+        </Stack>
+      </Box>
+    );
+  }
+
   return (
     <List
       disablePadding
       sx={{
         display: "flex",
         flexDirection: "column",
+        justifyContent: "start",
         gap: { xs: 1, md: 0.5 },
         minHeight: 0,
-        height: "235px",
+        maxHeight: "235px",
         pb: 0.5,
         px: 1,
         bgcolor: "background.default",
