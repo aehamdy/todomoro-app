@@ -1,4 +1,5 @@
 import { RequestHandler } from "express";
+import { Types } from "mongoose";
 import PomodoroSession from "../models/pomodoro-session.model.js";
 import {
   getPomodoroStatsDateKeys,
@@ -9,11 +10,12 @@ import type {
   PomodoroProjectStat,
   PomodoroTaskStat,
 } from "../types/pomodoro-stats.types.js";
-import { Types } from "mongoose";
 
 interface DailyPomodoroStat {
   date: string;
   focusTimeSeconds: number;
+  shortBreakTimeSeconds: number;
+  longBreakTimeSeconds: number;
   completedSessions: number;
 }
 
@@ -101,11 +103,6 @@ export const getPomodoroStats: RequestHandler = async (req, res, next) => {
             ],
             dailyStats: [
               {
-                $match: {
-                  sessionType: "focus",
-                },
-              },
-              {
                 $group: {
                   _id: {
                     $dateToString: {
@@ -115,10 +112,36 @@ export const getPomodoroStats: RequestHandler = async (req, res, next) => {
                     },
                   },
                   focusTimeSeconds: {
-                    $sum: "$actualDurationSeconds",
+                    $sum: {
+                      $cond: [
+                        { $eq: ["$sessionType", "focus"] },
+                        "$actualDurationSeconds",
+                        0,
+                      ],
+                    },
+                  },
+                  shortBreakTimeSeconds: {
+                    $sum: {
+                      $cond: [
+                        { $eq: ["$sessionType", "shortBreak"] },
+                        "$actualDurationSeconds",
+                        0,
+                      ],
+                    },
+                  },
+                  longBreakTimeSeconds: {
+                    $sum: {
+                      $cond: [
+                        { $eq: ["$sessionType", "longBreak"] },
+                        "$actualDurationSeconds",
+                        0,
+                      ],
+                    },
                   },
                   completedSessions: {
-                    $sum: 1,
+                    $sum: {
+                      $cond: [{ $eq: ["$sessionType", "focus"] }, 1, 0],
+                    },
                   },
                 },
               },
@@ -132,6 +155,8 @@ export const getPomodoroStats: RequestHandler = async (req, res, next) => {
                   _id: 0,
                   date: "$_id",
                   focusTimeSeconds: 1,
+                  shortBreakTimeSeconds: 1,
+                  longBreakTimeSeconds: 1,
                   completedSessions: 1,
                 },
               },
@@ -249,6 +274,8 @@ export const getPomodoroStats: RequestHandler = async (req, res, next) => {
         dailyStatsMap.get(date) ?? {
           date,
           focusTimeSeconds: 0,
+          shortBreakTimeSeconds: 0,
+          longBreakTimeSeconds: 0,
           completedSessions: 0,
         },
     );
