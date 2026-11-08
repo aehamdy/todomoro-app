@@ -85,7 +85,7 @@ const SEMANTIC: Record<"light" | "dark", SemanticSet> = {
     success: {
       lighter: "#E3F4EA",
       light: "#4CAF7D",
-      main: "#1F7A4D",
+      main: "#36BC9B",
       dark: "#14573A",
       contrastText: "#FFFFFF",
       onLighter: "#0F4A2F",
@@ -93,7 +93,7 @@ const SEMANTIC: Record<"light" | "dark", SemanticSet> = {
     warning: {
       lighter: "#FEF0D2",
       light: "#E0A030",
-      main: "#9A4A06",
+      main: "#F8BA43",
       dark: "#6B3205",
       contrastText: "#FFFFFF",
       onLighter: "#6B3A06",
@@ -101,15 +101,15 @@ const SEMANTIC: Record<"light" | "dark", SemanticSet> = {
     error: {
       lighter: "#FDE6E6",
       light: "#E57373",
-      main: "#C62828",
-      dark: "#8E1B1B",
+      main: "#D32F2F",
+      dark: "#D94555",
       contrastText: "#FFFFFF",
       onLighter: "#7F1D1D",
     },
     info: {
       lighter: "#E1F0FB",
       light: "#4F9BD6",
-      main: "#1769AA",
+      main: "#4B89DC",
       dark: "#0F4A7A",
       contrastText: "#FFFFFF",
       onLighter: "#0D3F66",
@@ -119,7 +119,7 @@ const SEMANTIC: Record<"light" | "dark", SemanticSet> = {
     success: {
       lighter: "#13301F",
       light: "#7BDDA6",
-      main: "#3DBE7A",
+      main: "#48CFAE",
       dark: "#2A9460",
       contrastText: "#07140D",
       onLighter: "#9BE8BB",
@@ -127,7 +127,7 @@ const SEMANTIC: Record<"light" | "dark", SemanticSet> = {
     warning: {
       lighter: "#3A2A0B",
       light: "#F8D283",
-      main: "#F5B93A",
+      main: "#FFCE55",
       dark: "#C98F14",
       contrastText: "#1A1204",
       onLighter: "#FBD38D",
@@ -135,7 +135,7 @@ const SEMANTIC: Record<"light" | "dark", SemanticSet> = {
     error: {
       lighter: "#3C1717",
       light: "#FCA5A5",
-      main: "#F87171",
+      main: "#EF5350",
       dark: "#D44A4A",
       contrastText: "#1C0707",
       onLighter: "#FCA5A5",
@@ -143,7 +143,7 @@ const SEMANTIC: Record<"light" | "dark", SemanticSet> = {
     info: {
       lighter: "#112C40",
       light: "#9BD0F5",
-      main: "#5BB5F0",
+      main: "#5D9CEC",
       dark: "#3A8CC4",
       contrastText: "#06151F",
       onLighter: "#A5D8FA",
