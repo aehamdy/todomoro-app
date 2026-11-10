@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-import helmet from "helmet";
+import * as helmetModule from "helmet";
 import mongoose from "mongoose";
 import { errorHandler } from "./middlewares/error-handler.ts";
 import authRouter from "./routes/auth.routes.ts";
@@ -13,7 +13,7 @@ import pomodoroSessionRouter from "./routes/pomodoro-session.routes.ts";
 
 const app = express();
 
-app.use(helmet());
+app.use(helmetModule.default());
 app.use(
   cors({
     // cors() allows your frontend's configured origin to access the API.
