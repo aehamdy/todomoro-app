@@ -12,7 +12,8 @@
     "noUncheckedIndexedAccess": true,
     "noEmitOnError": true,
     "allowImportingTsExtensions": true,
-    "noEmit": true
+    "rewriteRelativeImportExtensions": true,
+    "noEmit": false
   },
   "include": ["src"],
   "exclude": ["node_modules", "dist", "tests"]

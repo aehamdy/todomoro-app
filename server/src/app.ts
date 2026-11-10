@@ -1,20 +1,18 @@
 import express from "express";
 import cors from "cors";
-import helmetModule from "helmet";
+import helmet from "helmet";
 import mongoose from "mongoose";
-import { errorHandler } from "./middlewares/error-handler.ts";
-import authRouter from "./routes/auth.routes.ts";
+import { errorHandler } from "./middlewares/error-handler.js";
+import authRouter from "./routes/auth.routes.js";
 import cookieParser from "cookie-parser";
 import csrfRouter from "./routes/csrf.routes.js";
-import taskRouter from "./routes/task.routes.ts";
-import projectRouter from "./routes/project.routes.ts";
-import overviewRouter from "./routes/overview.routes.ts";
-import pomodoroSessionRouter from "./routes/pomodoro-session.routes.ts";
-import type { RequestHandler } from "express";
+import taskRouter from "./routes/task.routes.js";
+import projectRouter from "./routes/project.routes.js";
+import overviewRouter from "./routes/overview.routes.js";
+import pomodoroSessionRouter from "./routes/pomodoro-session.routes.js";
 
 const app = express();
 
-const helmet = helmetModule as unknown as () => RequestHandler;
 app.use(helmet());
 
 app.use(
