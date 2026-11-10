@@ -11,6 +11,7 @@ import projectRouter from "./routes/project.routes.js";
 import overviewRouter from "./routes/overview.routes.js";
 import pomodoroSessionRouter from "./routes/pomodoro-session.routes.js";
 import type { RequestHandler } from "express";
+import { connectDB } from "./config/database.js";
 
 const app = express();
 
@@ -34,24 +35,36 @@ app.get("/api/v1/health", (req, res) => {
   });
 });
 
-app.get("/api/v1/ready", (_req, res) => {
-  const databaseConnected = mongoose.connection.readyState === 1;
+app.get("/api/v1/ready", async (_req, res) => {
+  try {
+    await connectDB();
 
-  if (!databaseConnected) {
+    res.status(200).json({
+      status: "success",
+      message: "Service is ready",
+    });
+  } catch (error) {
+    console.error("Readiness check failed:", error);
+
     res.status(503).json({
       status: "error",
       message: "Service is not ready",
     });
-    return;
   }
-
-  res.status(200).json({
-    status: "success",
-    message: "Service is ready",
-  });
 });
 
 app.use("/api/v1/csrf", csrfRouter);
+
+const ensureDatabaseConnection: RequestHandler = async (_req, _res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (error) {
+    next(error);
+  }
+};
+
+app.use(ensureDatabaseConnection);
 
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/tasks", taskRouter);
