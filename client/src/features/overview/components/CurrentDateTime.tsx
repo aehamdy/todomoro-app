@@ -32,14 +32,15 @@ function CurrentDateTime() {
       sx={{
         flexDirection: "row",
         alignItems: "center",
+        justifyContent: "end",
         flexWrap: "wrap",
         gap: 1,
+        width: "fit-content",
       }}
     >
       <Stack
         sx={{
           flexDirection: "row",
-          justifyContent: "",
           alignItems: "center",
           gap: 0.75,
         }}

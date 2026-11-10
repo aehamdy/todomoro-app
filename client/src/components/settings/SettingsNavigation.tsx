@@ -28,7 +28,7 @@ const settingsTabs: {
     value: "general",
   },
   {
-    label: "Pomodoro Timer",
+    label: "Timer",
     icon: <TimerOutlinedIcon fontSize="small" />,
     value: "pomodoro-timer",
   },

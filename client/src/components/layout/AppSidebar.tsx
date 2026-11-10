@@ -1,4 +1,4 @@
-import { Box, Divider, List } from "@mui/material";
+import { Box, List } from "@mui/material";
 import { motion, useReducedMotion } from "motion/react";
 import NavList from "./NavList";
 import ProjectsSection from "../../features/projects/components/ProjectsSection";
@@ -65,15 +65,11 @@ function AppSidebar({
         sx={{
           display: "flex",
           flexDirection: "column",
-          gap: 1,
+          gap: 1.5,
         }}
       >
         <MotionBox variants={sectionVariants}>
           <NavList />
-        </MotionBox>
-
-        <MotionBox variants={sectionVariants}>
-          <Divider />
         </MotionBox>
 
         <MotionBox variants={sectionVariants}>

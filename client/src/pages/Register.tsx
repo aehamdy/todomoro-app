@@ -1,133 +1,52 @@
-import { Box, Paper, Stack, Typography } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 import RegisterForm from "../features/auth/components/RegisterForm";
-import Logo from "../components/layout/AppLogo";
+import AuthContainer from "../components/common/AuthContainer";
 
 function RegisterPage() {
   return (
-    <Box
-      sx={{
-        minHeight: "100dvh",
-        p: { xs: 1, sm: 2 },
-        display: "flex",
-        alignItems: "stretch",
-        bgcolor: "#FFF",
-      }}
-    >
-      <Paper
-        elevation={0}
+    <AuthContainer>
+      <Box
         sx={{
+          flex: { xs: 1, md: "initial" },
           display: "flex",
-          flexDirection: { xs: "column", md: "row" },
-          width: "100%",
-          minHeight: { xs: "calc(100dvh - 16px)", sm: "calc(100dvh - 32px)" },
-          bgcolor: "#222",
-          borderRadius: { xs: 4, md: 5 },
-          overflow: "hidden",
+          alignItems: "center",
+          justifyContent: "center",
+          width: { xs: "100%", lg: "70%" },
+          height: "100%",
+          p: { xs: 3, sm: 5, md: 4, lg: 6 },
+          mx: "auto",
         }}
       >
-        {/* Branding panel */}
         <Box
           sx={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "space-between",
-            width: { xs: "100%", md: "65%" },
-            minHeight: { xs: 260, md: "auto" },
-            p: { xs: 3, sm: 5, md: 6 },
-            color: "#FFFFFF",
-            borderRadius: { xs: 4, md: 0 },
+            width: { xs: "100%", md: "60%", lg: "100%" },
           }}
         >
-          <Logo color="light" />
-
-          {/* Main tagline */}
-          <Box
-            sx={{
-              flex: 1,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              px: { xs: 0, sm: 2 },
-              py: { xs: 4, md: 0 },
-            }}
-          >
+          <Stack spacing={0.5} sx={{ mb: 3 }}>
             <Typography
               variant="h5"
-              component="h1"
+              component="h2"
               sx={{
-                fontWeight: 300,
-                fontSize: {
-                  xs: "1.15rem",
-                  sm: "1.5rem",
-                  md: "1.65rem",
-                },
-                lineHeight: 1.6,
-                letterSpacing: "0.5px",
-                textAlign: "center",
+                fontWeight: 700,
+                letterSpacing: "-0.02em",
                 color: "rgba(255, 255, 255, 0.9)",
-                maxWidth: 650,
               }}
             >
-              A simple space to plan, focus, and make progress.
+              Create your account
             </Typography>
-          </Box>
 
-          {/* Footer */}
-          <Typography
-            variant="body2"
-            sx={{
-              textAlign: "center",
-              color: "rgba(255, 255, 255, 0.55)",
-              display: { xs: "none", sm: "block" },
-            }}
-          >
-            Make every day a little more intentional.
-          </Typography>
+            <Typography
+              variant="body2"
+              sx={{ color: "rgba(255, 255, 255, 0.55)" }}
+            >
+              Start organizing your tasks with Todomoro.
+            </Typography>
+          </Stack>
+
+          <RegisterForm />
         </Box>
-
-        {/* Register form panel */}
-        <Box
-          sx={{
-            width: { xs: "100%", md: "35%" },
-            flex: { xs: 1, md: "initial" },
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            p: { xs: 3, sm: 5, md: 4, lg: 6 },
-          }}
-        >
-          <Box
-            sx={{
-              width: "100%",
-              maxWidth: 380,
-            }}
-          >
-            <Stack spacing={0.5} sx={{ mb: 3 }}>
-              <Typography
-                variant="h5"
-                component="h2"
-                sx={{
-                  fontWeight: 700,
-                  letterSpacing: "-0.02em",
-                  color: "rgba(255, 255, 255, 0.9)",
-                }}
-              >
-                Create your account
-              </Typography>
-
-              <Typography
-                variant="body2"
-                sx={{ color: "rgba(255, 255, 255, 0.55)" }}
-              >
-                Start organizing your tasks with Todomoro.
-              </Typography>
-            </Stack>
-
-            <RegisterForm />
-          </Box>
-        </Box>
-      </Paper>
-    </Box>
+      </Box>
+    </AuthContainer>
   );
 }
 
