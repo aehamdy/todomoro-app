@@ -13,7 +13,7 @@ import pomodoroSessionRouter from "./routes/pomodoro-session.routes.ts";
 
 const app = express();
 
-app.use((helmet as unknown as { default: typeof helmet }).default());
+app.use(helmet());
 app.use(
   cors({
     // cors() allows your frontend's configured origin to access the API.
