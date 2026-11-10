@@ -15,6 +15,7 @@ import AppSidebar from "./AppSidebar";
 import type { ActivePomodoroTask, Task } from "../../features/tasks/task.types";
 import TaskDetailsSidebar from "../../features/tasks/components/TaskDetailsSidebar";
 import AnimatedOutlet from "../common/AnimatedOutlet";
+import useScreenshotMode from "../../hooks/useScreenshotMode";
 
 const HEADER_HEIGHT = 65;
 const SIDEBAR_RAIL_WIDTH = 36;
@@ -27,6 +28,7 @@ export type DashboardOutletContext = {
 };
 
 function DashboardLayout() {
+  const isScreenshotMode = useScreenshotMode();
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [activePomodoroTask, setActivePomodoroTask] =
     useState<ActivePomodoroTask | null>(null);
@@ -48,15 +50,16 @@ function DashboardLayout() {
   return (
     <Box
       sx={{
-        height: "100dvh",
-        overflow: "hidden",
+        height: isScreenshotMode ? "auto" : "100dvh",
+        minHeight: isScreenshotMode ? "100vh" : undefined,
+        overflow: isScreenshotMode ? "visible" : "hidden",
         bgcolor: "background.default",
       }}
     >
       {/* Application header */}
       <Box
         sx={{
-          position: "fixed",
+          position: isScreenshotMode ? "relative" : "fixed",
           top: 0,
           left: 0,
           right: 0,
@@ -78,15 +81,21 @@ function DashboardLayout() {
               : `${SIDEBAR_RAIL_WIDTH}px repeat(12, minmax(0, 1fr))`,
             lg: "repeat(12, minmax(0, 1fr))",
           },
-          height: `calc(100dvh - ${HEADER_HEIGHT}px)`,
-          mt: `${HEADER_HEIGHT}px`,
-          overflow: "hidden",
+          height: isScreenshotMode
+            ? "auto"
+            : `calc(100dvh - ${HEADER_HEIGHT}px)`,
+          minHeight: isScreenshotMode
+            ? `calc(100vh - ${HEADER_HEIGHT}px)`
+            : undefined,
+          mt: isScreenshotMode ? 0 : `${HEADER_HEIGHT}px`,
+          overflow: isScreenshotMode ? "visible" : "hidden",
         }}
       >
         {/* Navigation sidebar */}
         <Box
           component="aside"
           sx={{
+            display: isMobile ? "none" : "block",
             gridColumn: {
               xs: "1 / -1",
               md: isSidebarOpen ? "span 3" : "1 / 2",
@@ -94,11 +103,10 @@ function DashboardLayout() {
             },
             position: "relative",
             minWidth: 0,
-            minHeight: 0,
-            height: "100%",
-            overflow: "hidden",
+            height: isScreenshotMode ? "auto" : "100%",
+            minHeight: isScreenshotMode ? "100%" : 0,
             bgcolor: "background.sidebar",
-            display: isMobile ? "none" : "block",
+            overflow: isScreenshotMode ? "visible" : "hidden",
             transition: "width 250ms ease",
           }}
         >
@@ -117,7 +125,7 @@ function DashboardLayout() {
               onClick={() => setIsSidebarOpen((open) => !open)}
               sx={{
                 position: "absolute",
-                top: 12,
+                top: 70,
                 right: -16,
                 zIndex: theme.zIndex.drawer + 2,
                 width: 32,
@@ -146,21 +154,13 @@ function DashboardLayout() {
               lg: selectedTask ? "span 7" : "span 10",
             },
             minWidth: 0,
-            height: "100%",
-            overflowY: "auto",
-            overscrollBehavior: "contain",
-            p: { xs: 2, sm: 3, md: 2 },
+            height: isScreenshotMode ? "auto" : "100%",
+            overflowY: isScreenshotMode ? "visible" : "auto",
+            overscrollBehavior: isScreenshotMode ? "auto" : "contain",
+            p: { xs: 1, sm: 1.5, md: 2 },
             transition: "grid-column 250ms ease",
           }}
         >
-          {/* <Outlet
-            context={{
-              selectedTask,
-              setSelectedTask,
-              activePomodoroTask,
-              setActivePomodoroTask,
-            }}
-          /> */}
           <AnimatedOutlet>{outlet}</AnimatedOutlet>
         </Box>
 
@@ -172,8 +172,8 @@ function DashboardLayout() {
             sx={{
               gridColumn: "span 3",
               minWidth: 0,
-              height: "100%",
-              overflow: "hidden",
+              height: isScreenshotMode ? "auto" : "100%",
+              overflow: isScreenshotMode ? "visible" : "hidden",
               animation: "slideInFromRight 250ms ease-out",
               "@keyframes slideInFromRight": {
                 from: {
@@ -234,7 +234,7 @@ function DashboardLayout() {
               onClick={() => setIsSidebarOpen((open) => !open)}
               sx={{
                 position: "fixed",
-                top: `${HEADER_HEIGHT + 12}px`,
+                top: `${HEADER_HEIGHT + 100}px`,
                 left: isSidebarOpen ? "min(290px, 85vw)" : 0,
                 transform: isSidebarOpen ? "translateX(-50%)" : "translateX(0)",
                 // Lower than the Settings modal (1300) so it stays behind it

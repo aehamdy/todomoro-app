@@ -5,8 +5,11 @@ import type { TProject } from "../project.types";
 import { useFetchProjects } from "../hooks/useFetchProjects";
 import ErrorAlert from "../../../components/ui/ErrorAlert";
 import RecentProjectItemSkeleton from "../../overview/components/skeletons/RecentProjectItemSkeleton";
+import useScreenshotMode from "../../../hooks/useScreenshotMode";
 
 function ProjectsList() {
+  const isScreenshotMode = useScreenshotMode();
+
   const { projects, isLoading, isError, error } = useFetchProjects();
 
   if (isLoading) return <RecentProjectItemSkeleton count={5} />;
@@ -81,7 +84,10 @@ function ProjectsList() {
         justifyContent: "start",
         gap: { xs: 1, md: 0.5 },
         minHeight: 0,
-        maxHeight: { xs: "280px", lg: "230px" },
+        // maxHeight: { xs: "280px", lg: "230px" },
+        maxHeight: isScreenshotMode
+          ? { xs: "280px", lg: "260px" }
+          : { xs: "280px", lg: "230px" },
         pb: 0.5,
         px: 0.5,
         fontSize: "10px",

@@ -20,6 +20,7 @@ import FormatListBulletedRounded from "@mui/icons-material/FormatListBulletedRou
 import { playTaskCompletionSound } from "../utils/playTaskCompletionSound";
 import { useAuth } from "../../auth/hooks/useAuth";
 import TaskProjectInfo from "../../overview/components/TaskProjectInfo";
+import useScreenshotMode from "../../../hooks/useScreenshotMode";
 
 type TaskItemProps = {
   task: Task;
@@ -34,6 +35,8 @@ function TaskItem({
   displayProject = false,
   onPlay,
 }: TaskItemProps) {
+  const isScreenshotMode = useScreenshotMode();
+
   const { user } = useAuth();
   const { toggleTask, isToggling, error, isError } = useToggleTask();
   const [showError, setShowError] = useState(false);
@@ -131,6 +134,7 @@ function TaskItem({
                   <Typography
                     sx={{
                       fontWeight: 600,
+                      fontSize: isScreenshotMode ? 14 : "",
                       textDecoration: task.isCompleted
                         ? "line-through"
                         : "none",

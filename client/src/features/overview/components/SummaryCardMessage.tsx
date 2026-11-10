@@ -1,5 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import type { ReactNode } from "react";
+import useScreenshotMode from "../../../hooks/useScreenshotMode";
 
 type SummaryCardMessageProps = {
   value: number;
@@ -14,6 +15,8 @@ function SummaryCardMessage({
   secondaryIcon,
   message,
 }: SummaryCardMessageProps) {
+  const isScreenshotMode = useScreenshotMode();
+
   return (
     <Box
       sx={{
@@ -31,7 +34,8 @@ function SummaryCardMessage({
       <Typography
         className="card-message-text"
         sx={{
-          fontSize: { xs: 10, md: 14 },
+          // fontSize: { xs: 10, md: 14 },
+          fontSize: isScreenshotMode ? { xs: 10, md: 13 } : { xs: 10, md: 14 },
           color: "text.secondary",
           transition: "color 0.2s ease",
         }}

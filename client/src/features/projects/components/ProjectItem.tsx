@@ -18,6 +18,7 @@ import ProjectFormDialog from "./ProjectFormDialog";
 import DeleteModal from "../../../components/common/DeleteModal";
 import { ROUTES } from "../../../routes/paths";
 import { useLocation, useNavigate } from "react-router-dom";
+import useScreenshotMode from "../../../hooks/useScreenshotMode";
 
 type ProjectItemProps = {
   project: TProject;
@@ -35,6 +36,8 @@ function getApiErrorMessage(error: unknown, fallbackMessage: string): string {
 }
 
 function ProjectItem({ project }: ProjectItemProps) {
+  const isScreenshotMode = useScreenshotMode();
+
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
@@ -180,6 +183,7 @@ function ProjectItem({ project }: ProjectItemProps) {
               minWidth: 0,
               "& .MuiListItemText-primary": {
                 // fontSize: "14px",
+                fontSize: isScreenshotMode ? 14 : 16,
                 overflow: "hidden",
                 textOverflow: "ellipsis",
                 whiteSpace: "nowrap",
