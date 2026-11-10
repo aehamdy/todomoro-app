@@ -10,10 +10,12 @@ import taskRouter from "./routes/task.routes.js";
 import projectRouter from "./routes/project.routes.js";
 import overviewRouter from "./routes/overview.routes.js";
 import pomodoroSessionRouter from "./routes/pomodoro-session.routes.js";
+import type { RequestHandler } from "express";
 
 const app = express();
 
-app.use(helmet());
+const createHelmetMiddleware = helmet as unknown as () => RequestHandler;
+app.use(createHelmetMiddleware());
 
 app.use(
   cors({
