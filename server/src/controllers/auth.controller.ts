@@ -68,7 +68,7 @@ export const login: RequestHandler = async (req, res, next) => {
     res.cookie("accessToken", token, {
       httpOnly: true, // Prevents frontend JavaScript from reading the authentication cookie.
       secure: process.env.NODE_ENV === "production", // Sends the cookie only over HTTPS in production.
-      sameSite: "lax", // Helps protect against cross-site request forgery (CSRF). It is not our only CSRF defense.
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // Helps protect against cross-site request forgery (CSRF). It is not our only CSRF defense.
       maxAge: 7 * 24 * 60 * 60 * 1000, // Keeps the cookie for seven days, matching your JWT lifetime.
       path: "/", // Makes the cookie available across your API routes.
     });
@@ -211,18 +211,21 @@ export const getMe: RequestHandler = async (req, res, next) => {
 };
 
 export const logout: RequestHandler = (_req, res) => {
-  res.clearCookie("accessToken", {
+  const cookieOptions = {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
+    sameSite:
+      process.env.NODE_ENV === "production"
+        ? ("none" as const)
+        : ("lax" as const),
     path: "/",
-  });
+  };
+
+  res.clearCookie("accessToken", cookieOptions);
 
   res.clearCookie("csrfToken", {
+    ...cookieOptions,
     httpOnly: false,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    path: "/",
   });
 
   res.status(200).json({
