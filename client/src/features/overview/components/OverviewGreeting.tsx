@@ -137,6 +137,7 @@ function OverviewGreeting() {
               fontWeight: 600,
               color: "primary.contrastText",
               letterSpacing: "-0.02em",
+              width: "100%",
             }}
           >
             {greeting}, {name}! 👋
