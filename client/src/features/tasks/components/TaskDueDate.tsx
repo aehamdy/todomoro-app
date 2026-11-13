@@ -46,6 +46,7 @@ function TaskDueDate({ dueDate, onSave, isSaving }: TaskDueDateProps) {
           justifyContent: "space-between",
           alignItems: "center",
           p: 1,
+          fontSize: "0.875rem",
           borderRadius: 1,
           cursor: isSaving ? "default" : "pointer",
           "&:hover": {
@@ -56,13 +57,18 @@ function TaskDueDate({ dueDate, onSave, isSaving }: TaskDueDateProps) {
       >
         <Typography
           color="text.secondary"
-          sx={{ display: "flex", alignItems: "center", gap: "6px" }}
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: "6px",
+            fontSize: "inherit",
+          }}
         >
-          <TrackChangesIcon color="inherit" />
+          <TrackChangesIcon color="inherit" fontSize="small" />
           Due Date
         </Typography>
 
-        <Typography sx={{ color: "text.primary" }}>
+        <Typography sx={{ color: "text.primary", fontSize: "inherit" }}>
           {dueDate ? formatDateTime(dueDate) : "Someday"}
         </Typography>
       </Stack>

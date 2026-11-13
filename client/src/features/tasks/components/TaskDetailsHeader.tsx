@@ -1,5 +1,5 @@
 import CloseIcon from "@mui/icons-material/Close";
-import { Box, Divider, IconButton, Stack, Typography } from "@mui/material";
+import { Box, IconButton, Stack, Typography } from "@mui/material";
 
 type TaskDetailsHeaderProps = {
   onClose: () => void;
@@ -7,14 +7,23 @@ type TaskDetailsHeaderProps = {
 
 function TaskDetailsHeader({ onClose }: TaskDetailsHeaderProps) {
   return (
-    <Box>
+    <Box
+      sx={{
+        position: "sticky",
+        top: 0,
+        zIndex: 10,
+        bgcolor: "background.paper",
+        borderBottom: "1px solid",
+        borderColor: "divider",
+      }}
+    >
       <Stack
         sx={{
           display: "flex",
           flexDirection: "row",
           justifyContent: "space-between",
           alignItems: "center",
-          mb: 2,
+          p: 1,
         }}
       >
         <Typography
@@ -37,8 +46,6 @@ function TaskDetailsHeader({ onClose }: TaskDetailsHeaderProps) {
           <CloseIcon fontSize="small" />
         </IconButton>
       </Stack>
-
-      <Divider sx={{ mb: 2 }} />
     </Box>
   );
 }
