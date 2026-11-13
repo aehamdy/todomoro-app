@@ -7,11 +7,11 @@ import FlagIcon from "@mui/icons-material/Flag";
 import {
   Alert,
   Box,
+  CircularProgress,
   IconButton,
   Menu,
   MenuItem,
   Paper,
-  Popover,
   Stack,
   TextField,
   Tooltip,
@@ -26,6 +26,8 @@ import {
 } from "../task.schema";
 import { priorityColors } from "../task.constants";
 import axios from "axios";
+import dayjs, { Dayjs } from "dayjs";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 interface CreateTaskFormProps {
   projectId: string | null;
@@ -40,12 +42,13 @@ const priorities = [
 ] as const;
 
 function CreateTaskForm({ projectId, onSuccess }: CreateTaskFormProps) {
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
+
   const { createTask, isCreating, error, isError } = useCreateTask();
 
   const [priorityAnchor, setPriorityAnchor] = useState<HTMLElement | null>(
     null,
   );
-  const [dateAnchor, setDateAnchor] = useState<HTMLElement | null>(null);
 
   const {
     control,
@@ -111,19 +114,27 @@ function CreateTaskForm({ projectId, onSuccess }: CreateTaskFormProps) {
           },
         }}
       >
-        <Tooltip title="Create task">
-          <span>
-            <IconButton
-              type="submit"
-              color="primary"
-              aria-label="Create task"
-              disabled={isCreating}
-              sx={{ flexShrink: 0 }}
-            >
-              <AddIcon />
-            </IconButton>
-          </span>
-        </Tooltip>
+        {isCreating ? (
+          <CircularProgress
+            size={14}
+            thickness={5}
+            aria-label="Updating task"
+          />
+        ) : (
+          <Tooltip title="Create task">
+            <span>
+              <IconButton
+                type="submit"
+                color="primary"
+                aria-label="Create task"
+                disabled={isCreating}
+                sx={{ flexShrink: 0 }}
+              >
+                <AddIcon />
+              </IconButton>
+            </span>
+          </Tooltip>
+        )}
 
         <TextField
           {...register("title")}
@@ -208,86 +219,123 @@ function CreateTaskForm({ projectId, onSuccess }: CreateTaskFormProps) {
           )}
         />
 
-        <Tooltip
-          title={selectedDueDate ? `Due: ${selectedDueDate}` : "Set due date"}
-        >
-          <span>
-            <IconButton
-              type="button"
-              aria-label="Select due date"
-              aria-haspopup="true"
-              aria-expanded={Boolean(dateAnchor)}
-              disabled={isCreating}
-              onClick={(event) => setDateAnchor(event.currentTarget)}
-              sx={{ flexShrink: 0, color: "primary.main" }}
-            >
-              <CalendarMonthOutlinedIcon />
-            </IconButton>
-          </span>
-        </Tooltip>
+        <Box sx={{ position: "relative" }}>
+          <Tooltip
+            title={
+              selectedDueDate
+                ? `Due: ${dayjs(selectedDueDate).format("DD MMM YYYY")}`
+                : "Set due date"
+            }
+          >
+            <span>
+              <IconButton
+                type="button"
+                aria-label="Select due date"
+                aria-haspopup="dialog"
+                aria-expanded={isDatePickerOpen}
+                disabled={isCreating}
+                onClick={() => setIsDatePickerOpen(true)}
+                sx={{ flexShrink: 0, color: "primary.main" }}
+              >
+                <CalendarMonthOutlinedIcon />
+              </IconButton>
+            </span>
+          </Tooltip>
 
-        <Popover
-          open={Boolean(dateAnchor)}
-          anchorEl={dateAnchor}
-          onClose={() => setDateAnchor(null)}
-          anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "right",
-          }}
-          transformOrigin={{
-            vertical: "top",
-            horizontal: "right",
-          }}
-        >
-          <Box sx={{ p: 2, width: 260, maxWidth: "90vw" }}>
-            <Stack spacing={2}>
-              <TextField
-                label="Due date"
-                type="date"
-                fullWidth
-                size="small"
-                value={selectedDueDate ?? ""}
-                onChange={(event) => {
-                  setValue("dueDate", event.target.value || null, {
-                    shouldDirty: true,
-                  });
-                }}
-                slotProps={{
-                  inputLabel: { shrink: true },
-                  htmlInput: {
-                    min: new Date().toLocaleDateString("en-CA"),
+          <DatePicker
+            open={isDatePickerOpen}
+            value={selectedDueDate ? dayjs(selectedDueDate) : null}
+            onChange={(newValue: Dayjs | null) => {
+              if (newValue === null) {
+                setValue("dueDate", null, { shouldDirty: true });
+                return;
+              }
+
+              if (newValue.isValid()) {
+                setValue("dueDate", newValue.format("YYYY-MM-DD"), {
+                  shouldDirty: true,
+                });
+              }
+            }}
+            onClose={() => setIsDatePickerOpen(false)}
+            onAccept={() => setIsDatePickerOpen(false)}
+            closeOnSelect={false}
+            disabled={isCreating}
+            minDate={dayjs()}
+            format="DD MMM YYYY"
+            reduceAnimations
+            slotProps={{
+              textField: {
+                sx: {
+                  position: "absolute",
+                  top: "-10px",
+                  left: "0%",
+                  translate: "-50% 0",
+                  width: 0,
+                  height: 0,
+                  opacity: 0,
+                  pointerEvents: "none",
+                },
+              },
+              actionBar: {
+                actions: ["cancel", "accept"],
+              },
+              popper: {
+                placement: "bottom-end",
+                modifiers: [
+                  {
+                    name: "preventOverflow",
+                    options: {
+                      boundary: "viewport",
+                    },
                   },
-                }}
-              />
-
-              <Stack direction="row" spacing={1}>
-                <Box sx={{ flex: 1 }}>
-                  <IconButton
-                    aria-label="Clear due date"
-                    title="Clear due date"
-                    onClick={() => {
-                      setValue("dueDate", null, {
-                        shouldDirty: true,
-                      });
-                      setDateAnchor(null);
-                    }}
-                    size="small"
-                  >
-                    <span style={{ fontSize: 13 }}>Clear date</span>
-                  </IconButton>
-                </Box>
-
-                <IconButton
-                  aria-label="Close date picker"
-                  onClick={() => setDateAnchor(null)}
-                  size="small"
-                >
-                  <span style={{ fontSize: 13 }}>Done</span>
-                </IconButton>
-              </Stack>
-            </Stack>
-          </Box>
-        </Popover>
+                  {
+                    name: "flip",
+                    options: {
+                      enabled: true,
+                    },
+                  },
+                ],
+                sx: {
+                  "& .MuiPaper-root": {
+                    border: "1px solid",
+                    borderColor: "divider",
+                    borderRadius: 2,
+                  },
+                  "& .MuiDateCalendar-root": {
+                    width: 250,
+                    height: "auto",
+                    maxHeight: 270,
+                  },
+                  "& .MuiPickersCalendarHeader-root": {
+                    px: 1.5,
+                    mt: 1,
+                    mb: 0.5,
+                    minHeight: 32,
+                  },
+                  "& .MuiPickersCalendarHeader-label": {
+                    fontSize: "0.85rem",
+                  },
+                  "& .MuiDayCalendar-weekDayLabel": {
+                    width: 30,
+                    height: 26,
+                    fontSize: "0.75rem",
+                  },
+                  "& .MuiPickersDay-root": {
+                    width: 30,
+                    height: 30,
+                    fontSize: "0.75rem",
+                  },
+                  "& .MuiDialogActions-root": {
+                    pt: 0,
+                    pb: 0.75,
+                    px: 1.5,
+                  },
+                },
+              },
+            }}
+          />
+        </Box>
       </Paper>
 
       {errors.title && (

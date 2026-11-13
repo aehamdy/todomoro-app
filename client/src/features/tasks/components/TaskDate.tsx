@@ -17,9 +17,14 @@ function TaskDate({ taskDate }: { taskDate: string | Date }) {
     >
       <Typography
         color="text.secondary"
-        sx={{ display: "flex", alignItems: "center", gap: "6px" }}
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          gap: "6px",
+          fontSize: "0.875rem",
+        }}
       >
-        <CalendarMonthIcon color="inherit" />
+        <CalendarMonthIcon color="inherit" fontSize="small" />
         Task Date
       </Typography>
       {formatDateTime(taskDate)}

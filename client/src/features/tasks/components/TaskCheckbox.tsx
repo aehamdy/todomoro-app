@@ -41,8 +41,8 @@ function TaskCheckbox({
           icon={
             <Box
               sx={{
-                width: 20,
-                height: 20,
+                width: 18,
+                height: 18,
                 borderRadius: "6px",
                 border: "2px solid",
                 borderColor: priority
@@ -54,8 +54,8 @@ function TaskCheckbox({
           checkedIcon={
             <Box
               sx={{
-                width: 20,
-                height: 20,
+                width: 18,
+                height: 18,
                 borderRadius: "6px",
                 bgcolor: priority
                   ? priorityColors[priority].text

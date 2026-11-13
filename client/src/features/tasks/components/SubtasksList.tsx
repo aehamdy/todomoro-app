@@ -23,7 +23,14 @@ function SubtasksList({ taskId, subtasks }: SubtasksListProps) {
 
       <CreateSubtaskForm taskId={taskId} />
 
-      <List disablePadding>
+      <List
+        disablePadding
+        sx={{
+          minHeight: 0,
+          maxHeight: "225px",
+          overflow: "auto",
+        }}
+      >
         {subtasks.map((subtask) => (
           <SubtaskItem key={subtask._id} taskId={taskId} subtask={subtask} />
         ))}

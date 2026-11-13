@@ -119,14 +119,6 @@ function TaskList({
             sx={{
               maxHeight: "450px",
               overflowY: "auto",
-
-              "&::-webkit-scrollbar": {
-                width: "8px",
-              },
-              "&::-webkit-scrollbar-thumb": {
-                backgroundColor: "divider",
-                borderRadius: "4px",
-              },
             }}
           >
             {displayedTasks.map((task) => (
@@ -145,6 +137,7 @@ function TaskList({
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
+                py: 1,
               }}
             >
               <Button
@@ -175,14 +168,6 @@ function TaskList({
               sx={{
                 maxHeight: "450px",
                 overflowY: "auto",
-
-                "&::-webkit-scrollbar": {
-                  width: "8px",
-                },
-                "&::-webkit-scrollbar-thumb": {
-                  backgroundColor: "divider",
-                  borderRadius: "4px",
-                },
               }}
             >
               {completedTasks.map((task) => (

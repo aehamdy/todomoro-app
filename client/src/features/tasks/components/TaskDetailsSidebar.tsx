@@ -108,24 +108,45 @@ function TaskDetailsSidebar({ taskId, onClose }: TaskDetailsSidebarProps) {
     <Box
       component="aside"
       sx={{
+        // display: "flex",
+        // flexDirection: "column",
+        // justifyContent: "space-between",
+        // minWidth: 0,
+        // height: "calc(100% - 40px)",
+        // my: "20px",
+        // mx: 1,
+        // p: 2,
+        // fontSize: "0.875rem",
+        // bgcolor: "background.paper",
+        // borderRadius: "8px",
+        // boxShadow: 5,
+        // position: "relative",
+        // overflowY: "auto",
         display: "flex",
         flexDirection: "column",
-        justifyContent: "space-between",
         minWidth: 0,
         height: "calc(100% - 40px)",
         my: "20px",
         mx: 1,
         p: 2,
+        fontSize: "0.875rem",
         bgcolor: "background.paper",
         borderRadius: "8px",
         boxShadow: 5,
-        overflowY: "auto",
+        position: "relative",
+        overflow: "hidden",
       }}
     >
-      <Stack>
+      <Box
+        sx={{
+          flex: 1,
+          minHeight: 0,
+          overflowY: "auto",
+        }}
+      >
         <TaskDetailsHeader onClose={onClose} />
 
-        <Stack spacing={1} sx={{ color: "text.secondary" }}>
+        <Stack spacing={1} sx={{ mt: 2, color: "text.secondary" }}>
           {isUpdateError && (
             <Alert severity="error">
               Failed to update the task. Please try again.
@@ -173,7 +194,7 @@ function TaskDetailsSidebar({ taskId, onClose }: TaskDetailsSidebarProps) {
         <Divider sx={{ my: 1 }} />
 
         <SubtasksList taskId={taskId} subtasks={displayedSubtasks} />
-      </Stack>
+      </Box>
 
       <TaskDetailsFooter
         taskTitle={task.title}

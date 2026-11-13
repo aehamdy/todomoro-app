@@ -66,6 +66,7 @@ function TaskPrioritySelector({
           gap: 2,
           mx: -0.5,
           p: 1,
+          fontSize: "0.875rem",
           borderRadius: 1,
           cursor: isSaving ? "default" : "pointer",
           "&:hover": {
@@ -75,9 +76,14 @@ function TaskPrioritySelector({
       >
         <Typography
           color="text.secondary"
-          sx={{ display: "flex", alignItems: "center", gap: "6px" }}
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: "6px",
+            fontSize: "inherit",
+          }}
         >
-          <FlagOutlinedIcon color="inherit" />
+          <FlagOutlinedIcon color="inherit" fontSize="small" />
           Priority
         </Typography>
 
@@ -93,15 +99,12 @@ function TaskPrioritySelector({
             borderRadius: 2,
           }}
         >
-          <FlagIcon
-            fontSize="small"
-            // sx={{ color: currentPriority?.color ?? "text.secondary" }}
-            sx={{ color: "white" }}
-          />
+          <FlagIcon fontSize="small" sx={{ color: "white" }} />
 
           <Typography
             variant="body2"
             sx={{
+              fontSize: "inherit",
               color: "white",
               bgcolor: currentPriority?.color,
             }}

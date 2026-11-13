@@ -49,7 +49,6 @@ function TaskTitle({
         display: "flex",
         flexDirection: "row",
         alignItems: "center",
-        gap: 1,
       }}
     >
       <TaskCheckbox
@@ -80,11 +79,12 @@ function TaskTitle({
           variant="h6"
           onClick={handleStartEditing}
           sx={{
-            overflowWrap: "anywhere",
-            cursor: isSaving ? "default" : "text",
-            borderRadius: 1,
+            fontSize: "0.875rem",
             textDecoration: isCompleted ? "line-through" : "none",
             color: isCompleted ? "text.secondary" : "text.primary",
+            borderRadius: 1,
+            overflowWrap: "anywhere",
+            cursor: isSaving ? "default" : "text",
             "&:hover": {
               backgroundColor: isSaving ? "transparent" : "action.hover",
             },

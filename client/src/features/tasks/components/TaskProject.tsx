@@ -80,9 +80,10 @@ function TaskProject({ taskId, projectId }: TaskProjectProps) {
           p: 1,
           border: 0,
           borderRadius: 2,
-          backgroundColor: "transparent",
-          textAlign: "left",
           font: "inherit",
+          fontSize: "0.875rem",
+          textAlign: "left",
+          backgroundColor: "transparent",
           cursor: isLoading || isUpdating ? "default" : "pointer",
           "&:hover": {
             backgroundColor:
@@ -92,7 +93,9 @@ function TaskProject({ taskId, projectId }: TaskProjectProps) {
       >
         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
           <FolderOutlinedIcon fontSize="small" />
-          <Typography color="text.secondary">Project</Typography>
+          <Typography sx={{ fontSize: "inherit", color: "text.secondary" }}>
+            Project
+          </Typography>
         </Box>
 
         <Stack
@@ -105,7 +108,11 @@ function TaskProject({ taskId, projectId }: TaskProjectProps) {
         >
           {isUpdating && <CircularProgress size={16} />}
 
-          <Typography variant="body2" sx={{ color: "text.primary" }} noWrap>
+          <Typography
+            variant="body2"
+            sx={{ color: "text.primary", fontSize: "inherit" }}
+            noWrap
+          >
             {isLoading ? "Loading..." : (selectedProject?.title ?? "Tasks")}
           </Typography>
         </Stack>

@@ -10,6 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import CheckIcon from "@mui/icons-material/Check";
 import type { Subtask } from "../task.types";
 import { useUpdateSubtask } from "../hooks/useUpdateSubtask";
@@ -114,14 +115,14 @@ function SubtaskItem({ taskId, subtask }: SubtaskItemProps) {
           alignItems: "center",
           justifyContent: "space-between",
           px: 0,
-          py: 1,
+          py: 0.5,
         }}
       >
         <Stack
           sx={{
             flexDirection: "row",
             alignItems: "center",
-            gap: 1.5,
+            gap: 0.25,
             flex: 1,
             minWidth: 0,
           }}
@@ -138,8 +139,8 @@ function SubtaskItem({ taskId, subtask }: SubtaskItemProps) {
               icon={
                 <Box
                   sx={{
-                    width: 20,
-                    height: 20,
+                    width: 16,
+                    height: 16,
                     borderRadius: "6px",
                     border: "2px solid",
                     borderColor: "text.secondary",
@@ -149,8 +150,8 @@ function SubtaskItem({ taskId, subtask }: SubtaskItemProps) {
               checkedIcon={
                 <Box
                   sx={{
-                    width: 20,
-                    height: 20,
+                    width: 16,
+                    height: 16,
                     borderRadius: "6px",
                     bgcolor: "success.main",
                     display: "flex",
@@ -212,14 +213,15 @@ function SubtaskItem({ taskId, subtask }: SubtaskItemProps) {
                 display: "flex",
                 alignItems: "center",
                 textDecoration: subtask.isCompleted ? "line-through" : "none",
+                fontSize: "0.875rem",
                 color:
                   subtask.isCompleted || isUpdating
                     ? "text.secondary"
                     : "text.primary",
                 wordBreak: "break-word",
                 flex: 1,
-                cursor: "text",
                 minWidth: 0,
+                cursor: "text",
               }}
             >
               {subtask.title}
@@ -260,7 +262,10 @@ function SubtaskItem({ taskId, subtask }: SubtaskItemProps) {
               "&:hover": { color: "error.main" },
             }}
           >
-            <CloseIcon fontSize="small" />
+            <DeleteOutlinedIcon
+              fontSize="small"
+              sx={{ color: "text.secondary" }}
+            />
           </IconButton>
         )}
       </ListItem>
