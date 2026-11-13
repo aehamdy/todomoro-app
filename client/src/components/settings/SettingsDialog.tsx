@@ -36,7 +36,12 @@ function SettingsDialog({ isModalOpen, setIsModalOpen }: SettingsDialogProps) {
     >
       <DialogTitle>Settings</DialogTitle>
 
-      <DialogContent dividers sx={{ p: { xs: 1.5, md: 2 } }}>
+      <DialogContent
+        dividers
+        sx={{
+          p: { xs: 1.5, md: 2 },
+        }}
+      >
         <Box
           sx={{
             display: "flex",

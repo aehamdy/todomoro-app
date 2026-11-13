@@ -84,7 +84,6 @@ function ProjectsList() {
         justifyContent: "start",
         gap: { xs: 1, md: 0.5 },
         minHeight: 0,
-        // maxHeight: { xs: "280px", lg: "230px" },
         maxHeight: isScreenshotMode
           ? { xs: "280px", lg: "260px" }
           : { xs: "280px", lg: "230px" },

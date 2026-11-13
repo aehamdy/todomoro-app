@@ -598,14 +598,48 @@ export function getAppTheme(preference: ThemePreference) {
 
     components: {
       MuiCssBaseline: {
-        styleOverrides: {
+        styleOverrides: (theme) => ({
           body: {
             transition: "background-color 200ms ease, color 200ms ease",
           },
           "::selection": {
             backgroundColor: alpha(t.primary.main, isDark ? 0.4 : 0.25),
           },
-        },
+          "*": {
+            // Firefox & modern standard support
+            scrollbarWidth: "thin",
+            scrollbarColor: `${
+              theme.palette.mode === "dark"
+                ? "rgba(255, 255, 255, 0.2)"
+                : "rgba(0, 0, 0, 0.2)"
+            } transparent`,
+          },
+          // Chrome, Edge, Safari
+          "*::-webkit-scrollbar": {
+            width: "6px",
+            height: "6px",
+          },
+          "*::-webkit-scrollbar-track": {
+            backgroundColor: "transparent",
+          },
+          "*::-webkit-scrollbar-thumb": {
+            backgroundColor:
+              theme.palette.mode === "dark"
+                ? "rgba(255, 255, 255, 0.2)"
+                : "rgba(0, 0, 0, 0.2)",
+            borderRadius: "9999px",
+            transition: "background-color 150ms ease",
+          },
+          "*::-webkit-scrollbar-thumb:hover": {
+            backgroundColor:
+              theme.palette.mode === "dark"
+                ? "rgba(255, 255, 255, 0.35)"
+                : "rgba(0, 0, 0, 0.35)",
+          },
+          "*::-webkit-scrollbar-corner": {
+            backgroundColor: "transparent",
+          },
+        }),
       },
 
       // Remove MUI's dark-mode elevation overlay so our surface tokens rule.
