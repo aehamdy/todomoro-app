@@ -68,13 +68,7 @@ function TaskSchedulePanel({
             minHeight: 0,
             overflowY: "auto",
             overflowX: "hidden",
-            pr: 1,
-            scrollbarWidth: "thin",
-            "&::-webkit-scrollbar": { width: "6px" },
-            "&::-webkit-scrollbar-thumb": {
-              bgcolor: "action.disabled",
-              borderRadius: 3,
-            },
+            pr: 0.5,
           }}
         >
           {displayedTasks?.length === 0 ? (
